@@ -74,7 +74,12 @@ $("signupBtn").addEventListener("click", async () => {
     : "تم إرسال رسالة تأكيد إلى بريدك الإلكتروني. أكّد البريد ثم أرسل عنوانه لمالك الموقع لاعتماده.";
 });
 
-$("refresh").addEventListener("click", async () => {\n  $("refresh").disabled = true;\n  try { await loadDashboard(); } finally { $("refresh").disabled = false; }\n});\n\n$("logout").addEventListener("click", async () => {
+$("refresh").addEventListener("click", async () => {
+  $("refresh").disabled = true;
+  try { await loadDashboard(); } finally { $("refresh").disabled = false; }
+});
+
+$("logout").addEventListener("click", async () => {
   if (liveChannel) await supabase.removeChannel(liveChannel);
   await supabase.auth.signOut();
   showAuth();
