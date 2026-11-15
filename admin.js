@@ -114,7 +114,7 @@ async function loadVisitors() {
   body.replaceChildren();
   if (!data.length) {
     const tr = document.createElement("tr");
-    const td = document.createElement("td"); td.colSpan = 5; td.className = "empty"; td.textContent = "لا يوجد زوار نشطون في هذه اللحظة";
+    const td = document.createElement("td"); td.colSpan = 6; td.className = "empty"; td.textContent = "لا يوجد زوار نشطون في هذه اللحظة";
     tr.append(td); body.append(tr); return;
   }
   for (const v of data) {
