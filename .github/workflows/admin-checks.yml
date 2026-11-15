@@ -21,10 +21,12 @@ jobs:
         run: |
           node --check admin.js
           node --check analytics.js
+          node --check site-content.js
       - name: Check required dashboard wiring
         run: |
           grep -q 'src="admin.js"' admin.html
           grep -q 'functions.invoke("bootstrap-admin")' admin.js
           grep -q 'app_metadata?.role !== "admin"' admin.js
           grep -q 'src="analytics.js"' index.html
+          grep -q 'src="site-content.js"' index.html
           grep -q 'track-visitor' analytics.js
