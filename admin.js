@@ -43,9 +43,12 @@ async function checkSession() {
   if (error || !user) return showAuth();
   if (user.app_metadata?.role !== "admin") {
     showAuth();
-    $("authMsg").textContent = "الحساب اتسجل بنجاح لكنه لم يحصل على صلاحية الإدارة بعد. ابعت بريد الحساب لمالك الموقع لاعتماده.";
+    $("authMsg").textContent = "الحساب مسجل. إذا كان هذا هو البريد الأساسي وأكدت عنوانه، اضغط زر تفعيل حساب المدير.";
+    const canActivate = (user.email || "").toLowerCase() === "motazo55520@gmail.com" && !!user.email_confirmed_at;
+    $("activateAdmin").classList.toggle("hidden", !canActivate);
     return;
   }
+  $("activateAdmin").classList.add("hidden");
   showDashboard(user.email || "");
   await loadDashboard();
   subscribeLive();
