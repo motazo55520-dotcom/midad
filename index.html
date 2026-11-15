@@ -942,6 +942,7 @@ $('#dua').textContent=DUA[Math.floor((new Date()-new Date(new Date().getFullYear
 setInterval(()=>{const k=dayKey();if(PT._k!==k){PT=ptCalc(new Date());PT._k=k;rolloverTasks();render();habRender();sjRender();wRender();tbRender()}npRender()},30000);
 dates();render();
 </script>
+<script src="analytics.js" defer></script>
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>
