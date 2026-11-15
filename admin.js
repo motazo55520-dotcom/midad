@@ -133,7 +133,12 @@ async function loadAnalytics() {
     .eq("event_name", "page_view").gte("occurred_at", since)
     .order("occurred_at", { ascending: false }).limit(5000);
   if (error) return;
-  const pages = new Map(), sources = new Map();
+  const pages = new Map(), sources = new Map(), sessions = new Set();
+  for (const e of data || []) sessions.add(e.session_id);
+  const unique = sessions.size;
+  const views = (data || []).length;
+  $("uniqueSessions").textContent = fmt(unique);
+  $("avgViews").textContent = fmt(unique ? (views / unique).toFixed(1) : 0);
   for (const e of data || []) {
     pages.set(e.page_path, (pages.get(e.page_path) || 0) + 1);
     const s = e.referrer_domain || "مباشر";
