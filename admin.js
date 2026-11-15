@@ -155,38 +155,71 @@ async function loadVisitors() {
   }
 }
 
+let lastAnalyticsExport = [];
 async function loadAnalytics() {
   const since = new Date(Date.now() - 30 * 86400000).toISOString();
-  const { data, error } = await supabase.from("analytics_events")
-    .select("page_path,referrer_domain,session_id,occurred_at")
-    .eq("event_name", "page_view").gte("occurred_at", since)
-    .order("occurred_at", { ascending: false }).limit(5000);
-  if (error) return;
-  const pages = new Map(), sources = new Map(), sessions = new Set();
-  for (const e of data || []) sessions.add(e.session_id);
-  const unique = sessions.size;
-  const views = (data || []).length;
-  $("uniqueSessions").textContent = fmt(unique);
-  $("avgViews").textContent = fmt(unique ? (views / unique).toFixed(1) : 0);
-  for (const e of data || []) {
+  const [eventsResult, sessionsResult] = await Promise.all([
+    supabase.from("analytics_events")
+      .select("page_path,referrer_domain,session_id,occurred_at,device_type")
+      .eq("event_name", "page_view").gte("occurred_at", since)
+      .order("occurred_at", { ascending: false }).limit(10000),
+    supabase.from("live_visitors")
+      .select("session_id,device_type,started_at,last_seen_at")
+      .gte("started_at", since).order("started_at", { ascending: false }).limit(10000)
+  ]);
+  if (eventsResult.error) return message("analyticsMsg", "تعذر تحميل الزيارات: " + eventsResult.error.message);
+  if (sessionsResult.error) return message("analyticsMsg", "تعذر تحميل بيانات الجلسات: " + sessionsResult.error.message);
+  const data = eventsResult.data || [];
+  const sessionsData = sessionsResult.data || [];
+  lastAnalyticsExport = data;
+  const pages = new Map(), sources = new Map(), devices = new Map(), sessions = new Set();
+  for (const e of data) {
+    sessions.add(e.session_id);
     pages.set(e.page_path, (pages.get(e.page_path) || 0) + 1);
-    const s = e.referrer_domain || "مباشر";
-    sources.set(s, (sources.get(s) || 0) + 1);
+    const source = e.referrer_domain || "مباشر";
+    sources.set(source, (sources.get(source) || 0) + 1);
   }
+  for (const s of sessionsData) {
+    const device = s.device_type || "غير معروف";
+    devices.set(device, (devices.get(device) || 0) + 1);
+  }
+  const unique = sessions.size;
+  $("uniqueSessions").textContent = fmt(unique);
+  $("avgViews").textContent = fmt(unique ? (data.length / unique).toFixed(1) : 0);
+  const durations = sessionsData.map(s => Math.max(0, (new Date(s.last_seen_at) - new Date(s.started_at)) / 1000)).filter(Number.isFinite);
+  const averageSeconds = durations.length ? durations.reduce((sum, value) => sum + value, 0) / durations.length : 0;
+  const mins = Math.floor(averageSeconds / 60), secs = Math.floor(averageSeconds % 60);
+  $("avgDuration").textContent = mins ? `${fmt(mins)} د ${fmt(secs)} ث` : `${fmt(secs)} ث`;
+  const topDevice = [...devices.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0] || "—";
+  $("topDevice").textContent = ({mobile:"موبايل",tablet:"تابلت",desktop:"كمبيوتر",unknown:"غير معروف"})[topDevice] || topDevice;
   const table = (map) => {
     const t = document.createElement("table");
-    const h = document.createElement("tr");
-    ["العنصر", "الزيارات"].forEach(x => { const th = document.createElement("th"); th.textContent = x; h.append(th); });
-    t.append(h);
-    [...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10).forEach(([k,v])=>{
+    const head = document.createElement("tr");
+    ["العنصر", "العدد"].forEach(label => { const th = document.createElement("th"); th.textContent = label; head.append(th); });
+    t.append(head);
+    [...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10).forEach(([key,value])=>{
       const tr=document.createElement("tr"); const a=document.createElement("td"); const b=document.createElement("td");
-      a.textContent=k; b.textContent=fmt(v); tr.append(a,b); t.append(tr);
+      a.textContent=key; b.textContent=fmt(value); tr.append(a,b); t.append(tr);
     });
     return t;
   };
   $("topPages").replaceChildren(table(pages));
   $("sources").replaceChildren(table(sources));
+  $("devices").replaceChildren(table(devices));
+  if ($("analyticsMsg")) message("analyticsMsg", `تم تحميل ${fmt(data.length)} مشاهدة و${fmt(sessionsData.length)} جلسة مسجلة`, true);
 }
+function exportAnalyticsCsv() {
+  if (!lastAnalyticsExport.length) return message("analyticsMsg", "لا توجد بيانات لتصديرها");
+  const rows = [["التاريخ","الصفحة","المصدر","الجهاز"], ...lastAnalyticsExport.map(e => [
+    new Date(e.occurred_at).toISOString(), e.page_path || "/", e.referrer_domain || "مباشر", e.device_type || "غير معروف"
+  ])];
+  const csv = "\uFEFF" + rows.map(row => row.map(value => '"' + String(value).replace(/"/g,'""') + '"').join(",")).join("\r\n");
+  const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  const link = document.createElement("a");
+  link.href = url; link.download = "midad-analytics-last-30-days.csv";
+  document.body.append(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+}
+$("exportAnalytics").addEventListener("click", exportAnalyticsCsv);
 
 function subscribeLive() {
   if (liveChannel) supabase.removeChannel(liveChannel);
