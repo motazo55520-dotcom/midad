@@ -7,7 +7,7 @@
   async function applyPublishedContent() {
     try {
       const response = await fetch(endpoint, {
-        headers: { apikey: PUBLIC_KEY, Authorization: "Bearer " + PUBLIC_KEY },
+        headers: { apikey: PUBLIC_KEY },
         cache: "no-store"
       });
       if (!response.ok) throw new Error("Content request failed: " + response.status);
