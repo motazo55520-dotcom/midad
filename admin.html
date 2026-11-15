@@ -56,6 +56,10 @@
 
     <section id="tab-analytics" class="card section hidden">
       <div class="section-head"><h2>ملخص الإحصائيات</h2><button class="secondary" id="refresh">تحديث البيانات</button></div>
+      <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:12px 0">
+        <article class="card metric"><div class="label">جلسات مميزة خلال 30 يومًا</div><div class="value" id="uniqueSessions">—</div></article>
+        <article class="card metric"><div class="label">متوسط الصفحات لكل جلسة</div><div class="value" id="avgViews">—</div></article>
+      </div>
       <div class="editor">
         <div><h3>أكثر الصفحات زيارة</h3><div id="topPages" class="table-wrap"></div></div>
         <div><h3>مصادر الزيارات</h3><div id="sources" class="table-wrap"></div></div>
