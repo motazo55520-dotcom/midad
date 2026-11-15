@@ -62,6 +62,24 @@ $("authForm").addEventListener("submit", async (e) => {
   await checkSession();
 });
 
+$("activateAdmin").addEventListener("click", async () => {
+  $("authMsg").textContent = "جارٍ التحقق من البريد وتفعيل الصلاحية…";
+  $("activateAdmin").disabled = true;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error("سجّل الدخول أولًا");
+    const { error } = await supabase.functions.invoke("bootstrap-admin");
+    if (error) throw error;
+    await supabase.auth.refreshSession();
+    $("authMsg").textContent = "تم اعتماد حساب المدير. جارٍ فتح اللوحة…";
+    await checkSession();
+  } catch (error) {
+    $("authMsg").textContent = error.message || "تعذر تفعيل حساب المدير";
+  } finally {
+    $("activateAdmin").disabled = false;
+  }
+});
+
 $("signupBtn").addEventListener("click", async () => {
   $("authMsg").textContent = "جارٍ إنشاء الحساب…";
   const { data, error } = await supabase.auth.signUp({
