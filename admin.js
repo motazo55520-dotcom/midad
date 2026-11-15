@@ -220,7 +220,9 @@ function editContent(item) {
   currentContentId=item.id;
   $("contentKey").value=item.content_key; $("contentSection").value=item.section;
   $("contentTitle").value=item.title; $("contentOrder").value=item.sort_order;
-  $("contentJson").value=JSON.stringify(item.content,null,2);
+  $("contentJson").value = item.content && typeof item.content === "object" && typeof item.content.text === "string"
+    ? item.content.text
+    : JSON.stringify(item.content, null, 2);
   $("contentPublished").checked=item.is_published;
 }
 function clearContent() {
@@ -231,7 +233,11 @@ function clearContent() {
 $("newContent").addEventListener("click",clearContent);
 $("cancelContent").addEventListener("click",clearContent);
 $("saveContent").addEventListener("click",async()=>{
-  let content; try{content=JSON.parse($("contentJson").value)}catch(_){return message("contentMsg","صيغة JSON غير صحيحة")}
+  const rawContent = $("contentJson").value;
+  let content;
+  try { content = JSON.parse(rawContent); }
+  catch (_) { content = { text: rawContent }; }
+  if (typeof content === "string") content = { text: content };
   const row={content_key:$("contentKey").value.trim(),section:$("contentSection").value.trim()||"general",title:$("contentTitle").value.trim(),sort_order:Number($("contentOrder").value)||0,content,is_published:$("contentPublished").checked,updated_at:new Date().toISOString()};
   if(!row.content_key)return message("contentMsg","اكتب مفتاح المحتوى");
   const result=currentContentId
