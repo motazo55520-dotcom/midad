@@ -87,7 +87,10 @@ $("signupBtn").addEventListener("click", async () => {
   $("authMsg").textContent = "جارٍ إنشاء الحساب…";
   const { data, error } = await supabase.auth.signUp({
     email: $("email").value.trim(),
-    password: $("password").value
+    password: $("password").value,
+    options: {
+      emailRedirectTo: "https://midad-admin-preview.vercel.app/admin.html"
+    }
   });
   if (error) { $("authMsg").textContent = error.message; return; }
   $("authMsg").textContent = data.session
