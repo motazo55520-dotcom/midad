@@ -8,6 +8,13 @@ const supabase = createClient(
 const $ = (id) => document.getElementById(id);
 const fmt = (v) => new Intl.NumberFormat("ar-EG").format(v ?? 0);
 const date = (v) => v ? new Date(v).toLocaleString("ar-EG") : "—";
+const duration = (v) => {
+  const seconds = Math.max(0, Math.floor((Date.now() - new Date(v).getTime()) / 1000));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  return hours ? `${hours} س ${minutes} د` : minutes ? `${minutes} د ${secs} ث` : `${secs} ث`;
+};
 let currentContentId = null;
 let liveChannel = null;
 
@@ -67,7 +74,7 @@ $("signupBtn").addEventListener("click", async () => {
     : "تم إرسال رسالة تأكيد إلى بريدك الإلكتروني. أكّد البريد ثم أرسل عنوانه لمالك الموقع لاعتماده.";
 });
 
-$("logout").addEventListener("click", async () => {
+$("refresh").addEventListener("click", async () => {\n  $("refresh").disabled = true;\n  try { await loadDashboard(); } finally { $("refresh").disabled = false; }\n});\n\n$("logout").addEventListener("click", async () => {
   if (liveChannel) await supabase.removeChannel(liveChannel);
   await supabase.auth.signOut();
   showAuth();
@@ -112,7 +119,7 @@ async function loadVisitors() {
   }
   for (const v of data) {
     const tr = document.createElement("tr");
-    [v.page_path, v.device_type, date(v.started_at), date(v.last_seen_at), v.referrer_domain || "مباشر"].forEach((val) => {
+    [v.page_path, v.device_type, date(v.started_at), duration(v.started_at), date(v.last_seen_at), v.referrer_domain || "مباشر"].forEach((val) => {
       const td = document.createElement("td"); td.textContent = val; tr.append(td);
     });
     body.append(tr);
