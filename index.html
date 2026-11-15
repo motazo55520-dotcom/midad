@@ -199,17 +199,17 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 <div class="wrap">
   <header>
     <div>
-      <h1>مِداد</h1>
+      <h1 data-admin-key="site_title">مِداد</h1>
       <div class="dates"><b id="g"></b> · <span id="h"></span></div>
     </div>
-    <div class="kraft">«اللهم بارك لنا في يومنا، ويسّر لنا أمرنا»</div>
+    <div class="kraft" data-admin-key="daily_quote">«اللهم بارك لنا في يومنا، ويسّر لنا أمرنا»</div>
     <button class="tab" id="thm" type="button" aria-label="تبديل الوضع الفاتح والداكن">🌓</button>
     <div class="stamp" aria-live="polite"><b id="pct">٠٪</b><span>إنجاز اليوم</span></div>
   </header>
 
   <div class="grid">
     <section class="card c1" aria-labelledby="ph"><div class="sheet">
-      <h2 id="ph">الصلوات</h2>
+      <h2 id="ph" data-admin-key="prayers_heading">الصلوات</h2>
       <p class="ayah">﴿حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ﴾</p>
       <div class="add" style="margin:0 0 8px"><select id="gv" aria-label="المحافظة"></select><select id="cty" aria-label="المدينة"></select></div>
 <div class="tip" id="np" style="font-size:16px;margin:0 0 8px"></div>
@@ -222,7 +222,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
     </div></section>
 
     <section class="card c2" aria-labelledby="th"><div class="sheet">
-      <h2 id="th">مهام اليوم</h2>
+      <h2 id="th" data-admin-key="tasks_heading">مهام اليوم</h2>
       <form class="add" id="form">
         <input type="text" id="txt" placeholder="اكتب مهمة جديدة…" aria-label="مهمة جديدة" maxlength="120" autocomplete="off">
         <select id="cat" aria-label="التصنيف"><option>عمل</option><option>دراسة</option><option>بيت</option><option>شخصي</option></select><select id="pri" aria-label="الأولوية"><option value="1">عادية</option><option value="2">عاجلة</option><option value="0">مؤجلة</option></select><input type="date" id="tdue" aria-label="موعد التسليم"><label class="rep"><input type="checkbox" id="trep"> يومية</label>
@@ -241,7 +241,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
   </div>
   <div class="grid g2">
 <section class="card c2" aria-labelledby="ch"><div class="sheet plain">
-<h2 id="ch">موعد الامتحان</h2>
+<h2 id="ch" data-admin-key="exam_heading">موعد الامتحان</h2>
 <div class="count" id="count"></div>
 <form class="add" id="exf"><input type="text" id="exn" placeholder="اسم المادة" maxlength="60" aria-label="اسم الامتحان"><span class="dsel"><select id="exdd" aria-label="اليوم"></select><select id="exdm" aria-label="الشهر"></select><select id="exdy" aria-label="السنة"></select></span><button class="btn" type="submit">أضف</button></form>
 <p class="sub" id="exm" role="status" style="margin:4px 0"></p>
@@ -251,7 +251,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 <p class="sub" style="margin-top:10px">كل يوم ينتهي يتعلّم تلقائيًا بعلامة حمراء ✕ — اضغط على أي يوم لتحديده كموعد امتحان</p>
 </div></section>
 <section class="card c1" aria-labelledby="zh"><div class="sheet plain">
-<h2 id="zh">الأذكار</h2>
+<h2 id="zh" data-admin-key="azkar_heading">الأذكار</h2>
 <p class="sub">اضغط على العدّاد مع كل مرة تقول فيها الذكر</p>
 <div class="tabs" id="ztabs"><button class="tab" data-z="m" aria-pressed="true">الصباح</button><button class="tab" data-z="e" aria-pressed="false">المساء</button><button class="tab" data-z="p" aria-pressed="false">بعد الصلاة</button><button class="tab" data-z="s" aria-pressed="false">النوم</button><button class="clear" id="zr">إعادة العدّ</button></div>
 <div class="tip" id="dua" style="text-align:center;font-size:21px"></div>
@@ -260,7 +260,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 <div class="bar"><i id="zbar"></i></div><p class="sub" id="zc"></p>
 </div></section>
 <section class="card wide" aria-labelledby="qh"><div class="sheet plain">
-<h2 id="qh">المصحف</h2>
+<h2 id="qh" data-admin-key="quran_heading">المصحف</h2>
 <div class="tabs" id="qtabs"></div>
 <div class="tabs"><button class="tab" id="qa" type="button">تكبير الخط +</button><button class="tab" id="qb" type="button">تصغير الخط −</button></div>
 <div class="qr" id="qr"></div>
@@ -270,12 +270,12 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 </div>
 <div class="grid g2">
 <section class="card wide c1" aria-labelledby="sh"><div class="sheet plain">
-<h2 id="sh">المذاكرة</h2>
+<h2 id="sh" data-admin-key="study_heading">المذاكرة</h2>
 <div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p></div>
 <div id="sj"></div></div>
 </div></section>
 <section class="card wide c2" aria-labelledby="hh"><div class="sheet plain">
-<h2 id="hh">سجل أيامي</h2>
+<h2 id="hh" data-admin-key="history_heading">سجل أيامي</h2>
 <p class="sub">بيتسجّل يومك تلقائيًا: الصلوات ٤٠٪ · المهام ٢٥٪ · العادات ٢٠٪ · الأذكار ١٥٪</p>
 <div class="hstats" id="hst"></div>
 <div class="hm" id="hm" aria-label="خريطة الأيام"></div>
@@ -285,7 +285,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 <button class="clear" id="hx" type="button">مسح السجل</button>
 </div></section>
 <section class="card wide c1" aria-labelledby="kh"><div class="sheet plain">
-<h2 id="kh">ركن القهوة</h2>
+<h2 id="kh" data-admin-key="coffee_heading">ركن القهوة</h2>
 <div class="tabs" id="ctabs"></div>
 <p class="sub" id="cing"></p>
 <div class="cwrap">
@@ -307,23 +307,23 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 </div>
 
 <div class="grid g2"><section class="card wide c1 about" aria-labelledby="ah"><div class="sheet plain">
-<h2 id="ah">عن مِداد</h2>
-<p>مِداد مفكرة يومية عربية مجانية بتجمع في صفحة واحدة: قائمة مهامك، ومواقيت الصلاة، وأذكار الصباح والمساء، ومؤقت المذاكرة، وعدّاد الامتحانات، بشكل كولاج على ورق معتّق. مفيش تسجيل ولا حساب، وبياناتك بتفضل على جهازك.</p>
-<h3>إيه اللي هتلاقيه جوه مِداد؟</h3>
+<h2 id="ah" data-admin-key="about_heading">عن مِداد</h2>
+<p data-admin-key="about_description">مِداد مفكرة يومية عربية مجانية بتجمع في صفحة واحدة: قائمة مهامك، ومواقيت الصلاة، وأذكار الصباح والمساء، ومؤقت المذاكرة، وعدّاد الامتحانات، بشكل كولاج على ورق معتّق. مفيش تسجيل ولا حساب، وبياناتك بتفضل على جهازك.</p>
+<h3 data-admin-key="about_features_heading">إيه اللي هتلاقيه جوه مِداد؟</h3>
 <ul>
-<li>قائمة مهام بأولويات ومواعيد تسليم ومهام يومية متكررة.</li>
-<li>مواقيت الصلاة لـ٢٧ محافظة و١٤٩ مدينة في مصر، مع «الصلاة الجاية بعد كام».</li>
-<li>أذكار الصباح والمساء وبعد الصلاة والنوم بعدّاد تفاعلي، وعدّاد تسبيح.</li>
-<li>ورد القرآن اليومي وتتبع الختمة، مع سور قصيرة للقراءة.</li>
-<li>عدّاد تنازلي للامتحانات بالشهور والأيام، وتقويم بعلامة على كل يوم ينتهي، وخطة مذاكرة.</li>
-<li>مؤقت بومودورو للتركيز، وسجل لأيامك بخريطة حرارية ونصايح مبنية على أدائك.</li>
-<li>وصفات قهوة متحركة خطوة بخطوة.</li>
+<li data-admin-key="feature_tasks">قائمة مهام بأولويات ومواعيد تسليم ومهام يومية متكررة.</li>
+<li data-admin-key="feature_prayers">مواقيت الصلاة لـ٢٧ محافظة و١٤٩ مدينة في مصر، مع «الصلاة الجاية بعد كام».</li>
+<li data-admin-key="feature_azkar">أذكار الصباح والمساء وبعد الصلاة والنوم بعدّاد تفاعلي، وعدّاد تسبيح.</li>
+<li data-admin-key="feature_quran">ورد القرآن اليومي وتتبع الختمة، مع سور قصيرة للقراءة.</li>
+<li data-admin-key="feature_exam">عدّاد تنازلي للامتحانات بالشهور والأيام، وتقويم بعلامة على كل يوم ينتهي، وخطة مذاكرة.</li>
+<li data-admin-key="feature_focus">مؤقت بومودورو للتركيز، وسجل لأيامك بخريطة حرارية ونصايح مبنية على أدائك.</li>
+<li data-admin-key="feature_coffee">وصفات قهوة متحركة خطوة بخطوة.</li>
 </ul>
-<h3>أسئلة شائعة</h3>
-<h4>هل مِداد مجاني؟</h4><p>أيوه، مجاني بالكامل وبدون حساب.</p>
-<h4>هل مواقيت الصلاة دقيقة؟</h4><p>بتتحسب بطريقة الهيئة المصرية لإحداثيات مدينتك من بين ٢٧ محافظة و١٤٩ مدينة، وفيه خيار لضبط الدقائق لو تقويم مسجدك مختلف.</p>
-<h4>فين بياناتي بتتحفظ؟</h4><p>على جهازك فقط داخل المتصفح، ومش بتتبعت لأي سيرفر.</p>
-<h4>أقدر أستخدمه بدون إنترنت؟</h4><p>أيوه، بعد أول زيارة بيشتغل بدون إنترنت، وتقدر تثبّته على الموبايل من «إضافة إلى الشاشة الرئيسية».</p>
+<h3 data-admin-key="faq_heading">أسئلة شائعة</h3>
+<h4 data-admin-key="faq_free_question">هل مِداد مجاني؟</h4><p data-admin-key="faq_free_answer">أيوه، مجاني بالكامل وبدون حساب.</p>
+<h4 data-admin-key="faq_prayer_question">هل مواقيت الصلاة دقيقة؟</h4><p data-admin-key="faq_prayer_answer">بتتحسب بطريقة الهيئة المصرية لإحداثيات مدينتك من بين ٢٧ محافظة و١٤٩ مدينة، وفيه خيار لضبط الدقائق لو تقويم مسجدك مختلف.</p>
+<h4 data-admin-key="faq_data_question">فين بياناتي بتتحفظ؟</h4><p data-admin-key="faq_data_answer">على جهازك فقط داخل المتصفح، ومش بتتبعت لأي سيرفر.</p>
+<h4 data-admin-key="faq_offline_question">أقدر أستخدمه بدون إنترنت؟</h4><p data-admin-key="faq_offline_answer">أيوه، بعد أول زيارة بيشتغل بدون إنترنت، وتقدر تثبّته على الموبايل من «إضافة إلى الشاشة الرئيسية».</p>
 </div></section></div>
 <footer>تُحفظ بياناتك في هذا المتصفح، وتتجدد الصلوات كل يوم تلقائيًا<div class="credit"><div class="orn" aria-hidden="true">❦</div><small>صُنع بواسطة</small><b>معتز محمد</b></div></footer>
 </div>
@@ -942,6 +942,8 @@ $('#dua').textContent=DUA[Math.floor((new Date()-new Date(new Date().getFullYear
 setInterval(()=>{const k=dayKey();if(PT._k!==k){PT=ptCalc(new Date());PT._k=k;rolloverTasks();render();habRender();sjRender();wRender();tbRender()}npRender()},30000);
 dates();render();
 </script>
+<script src="site-content.js" defer></script>
+<script src="analytics.js" defer></script>
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>
