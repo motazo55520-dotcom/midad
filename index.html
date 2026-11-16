@@ -204,6 +204,8 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
     <div class="kraft" data-admin-key="daily_quote">«اللهم بارك لنا في يومنا، ويسّر لنا أمرنا»</div>
     <a href="ai.html" aria-label="افتح مساحة مراجعة مِداد" style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--red);color:#fff5df;text-decoration:none;border-radius:5px 12px 5px 10px;box-shadow:2px 2px 0 var(--ink);font-weight:700;white-space:nowrap">✦ مساحة المراجعة</a>
     <a href="subscriptions.html" aria-label="عرض باقات واشتراكات مِداد" style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--ink);color:var(--card);text-decoration:none;border-radius:5px 12px 5px 10px;box-shadow:2px 2px 0 var(--red);font-weight:700;white-space:nowrap">✦ الباقات والاشتراكات</a>
+    <a href="account.html" aria-label="حسابي ومزامنة بيانات مِداد" style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:var(--green);color:#fff5df;text-decoration:none;border-radius:5px 12px 5px 10px;box-shadow:2px 2px 0 var(--ink);font-weight:700;white-space:nowrap">◉ حسابي</a>
+    <span id="midadSyncStatus" aria-live="polite" style="font-size:14px;color:var(--muted);max-width:190px"></span>
     <button class="tab" id="thm" type="button" aria-label="تبديل الوضع الفاتح والداكن">🌓</button>
     <div class="stamp" aria-live="polite"><b id="pct">٠٪</b><span>إنجاز اليوم</span></div>
   </header>
@@ -332,7 +334,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
 <script>
 const $=s=>document.querySelector(s);
 const load=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
-const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(k==='tasks'||k.startsWith('pr:')||k.startsWith('az:')||k.startsWith('hb:')){try{afterSave()}catch(e){}}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(k==='tasks'||k.startsWith('pr:')||k.startsWith('az:')||k.startsWith('hb:')){try{afterSave()}catch(e){}}try{window.MidadCloudSync?.queue()}catch(e){}};
 const ar=n=>Number(n).toLocaleString('ar-EG');
 const dayKey=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
 const PR=[['fajr','الفجر','ركعتان'],['dhuhr','الظهر','٤ ركعات'],['asr','العصر','٤ ركعات'],['maghrib','المغرب','٣ ركعات'],['isha','العشاء','٤ ركعات']];
@@ -1001,5 +1003,36 @@ dates();render();
  if(ios)show();
 })();
 </script>
-\n</body>
+\n
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<script>
+(()=> {
+"use strict";
+const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",ENDPOINT=URL+"/functions/v1/midad-sync";
+const statusEl=document.getElementById("midadSyncStatus");
+const say=t=>{if(statusEl)statusEl.textContent=t};
+const validKey=k=>["tasks","exams","qi","qs","hist","loc","padj","wird","theme"].includes(k)||/^(pr|az|hb|tsb|pomo):\d{4}-\d{1,2}-\d{1,2}$/.test(k);
+const snapshot=()=>{const out={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(validKey(k)){try{out[k]=JSON.parse(localStorage.getItem(k))}catch{}}}return out};
+let ready=false,busy=false,timer=null,version=Number(localStorage.getItem("midad-sync-last-version")||0);
+const enabled=()=>localStorage.getItem("midad-cloud-sync-enabled")==="1";
+const device=()=>{let id=localStorage.getItem("midad-device-id");if(!id){id=crypto.randomUUID();localStorage.setItem("midad-device-id",id)}return id};
+const label=/android|iphone|ipad|mobile/i.test(navigator.userAgent)?"هاتف أو جهاز لوحي":"كمبيوتر";
+const sb=window.supabase?.createClient(URL,KEY);
+async function call(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول من صفحة حسابي");const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,device_id:device(),device_label:label,...extra})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.message||d.error||"تعذر الاتصال بالسحابة");return d}
+async function pushNow(){if(!ready||busy||!enabled())return;busy=true;try{const r=await call("push",{payload:snapshot(),expected_version:version});version=r.version;localStorage.setItem("midad-sync-last-version",String(version));localStorage.removeItem("midad-sync-dirty");say("✓ تمت المزامنة");}catch(e){say(e.message.includes("نسخة أحدث")?"توجد تغييرات أحدث — افتح حسابي":e.message);ready=false;}finally{busy=false}}
+async function boot(){if(!sb||!enabled())return;try{const {data:{session}}=await sb.auth.getSession();if(!session){say("سجّل الدخول لتفعيل المزامنة");return}const st=await call("status");version=st.version;const dirty=localStorage.getItem("midad-sync-dirty")==="1";const last=Number(localStorage.getItem("midad-sync-last-version")||0);
+ if(st.has_snapshot){
+  if(dirty){say("تغييرات محلية تنتظر الرفع — افتح حسابي");return}
+  if(!last){say("نسخة سحابية موجودة — افتح حسابي للاستعادة");return}
+  const cloud=await call("pull");for(const [k,v] of Object.entries(cloud.payload||{})){if(validKey(k))localStorage.setItem(k,JSON.stringify(v))}
+  localStorage.setItem("midad-sync-last-version",String(cloud.version));version=cloud.version;ready=true;say("✓ البيانات متزامنة");
+ }else{
+  const res=await call("push",{payload:snapshot(),expected_version:0});version=res.version;localStorage.setItem("midad-sync-last-version",String(version));localStorage.removeItem("midad-sync-dirty");ready=true;say("✓ تم حفظ بياناتك سحابيًا");
+ }
+ }catch(e){say(e.message.includes("المزامنة السحابية")?"المزامنة تتطلب Plus أو Pro":e.message);}}
+window.MidadCloudSync={queue(){if(!enabled())return;localStorage.setItem("midad-sync-dirty","1");if(!ready)return;clearTimeout(timer);timer=setTimeout(pushNow,1800)}};
+boot();
+})();
+</script>
+</body>
 </html>
