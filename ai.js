@@ -6,6 +6,13 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
 const $ = (id) => document.getElementById(id);
+const savedTheme = (() => {
+  try { return JSON.parse(localStorage.getItem("theme")); } catch { return null; }
+})();
+if (savedTheme === "dark" || savedTheme === "light") {
+  document.documentElement.dataset.theme = savedTheme;
+}
+
 let mode = "login";
 let busy = false;
 let quotaState = null;
@@ -112,9 +119,14 @@ async function sendPrompt(raw) {
       body: { message }
     });
     if (error) {
-      let detail = "";
-      try { detail = await error.context?.json?.().then(x => x.error || "").catch(() => ""); } catch {}
-      throw new Error(detail || "حصلت مشكلة في الاتصال. جرّب كمان شوية.");
+      let payload = null;
+      try {
+        const response = error.context;
+        if (response?.clone) payload = await response.clone().json();
+        else if (response?.json) payload = await response.json();
+      } catch {}
+      if (payload?.quota) updateQuota(payload.quota);
+      throw new Error(payload?.error || "حصلت مشكلة في الاتصال. جرّب كمان شوية.");
     }
     if (!data || !data.answer) throw new Error(data?.error || "مِداد لم يستقبل إجابة صالحة.");
     addMessage("assistant", data.answer);
