@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d9c395">
+<title>الباقات والاشتراكات | مِداد</title>
+<meta name="description" content="اختر باقة مِداد المناسبة لك — مجاني وPlus وPro.">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#d9c395;--paper2:#bfa56c;--card:#f2e6c6;--ink:#3a2a19;--muted:#7a6444;--red:#9a2f22;--green:#4d6139;--line:rgba(58,42,25,.25);--shadow:rgba(40,25,10,.25)}
+@media(prefers-color-scheme:dark){:root{--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.22);--shadow:rgba(0,0,0,.45)}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font:19px 'Amiri',serif;background:radial-gradient(ellipse at 15% 10%,transparent 40%,rgba(90,55,20,.18) 100%),linear-gradient(135deg,var(--paper),var(--paper2));background-attachment:fixed}
+.wrap{max-width:1080px;margin:auto;padding:24px 18px 55px}header{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:28px}
+h1,h2,h3{font-family:'Aref Ruqaa','Amiri',serif}h1{font-size:clamp(38px,7vw,58px);margin:0;color:var(--red)}h2{font-size:30px;margin:0 0 8px;color:var(--red)}h3{font-size:26px;margin:0}
+p{line-height:1.8}.muted{color:var(--muted)}a{color:var(--red)}.back{border:1px solid var(--muted);padding:7px 14px;border-radius:8px;text-decoration:none}
+.intro{text-align:center;margin:16px auto 30px;max-width:700px}.intro p{margin:4px 0}
+.toggle{display:flex;justify-content:center;gap:8px;margin:20px 0}.toggle button,.btn{font:inherit;border:1px solid var(--ink);border-radius:7px;padding:8px 16px;background:transparent;color:var(--ink);cursor:pointer}
+.toggle button.active,.btn.primary{background:var(--ink);color:var(--card);box-shadow:2px 2px 0 var(--red)}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.plan{position:relative;background:var(--card);border:1px solid var(--line);padding:22px 18px 20px;box-shadow:3px 5px 10px var(--shadow);display:flex;flex-direction:column;transform:rotate(-.3deg)}
+.plan:nth-child(2){transform:rotate(.4deg)}.plan.pro{border:2px solid var(--red);transform:rotate(-.2deg)}
+.ribbon{position:absolute;top:-12px;left:18px;background:var(--red);color:#fff5df;padding:2px 12px;font-size:15px;transform:rotate(-3deg)}
+.price{font:700 40px 'Aref Ruqaa',serif;color:var(--red);margin:10px 0 0}.price small{font:18px 'Amiri',serif;color:var(--muted)}
+.year{font-size:15px;color:var(--muted);min-height:25px}.features{list-style:none;padding:0;margin:14px 0 22px;flex:1}.features li{padding:5px 0;border-bottom:1px dashed var(--line)}.features li:before{content:'✓';color:var(--green);font-weight:bold;margin-left:8px}
+.plan .btn{width:100%}.plan .btn:disabled{opacity:.5;cursor:not-allowed}
+.notice{background:var(--paper2);padding:12px 16px;border-right:4px solid var(--red);margin:24px 0;line-height:1.8}
+.panel{background:var(--card);border:1px solid var(--line);box-shadow:3px 5px 10px var(--shadow);padding:22px;margin:24px auto;max-width:720px}
+.panel[hidden]{display:none}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:4px}.field.full{grid-column:1/-1}label{color:var(--muted);font-size:16px}
+input,select{font:18px 'Amiri',serif;color:var(--ink);background:rgba(255,255,255,.2);border:1.5px solid var(--muted);border-radius:6px;padding:8px 10px;width:100%}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.msg{padding:10px 12px;margin-top:12px;border:1px dashed var(--muted);white-space:pre-wrap}.msg.error{border-color:var(--red);color:var(--red)}.msg.good{border-color:var(--green);color:var(--green)}
+.payment-number{font-size:26px;direction:ltr;display:inline-block;color:var(--red);font-weight:bold;letter-spacing:1px}
+footer{text-align:center;color:var(--muted);margin-top:34px;font-size:16px}
+@media(max-width:800px){.plans{grid-template-columns:1fr;max-width:520px;margin:auto}.plan,.plan:nth-child(2),.plan.pro{transform:none}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div><h1>باقات مِداد</h1><div class="muted">مساحة أكبر لتنظيم مذاكرتك وحياتك</div></div><a class="back" href="/">العودة إلى مِداد ←</a></header>
+<section class="intro"><h2>اختار الباقة اللي تناسب رحلتك</h2><p class="muted">ابدأ مجانًا، وطوّر تجربتك وقت ما تحتاج. بدون ذكاء اصطناعي أو تكاليف مخفية.</p></section>
+<div class="toggle" aria-label="مدة الاشتراك"><button type="button" data-period="monthly" class="active">شهري</button><button type="button" data-period="yearly">سنوي — وفر شهرين تقريبًا</button></div>
+<section class="plans" aria-label="الباقات">
+<article class="plan"><h3>مجاني</h3><div class="price">0 <small>جنيه</small></div><div class="year">دائمًا مجانًا وبدون حساب</div>
+<ul class="features"><li>المهام اليومية والعادات</li><li>الصلاة والأذكار والورد</li><li>مؤقت بومودورو وعدّاد الامتحانات</li><li>حتى 100 بطاقة تعليمية</li><li>حتى 3 مجموعات مراجعة</li><li>اختبارات أساسية وإحصائيات أسبوعية</li><li>حفظ محلي وتصدير نسخة احتياطية</li></ul><a class="btn" href="/">استخدم مِداد مجانًا</a></article>
+<article class="plan"><h3>Plus</h3><div class="price" id="plusPrice">79 <small>جنيه / شهر</small></div><div class="year" id="plusYear">790 جنيه سنويًا</div>
+<ul class="features"><li>كل مزايا المجاني</li><li>خطة مذاكرة لكل مادة وخطة امتحانات</li><li>مراجعة متباعدة وبطاقات غير محدودة</li><li>اختبارات مخصصة وتحليل الأخطاء</li><li>إحصائيات وتقارير متقدمة</li><li>مزامنة سحابية على جهازين</li><li>مساحة ملفات 100 MB</li></ul><button class="btn primary choose" data-plan="plus">اشترك في Plus</button></article>
+<article class="plan pro"><span class="ribbon">الأكثر اكتمالًا</span><h3>Pro</h3><div class="price" id="proPrice">149 <small>جنيه / شهر</small></div><div class="year" id="proYear">1490 جنيه سنويًا</div>
+<ul class="features"><li>كل مزايا Plus</li><li>محاكي امتحانات بوقت وخطة إنقاذ</li><li>تقارير أداء تفصيلية</li><li>أهداف أسبوعية ونقاط ومستويات وشارات</li><li>تحديات الأصدقاء حتى 10 تحديات نشطة</li><li>مزامنة على 5 أجهزة</li><li>مساحة ملفات 500 MB</li><li>تخصيص متقدم وأولوية للمزايا الجديدة</li></ul><button class="btn primary choose" data-plan="pro">اشترك في Pro</button></article>
+</section>
+<div class="notice"><b>طريقة الدفع:</b> التحويل عبر فودافون كاش، ثم إرسال مرجع العملية من حسابك. لا يتم تفعيل الاشتراك تلقائيًا؛ الإدارة تراجع التحويل أولًا. الأسعار بالجنيه المصري.</div>
+<section class="panel" id="accountPanel" hidden>
+<h2 id="accountTitle">سجّل الدخول للمتابعة</h2><p class="muted">الاشتراكات المدفوعة تحتاج حسابًا حتى نحفظ اشتراكك ونزامن بياناتك بين أجهزتك.</p>
+<div class="fields"><div class="field full"><label for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email" required placeholder="name@example.com"></div><div class="field full"><label for="password">كلمة المرور</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="8 أحرف على الأقل"></div></div>
+<div class="actions"><button class="btn primary" id="signIn">تسجيل الدخول</button><button class="btn" id="signUp">إنشاء حساب جديد</button><button class="btn" id="signOut" hidden>تسجيل الخروج</button></div><div class="msg" id="accountMsg" role="status" aria-live="polite">اختار تسجيل الدخول أو إنشاء حساب.</div>
+</section>
+<section class="panel" id="paymentPanel" hidden>
+<h2>إتمام طلب الاشتراك</h2><p id="selectedPlanText"></p>
+<div class="notice">حوّل المبلغ إلى رقم فودافون كاش التالي، ثم اكتب مرجع التحويل كما يظهر في رسالة العملية.</div>
+<div><span class="payment-number" id="cashNumber">جارٍ تحميل الرقم...</span> <button class="btn" id="copyNumber" type="button">نسخ الرقم</button></div>
+<div class="fields" style="margin-top:14px"><div class="field full"><label for="transferRef">رقم العملية أو مرجع التحويل</label><input id="transferRef" maxlength="120" minlength="4" placeholder="اكتب مرجع التحويل"></div></div>
+<div class="actions"><button class="btn primary" id="sendRequest">إرسال طلب المراجعة</button><button class="btn" id="cancelPayment">إلغاء</button></div>
+<div class="msg" id="paymentMsg" role="status" aria-live="polite">لن يتم تفعيل الاشتراك قبل مراجعة التحويل.</div>
+</section>
+<footer>مِداد — صُنع ليساعدك على تنظيم يومك ومذاكرتك</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<script>
+(()=> {
+"use strict";
+const SUPABASE_URL="https://dheazidcgmvjauchesey.supabase.co";
+const SUPABASE_KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s";
+const EDGE=SUPABASE_URL+"/functions/v1/midad-payments";
+const client=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+let period="monthly",selectedPlan=null,cashNumber="",planData={};
+const prices={plus:{monthly:79,yearly:790},pro:{monthly:149,yearly:1490}};
+const setMsg=(id,msg,type="")=>{const el=$(id);el.textContent=msg;el.className="msg"+(type?" "+type:"")};
+const setPeriod=p=>{period=p;document.querySelectorAll("[data-period]").forEach(b=>b.classList.toggle("active",b.dataset.period===p));for(const code of ["plus","pro"]){$(code+"Price").innerHTML=prices[code][p]+' <small>جنيه / '+(p==="monthly"?"شهر":"سنة")+'</small>';} $("plusYear").textContent=p==="monthly"?"أو 790 جنيه سنويًا":"خصم يعادل شهرين تقريبًا";$("proYear").textContent=p==="monthly"?"أو 1490 جنيه سنويًا":"خصم يعادل شهرين تقريبًا";};
+document.querySelectorAll("[data-period]").forEach(b=>b.addEventListener("click",()=>setPeriod(b.dataset.period)));
+async function edge(action,extra={}){const {data:{session}}=await client.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول أولًا");const res=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||"تعذر تنفيذ الطلب");return data;}
+function showAccount(plan){selectedPlan=plan;$("accountPanel").hidden=false;$("paymentPanel").hidden=true;$("accountPanel").scrollIntoView({behavior:"smooth",block:"center"});refreshAuth();}
+async function refreshAuth(){if(!client)return;const {data:{session}}=await client.auth.getSession();$("signOut").hidden=!session;$("signIn").hidden=!!session;$("signUp").hidden=!!session;$("accountTitle").textContent=session?"تم تسجيل الدخول":"سجّل الدخول للمتابعة";if(session){setMsg("accountMsg","تم تسجيل الدخول. جاري تجهيز طلب الدفع…","good");try{const info=await edge("payment_info");cashNumber=info.vodafone_cash_number||"";planData=Object.fromEntries((info.plans||[]).map(p=>[p.code,p]));if(!planData[selectedPlan]?.is_active)throw new Error("الباقة غير متاحة حاليًا");$("cashNumber").textContent=cashNumber||"رقم التحويل غير متاح حاليًا";$("selectedPlanText").textContent="الباقة: "+(selectedPlan==="plus"?"Plus":"Pro")+" — "+prices[selectedPlan][period]+" جنيه "+(period==="monthly"?"شهريًا":"سنويًا");$("paymentPanel").hidden=false;$("paymentPanel").scrollIntoView({behavior:"smooth",block:"center"});}catch(e){setMsg("accountMsg",e.message,"error");}}}
+if(!client){setMsg("accountMsg","تعذر تحميل نظام الحسابات. حدّث الصفحة وحاول مرة أخرى.","error");document.querySelectorAll(".choose").forEach(b=>b.disabled=true);}
+document.querySelectorAll(".choose").forEach(b=>b.addEventListener("click",()=>showAccount(b.dataset.plan)));
+$("signIn").addEventListener("click",async()=>{try{const {data,error}=await client.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;await refreshAuth();}catch(e){setMsg("accountMsg",e.message||"تعذر تسجيل الدخول","error");}});
+$("signUp").addEventListener("click",async()=>{try{const {data,error}=await client.auth.signUp({email:$("email").value.trim(),password:$("password").value});if(error)throw error;if(!data.session){setMsg("accountMsg","تم إنشاء الحساب. افتح رسالة تأكيد البريد الإلكتروني، ثم ارجع وسجّل الدخول.","good");return;}await refreshAuth();}catch(e){setMsg("accountMsg",e.message||"تعذر إنشاء الحساب","error");}});
+$("signOut").addEventListener("click",async()=>{await client.auth.signOut();$("paymentPanel").hidden=true;setMsg("accountMsg","تم تسجيل الخروج.");refreshAuth();});
+$("copyNumber").addEventListener("click",async()=>{if(!cashNumber)return;try{await navigator.clipboard.writeText(cashNumber);setMsg("paymentMsg","تم نسخ رقم فودافون كاش.");}catch(e){setMsg("paymentMsg","انسخ الرقم يدويًا: "+cashNumber);}});
+$("cancelPayment").addEventListener("click",()=>{$("paymentPanel").hidden=true;selectedPlan=null;});
+$("sendRequest").addEventListener("click",async()=>{const ref=$("transferRef").value.trim();if(ref.length<4){setMsg("paymentMsg","اكتب مرجع التحويل بشكل صحيح.","error");return;}const b=$("sendRequest");b.disabled=true;try{const result=await edge("create_request",{plan_code:selectedPlan,billing_period:period,transfer_reference:ref});setMsg("paymentMsg","تم إرسال طلبك للمراجعة بنجاح. رقم الطلب: "+result.request.id+" — انتظر مراجعة التحويل قبل استخدام مزايا الباقة.","good");b.hidden=true;}catch(e){setMsg("paymentMsg",e.message||"تعذر إرسال الطلب","error");}finally{b.disabled=false;}});
+if(client){client.auth.onAuthStateChange((_event,session)=>{if(!session){$("paymentPanel").hidden=true;} });}
+setPeriod("monthly");
+})();
+</script>
+</body>
+</html>
