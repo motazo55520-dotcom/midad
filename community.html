@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#d9c395"><title>مجتمع مِداد | التحديات والإنجازات</title>
+<meta name="theme-color" content="#10152d"><title>مجتمع مِداد | التحديات والإنجازات</title>
 <meta name="description" content="شارك أصدقاءك تحديات المذاكرة اليومية واجمع النقاط والشارات في مجتمع مِداد.">
 <link rel="icon" href="/icon-192.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,17 +93,129 @@ header .muted{font-size:17px}
 @media(max-width:700px){.community-hero{grid-template-columns:1fr;padding:22px 18px 42px;gap:8px}.hero-copy{max-width:none}.hero-copy h2{font-size:34px}.hero-copy p{max-width:100%;font-size:16px}.hero-art{height:150px;margin:4px 8px 0}.energy-panel{max-width:none}.energy-panel span{font-size:18px}.energy-orbit{width:150px;height:150px}.hero-foot{right:18px;left:18px;bottom:12px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){.live-dot,.energy-panel,.energy-panel:before,.energy-panel:after,.energy-orbit{animation:none!important}}
 
+
+/* COMMUNITY REBRAND — vivid arcade / neon identity, isolated to this page */
+:root{
+ --paper:#090d20;--paper2:#15102d;--card:rgba(23,29,59,.88);--ink:#f7f4ff;--muted:#b5b8d6;
+ --red:#ff4f91;--green:#35e0c1;--line:rgba(178,190,255,.2);--shadow:rgba(0,0,0,.42);
+ --gold:#ffca62;--glow:rgba(118,91,255,.25);
+}
+html{scroll-behavior:smooth}
+body{
+ color:var(--ink);
+ background:
+ radial-gradient(ellipse at 8% 8%,rgba(255,67,154,.24),transparent 28%),
+ radial-gradient(ellipse at 92% 18%,rgba(45,219,218,.2),transparent 30%),
+ radial-gradient(ellipse at 50% 100%,rgba(123,76,255,.22),transparent 40%),
+ linear-gradient(135deg,#080c1d 0%,#15102d 48%,#0a1b2b 100%);
+ background-attachment:fixed;
+ font-family:'Amiri',serif;
+}
+.wrap{width:min(1120px,94%);animation:neonPageIn .7s cubic-bezier(.2,.8,.2,1) both}
+header{padding:16px 18px;border:1px solid rgba(160,170,255,.18);border-radius:22px;background:rgba(14,19,43,.72);backdrop-filter:blur(16px);box-shadow:0 14px 40px rgba(0,0,0,.24)}
+h1{font-size:clamp(34px,5vw,48px);background:linear-gradient(100deg,#fff 5%,#69f4df 45%,#ff70b0 90%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+header .muted{color:#aeb6da}
+.nav{gap:10px}
+.link,.btn{border:1px solid rgba(177,190,255,.22);border-radius:13px 18px 13px 18px;padding:9px 16px;background:rgba(34,43,82,.88);color:#f7f4ff;box-shadow:0 5px 0 rgba(0,0,0,.22);transition:transform .22s,box-shadow .22s,background .22s,border-color .22s}
+.link:hover,.btn:hover{background:linear-gradient(110deg,#6548dc,#b43f9a);border-color:rgba(255,255,255,.4);box-shadow:0 8px 25px rgba(122,80,255,.3);filter:none}
+.btn.primary{background:linear-gradient(115deg,#7657ff,#b744b8);color:white;border-color:rgba(255,255,255,.2)}
+.btn.green{background:linear-gradient(115deg,#08a995,#32d8c1);color:#071e29;border:0}
+.btn.red{background:linear-gradient(115deg,#ff477f,#ff8b62);color:#fff;border:0}
+.panel{
+ background:linear-gradient(145deg,rgba(28,35,73,.94),rgba(18,24,52,.9));
+ border:1px solid rgba(155,174,255,.2);border-radius:22px;padding:22px;
+ box-shadow:0 18px 44px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.045);
+ backdrop-filter:blur(14px);transition:transform .28s,border-color .28s,box-shadow .28s;
+}
+.panel:before{width:4px;background:linear-gradient(180deg,#ff5da2,#8b67ff,#35e0c1);opacity:1}
+.panel:hover{transform:translateY(-5px);border-color:rgba(114,222,255,.42);box-shadow:0 22px 55px rgba(0,0,0,.3),0 0 28px rgba(112,89,255,.12)}
+h2{font-size:29px;color:#fff}
+h3{color:#fff}
+.muted,.sub,.tiny{color:var(--muted)}
+.stats{gap:13px}
+.stat{border:1px solid rgba(171,182,255,.2);border-radius:18px;padding:16px 10px;background:linear-gradient(145deg,rgba(75,69,145,.3),rgba(28,40,80,.42));box-shadow:inset 0 1px rgba(255,255,255,.07);transition:transform .25s,box-shadow .25s}
+.stat:nth-child(1){background:linear-gradient(145deg,rgba(255,79,145,.22),rgba(75,38,100,.28))}
+.stat:nth-child(2){background:linear-gradient(145deg,rgba(46,213,195,.2),rgba(22,76,94,.3))}
+.stat:nth-child(3){background:linear-gradient(145deg,rgba(255,199,91,.2),rgba(105,75,42,.3))}
+.stat:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.stat b{font-size:34px;color:#fff;text-shadow:0 0 18px rgba(104,224,255,.25)}
+.level-track{height:13px;background:rgba(4,8,25,.7);border:1px solid rgba(164,177,255,.22)}
+.level-fill{background:linear-gradient(90deg,#36e0c1,#5b8cff,#b55cff,#ff5b9d);box-shadow:0 0 18px rgba(104,111,255,.55)}
+.field{background:rgba(7,12,31,.68);border:1px solid rgba(167,182,255,.24);border-radius:13px;color:#fff}
+.field::placeholder{color:#858eae}
+.field:focus{border-color:#58e7df;box-shadow:0 0 0 3px rgba(53,224,193,.14)}
+.challenge{border:1px solid rgba(162,176,255,.2);border-radius:18px;padding:17px;background:linear-gradient(125deg,rgba(76,58,144,.23),rgba(23,49,81,.28));transition:transform .25s,border-color .25s,box-shadow .25s}
+.challenge:nth-child(4n+1){background:linear-gradient(125deg,rgba(255,75,145,.14),rgba(56,40,95,.25))}
+.challenge:nth-child(4n+2){background:linear-gradient(125deg,rgba(39,215,193,.13),rgba(29,58,91,.25))}
+.challenge:nth-child(4n+3){background:linear-gradient(125deg,rgba(255,192,84,.13),rgba(71,50,92,.25))}
+.challenge:after{width:4px;background:linear-gradient(180deg,#ff5b9d,#8a68ff,#37e1c2);opacity:1}
+.challenge:hover{transform:translateY(-4px) scale(1.006);border-color:rgba(87,229,220,.5);box-shadow:0 14px 32px rgba(0,0,0,.24),0 0 22px rgba(100,91,255,.12)}
+.code{color:#fff;background:rgba(7,10,28,.72);border:1px solid rgba(173,184,255,.22);border-radius:10px}
+.person{border:1px solid rgba(117,222,218,.22);background:rgba(42,169,164,.12);color:#c5fff4;border-radius:30px}
+.badgegrid{gap:12px}
+.badgeitem{border:1px solid rgba(166,179,255,.22);border-radius:17px;background:linear-gradient(145deg,rgba(84,66,145,.25),rgba(21,42,72,.3));transition:transform .25s,box-shadow .25s}
+.badgeitem:nth-child(3n+1){border-color:rgba(255,94,159,.35)}
+.badgeitem:nth-child(3n+2){border-color:rgba(54,224,193,.32)}
+.badgeitem .emoji{background:linear-gradient(135deg,rgba(255,89,163,.22),rgba(102,103,255,.25));}
+.badgeitem:not(.locked):hover{transform:translateY(-5px) rotate(1deg);box-shadow:0 12px 26px rgba(0,0,0,.24);border-color:#63e8df}
+.badgeitem.locked{opacity:.36}
+.rank{border-bottom:1px solid rgba(160,177,255,.13);border-radius:12px;padding:11px}
+.rank:hover{background:rgba(111,93,255,.14)}
+.ranknum{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,#6553df,#a94eaa);color:#fff}
+.rank:nth-child(1) .ranknum{background:linear-gradient(135deg,#ffc95c,#f18b45);color:#281b26}
+.rank:nth-child(2) .ranknum{background:linear-gradient(135deg,#d6e6f6,#7788b9);color:#18213d}
+.rank:nth-child(3) .ranknum{background:linear-gradient(135deg,#df9b76,#9b5a56);color:#fff}
+.msg{border:1px solid rgba(53,224,193,.25);border-radius:14px;background:rgba(23,151,139,.13);color:#9af4e4}
+.msg.error{border-color:rgba(255,91,139,.3);background:rgba(255,65,117,.12);color:#ff9ab8}
+#notice{backdrop-filter:blur(12px)}
+footer{color:#9da7ca}
+.community-hero{
+ min-height:330px;margin:20px 0;padding:32px 34px 48px;grid-template-columns:1fr 1.1fr;
+ border:1px solid rgba(183,181,255,.24);border-radius:28px;
+ background:radial-gradient(circle at 78% 38%,rgba(60,228,218,.17),transparent 26%),radial-gradient(circle at 22% 20%,rgba(255,71,151,.23),transparent 32%),linear-gradient(120deg,#201544,#182b55 55%,#0c3b4b);
+ box-shadow:0 24px 60px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.1);
+}
+.community-hero:before{background:repeating-linear-gradient(135deg,transparent 0 26px,rgba(255,255,255,.035) 27px 28px)}
+.hero-kicker{color:#78f4df}
+.live-dot{background:#45f2d2;box-shadow:0 0 0 6px rgba(69,242,210,.13)}
+.hero-copy h2{font-size:clamp(34px,5vw,54px);color:#fff;text-shadow:0 4px 22px rgba(0,0,0,.2)}
+.hero-copy h2 em{background:linear-gradient(90deg,#ff7bb5,#ffc76b,#64eee0);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+.hero-copy p{color:#c4c9e9;font-size:18px}
+.hero-cta{background:linear-gradient(110deg,#ff4f9a,#8c59ff);color:#fff;border-radius:14px 22px 14px 22px;box-shadow:0 8px 24px rgba(255,79,154,.24);padding:12px 19px}
+.hero-cta:hover{box-shadow:0 12px 30px rgba(255,79,154,.36)}
+.hero-art{height:230px;gap:7px}
+.energy-panel{border:1px solid rgba(255,255,255,.45);border-radius:16px 26px 16px 26px;box-shadow:0 14px 35px rgba(0,0,0,.28);filter:saturate(1.25)}
+.energy-one{background:radial-gradient(circle at 60% 35%,#ff9cbd,#ed397f 52%,#6a1d77)}
+.energy-two{background:radial-gradient(circle at 40% 30%,#8cfff0,#16bba9 52%,#15566d)}
+.energy-three{background:radial-gradient(circle at 55% 30%,#fff0a0,#ff9e45 52%,#9d3e5b)}
+.energy-four{background:radial-gradient(circle at 45% 30%,#c9a9ff,#7655ed 52%,#30266e)}
+.energy-orbit{border-color:rgba(132,241,231,.4);box-shadow:0 0 0 14px rgba(255,91,169,.07),0 0 0 28px rgba(83,211,255,.05)}
+.hero-foot{color:#c5c9e6}
+.hero-line{background:linear-gradient(90deg,transparent,#66eadb,#ff6eae,transparent)}
+@keyframes neonPageIn{from{opacity:0;transform:translateY(18px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:700px){
+ header{padding:13px;border-radius:18px}
+ .community-hero{grid-template-columns:1fr;padding:24px 19px 48px;min-height:0}
+ .hero-art{height:160px;margin:6px 3px 0}
+ .energy-panel{max-width:none}
+ .panel{padding:16px;border-radius:18px}
+ .stats{gap:7px}
+ .stat{padding:12px 5px}
+ .stat b{font-size:27px}
+}
+@media(prefers-reduced-motion:reduce){.wrap,.community-hero,.energy-panel{animation:none!important}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div><h1>مجتمع مِداد</h1><div class="muted">خطوة كل يوم… وإنجاز أكبر مع بعض</div></div><div class="nav"><a class="link" href="/">الرئيسية</a><a class="link" href="account.html">حسابي</a><a class="link" href="subscriptions.html">الباقات</a></div></header>
+<header><div><h1>مجتمع مِداد</h1><div class="muted">نافس، شارك، واجمع إنجازاتك</div></div><div class="nav"><a class="link" href="/">الرئيسية</a><a class="link" href="account.html">حسابي</a><a class="link" href="subscriptions.html">الباقات</a></div></header>
 
 <section class="community-hero" aria-label="مساحة التحديات">
  <div class="hero-copy">
-  <span class="hero-kicker"><span class="live-dot"></span> مساحة الإنجاز الجماعي</span>
-  <h2>كل تحدّي… <em>حكاية إنجاز</em></h2>
-  <p>ابدأ بخطوة صغيرة، شارك تقدمك، وخلي كل يوم يقرّبك من هدفك.</p>
+  <span class="hero-kicker"><span class="live-dot"></span> LEVEL UP · مجتمع التحديات</span>
+  <h2>العبها صح… <em>واكسب التحدّي!</em></h2>
+  <p>ادخل التحدي، اجمع النقاط، ارفع مستواك، وخلي إنجازك يتكلم عنك.</p>
   <a class="hero-cta" href="#challengeList">اكتشف تحدياتك <span aria-hidden="true">←</span></a>
  </div>
  <div class="hero-art" aria-hidden="true">
@@ -113,7 +225,7 @@ header .muted{font-size:17px}
   <div class="energy-panel energy-four"><span>أنجز</span></div>
   <div class="energy-orbit"></div>
  </div>
- <div class="hero-foot"><span>خطوة كل يوم</span><span class="hero-line"></span><span>إنجاز أكبر مع بعض</span></div>
+ <div class="hero-foot"><span>CHALLENGE ACCEPTED</span><span class="hero-line"></span><span>YOUR NEXT LEVEL STARTS HERE</span></div>
 </section>
 <div id="notice" class="msg">جارٍ تحميل المجتمع…</div>
 <section id="locked" class="panel hidden"><h2>مجتمع مِداد للمشتركين</h2><p id="lockedText">سجّل الدخول بحساب Plus أو Pro نشط للمشاركة في التحديات.</p><a class="btn primary" href="account.html">افتح حسابك</a> <a class="btn" href="subscriptions.html">عرض الباقات</a></section>
