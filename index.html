@@ -203,6 +203,7 @@ h3{font-family:'Aref Ruqaa',serif;font-size:22px;margin:0 0 4px;color:var(--red)
     </div>
     <div class="kraft" data-admin-key="daily_quote">«اللهم بارك لنا في يومنا، ويسّر لنا أمرنا»</div>
     <button class="tab" id="thm" type="button" aria-label="تبديل الوضع الفاتح والداكن">🌓</button>
+    <button class="tab" id="installApp" type="button" hidden>تثبيت مِداد</button>
     <div class="stamp" aria-live="polite"><b id="pct">٠٪</b><span>إنجاز اليوم</span></div>
   </header>
 
@@ -944,5 +945,43 @@ dates();render();
 <script src="site-content.js" defer></script>
 <script src="analytics.js" defer></script>
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
+<script>
+(() => {
+  const button = document.getElementById('installApp');
+  if (!button) return;
+  let installPrompt = null;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (standalone) return;
+
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (isIOS) {
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      alert('لتثبيت مِداد على جهازك: اضغط زر المشاركة في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».');
+    });
+  }
+
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    installPrompt = event;
+    button.hidden = false;
+  });
+
+  button.addEventListener('click', async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    button.hidden = true;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installPrompt = null;
+    button.hidden = true;
+  });
+})();
+</script>
 </body>
 </html>
