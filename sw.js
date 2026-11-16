@@ -1,5 +1,5 @@
-const V = 'midad-v6';
-const CORE = ['./', 'index.html', 'ai.html', 'ai.css', 'ai.js', 'manifest.webmanifest', 'favicon.svg', 'icon-192.png'];
+const V = 'midad-v7';
+const CORE = ['./', 'index.html', 'ai.html', 'manifest.webmanifest', 'favicon.svg', 'icon-192.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
 });
