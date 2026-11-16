@@ -103,8 +103,6 @@ async function sendPrompt(raw) {
   const message = String(raw || "").trim();
   if (!message || busy) return;
   if (message.length > 5000) { chatMessage("السؤال طويل جدًا. اختصره إلى 5000 حرف."); return; }
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { showAuth(); authMessage("سجّل الدخول للمتابعة."); return; }
 
   busy = true;
   $("messageInput").value = "";
@@ -114,25 +112,47 @@ async function sendPrompt(raw) {
   addMessage("user", message);
   $("thinking").classList.remove("hidden");
   $("messages").scrollTop = $("messages").scrollHeight;
+
   try {
-    const { data, error } = await supabase.functions.invoke("midad-ai", {
-      body: { message }
-    });
-    if (error) {
-      let payload = null;
-      try {
-        const response = error.context;
-        if (response?.clone) payload = await response.clone().json();
-        else if (response?.json) payload = await response.json();
-      } catch {}
-      if (payload?.quota) updateQuota(payload.quota);
-      throw new Error(payload?.error || "حصلت مشكلة في الاتصال. جرّب كمان شوية.");
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw new Error("تعذر التحقق من جلسة الدخول. حدّث الصفحة وسجّل الدخول.");
+    if (!session?.access_token) {
+      showAuth();
+      throw new Error("انتهت جلسة الدخول. سجّل الدخول مرة أخرى.");
     }
-    if (!data || !data.answer) throw new Error(data?.error || "مِداد لم يستقبل إجابة صالحة.");
-    addMessage("assistant", data.answer);
-    updateQuota(data.quota);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 35000);
+    let response;
+    try {
+      response = await fetch(SUPABASE_URL + "/functions/v1/midad-ai", {
+        method: "POST",
+        cache: "no-store",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + session.access_token
+        },
+        body: JSON.stringify({ message })
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    let payload = {};
+    try { payload = await response.json(); } catch {}
+    if (!response.ok) {
+      if (payload?.quota) updateQuota(payload.quota);
+      throw new Error(payload?.error || "تعذر الرد (رمز " + response.status + "). حاول مرة أخرى.");
+    }
+    if (!payload?.answer) throw new Error("وصل رد غير مكتمل من المساعد. حاول مرة أخرى.");
+    addMessage("assistant", payload.answer);
+    updateQuota(payload.quota);
   } catch (err) {
-    const msg = err?.message || "تعذر إرسال السؤال الآن.";
+    const msg = err?.name === "AbortError"
+      ? "الرد اتأخر أكثر من 35 ثانية. جرّب سؤالًا أقصر."
+      : (err?.message || "تعذر إرسال السؤال الآن.");
     addMessage("assistant", "مش قادر أرد عليك دلوقتي. " + msg);
     chatMessage(msg);
   } finally {
