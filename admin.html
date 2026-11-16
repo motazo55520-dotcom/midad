@@ -47,6 +47,7 @@
       <button data-tab="analytics">الإحصائيات</button>
       <button data-tab="content">محتوى الموقع</button>
       <button data-tab="settings">إعدادات الموقع</button>
+      <button data-tab="payments">الاشتراكات والدفع</button>
     </nav>
 
     <section id="tab-visitors" class="card section">
@@ -95,6 +96,24 @@
       </div>
       <p id="settingMsg" class="status"></p>
       <div class="table-wrap"><table><thead><tr><th>الإعداد</th><th>القيمة</th><th>آخر تحديث</th><th>إجراءات</th></tr></thead><tbody id="settingRows"></tbody></table></div>
+    </section>
+
+    <section id="tab-payments" class="card section hidden">
+      <div class="section-head"><h2>إدارة الاشتراكات والدفع</h2><button class="secondary" id="refreshPayments">تحديث الطلبات</button></div>
+      <div class="editor">
+        <div class="field wide"><label for="vodafoneNumber">رقم محفظة فودافون كاش</label><input id="vodafoneNumber" inputmode="tel" value="01018981967"><p class="note">الرقم محفوظ في إعدادات الموقع ولا يظهر إلا من خلال طلب الدفع المسجل الدخول.</p><button id="saveVodafone">حفظ رقم المحفظة</button></div>
+        <div class="field"><label>Plus — السعر الشهري بالجنيه</label><input id="plusMonthly" type="number" min="1"></div>
+        <div class="field"><label>Plus — السعر السنوي بالجنيه</label><input id="plusYearly" type="number" min="1"></div>
+        <div class="field"><label>Pro — السعر الشهري بالجنيه</label><input id="proMonthly" type="number" min="1"></div>
+        <div class="field"><label>Pro — السعر السنوي بالجنيه</label><input id="proYearly" type="number" min="1"></div>
+        <div class="field"><label><input id="plusActive" type="checkbox" style="width:auto"> تفعيل استقبال طلبات Plus</label></div>
+        <div class="field"><label><input id="proActive" type="checkbox" style="width:auto"> تفعيل استقبال طلبات Pro</label></div>
+        <div class="actions wide"><button id="savePlans">حفظ أسعار وحالة الباقات</button></div>
+      </div>
+      <p id="paymentAdminMsg" class="status" aria-live="polite"></p>
+      <h3>طلبات الدفع</h3>
+      <div class="table-wrap"><table><thead><tr><th>الطالب</th><th>الباقة</th><th>المدة</th><th>المبلغ</th><th>مرجع التحويل</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody id="paymentRequests"></tbody></table></div>
+      <p class="note">راجع وصول التحويل في محفظتك بنفسك قبل الضغط على «تأكيد وتفعيل». صورة الإيصال أو الرقم المرجعي وحدهما لا يثبتان وصول المبلغ.</p>
     </section>
   </main>
 </div>

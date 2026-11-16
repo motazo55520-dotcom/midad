@@ -51,6 +51,7 @@ async function checkSession() {
   $("activateAdmin").classList.add("hidden");
   showDashboard(user.email || "");
   await loadDashboard();
+  await loadPaymentAdmin();
   subscribeLive();
 }
 
@@ -318,8 +319,66 @@ async function deleteSetting(key){
 
 document.querySelectorAll("[data-tab]").forEach(btn=>btn.addEventListener("click",()=>{
   document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===btn));
-  ["visitors","analytics","content","settings"].forEach(tab=>$("tab-"+tab).classList.toggle("hidden",tab!==btn.dataset.tab));
+  ["visitors","analytics","content","settings","payments"].forEach(tab=>$("tab-"+tab).classList.toggle("hidden",tab!==btn.dataset.tab));
+  if(btn.dataset.tab==="payments")loadPaymentAdmin();
 }));
 
 setInterval(()=>{if(!$("dashboard").classList.contains("hidden"))loadDashboard()},60000);
 checkSession();
+
+
+async function paymentAdminCall(body){
+  const {data,error}=await supabase.functions.invoke("midad-payments",{body});
+  if(error)throw error;
+  if(data?.error)throw new Error(data.error);
+  return data;
+}
+async function loadPaymentAdmin(){
+  try{
+    const info=await paymentAdminCall({action:"payment_info"});
+    $("vodafoneNumber").value=info.vodafone_cash_number||"";
+    for(const code of ["plus","pro"]){
+      const p=info.plans.find(x=>x.code===code);
+      if(!p)continue;
+      $(code+"Monthly").value=p.monthly_price_piasters? p.monthly_price_piasters/100:"";
+      $(code+"Yearly").value=p.yearly_price_piasters? p.yearly_price_piasters/100:"";
+      $(code+"Active").checked=!!p.is_active;
+    }
+    const {requests=[]}=await paymentAdminCall({action:"admin_list_requests"});
+    const body=$("paymentRequests");body.replaceChildren();
+    if(!requests.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=7;td.className="empty";td.textContent="لا توجد طلبات دفع حتى الآن";tr.append(td);body.append(tr);}
+    for(const r of requests){
+      const tr=document.createElement("tr");
+      const values=[r.email,r.plan_code.toUpperCase(),r.billing_period==="yearly"?"سنوي":"شهري",(r.amount_piasters/100).toLocaleString("ar-EG")+" جنيه",r.transfer_reference,({pending:"قيد المراجعة",approved:"مقبول",rejected:"مرفوض"})[r.status]||r.status];
+      for(const v of values){const td=document.createElement("td");td.textContent=v;tr.append(td)}
+      const td=document.createElement("td");
+      if(r.status==="pending"){
+        const approve=document.createElement("button");approve.textContent="تأكيد وتفعيل";approve.addEventListener("click",()=>reviewPayment(r.id,"approve"));
+        const reject=document.createElement("button");reject.textContent="رفض";reject.className="danger";reject.addEventListener("click",()=>reviewPayment(r.id,"reject"));
+        td.append(approve,reject);
+      }else td.textContent="تمت المراجعة";
+      tr.append(td);body.append(tr);
+    }
+    message("paymentAdminMsg","تم تحميل إعدادات الدفع و"+requests.length+" طلب",true);
+  }catch(e){message("paymentAdminMsg","تعذر تحميل الدفع: "+(e.message||e))}
+}
+async function reviewPayment(id,decision){
+  const promptText=decision==="approve"?"هل تحققت بنفسك من وصول المبلغ إلى محفظتك؟ سيتم تفعيل الاشتراك فورًا.":"هل تريد رفض طلب الدفع؟";
+  if(!confirm(promptText))return;
+  try{await paymentAdminCall({action:"admin_review_request",request_id:id,decision});message("paymentAdminMsg",decision==="approve"?"تم تأكيد الدفع وتفعيل الاشتراك":"تم رفض الطلب",true);await loadPaymentAdmin();}
+  catch(e){message("paymentAdminMsg","تعذر مراجعة الطلب: "+(e.message||e))}
+}
+$("saveVodafone").addEventListener("click",async()=>{
+  try{await paymentAdminCall({action:"admin_update_config",vodafone_cash_number:$("vodafoneNumber").value});message("paymentAdminMsg","تم حفظ رقم المحفظة",true);}
+  catch(e){message("paymentAdminMsg",e.message||e)}
+});
+$("savePlans").addEventListener("click",async()=>{
+  try{
+    for(const code of ["plus","pro"]){
+      await paymentAdminCall({action:"admin_update_plan",plan_code:code,monthly_price_egp:Number($(code+"Monthly").value),yearly_price_egp:Number($(code+"Yearly").value),is_active:$(code+"Active").checked});
+    }
+    message("paymentAdminMsg","تم حفظ الأسعار وحالة الباقات",true);
+    await loadPaymentAdmin();
+  }catch(e){message("paymentAdminMsg","تعذر حفظ الباقات: "+(e.message||e))}
+});
+$("refreshPayments").addEventListener("click",loadPaymentAdmin);

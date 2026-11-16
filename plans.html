@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#d9c395">
+<meta name="description" content="اختر باقة مِداد المناسبة لطريقتك في المذاكرة وتنظيم يومك.">
+<title>باقات مِداد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#d9c395;--paper2:#bfa56c;--card:#f2e6c6;--ink:#3a2a19;--muted:#7a6444;--red:#9a2f22;--green:#4d6139;--line:rgba(58,42,25,.28);--tape:rgba(205,170,100,.7);--shadow:rgba(40,25,10,.4);--kraft:#c8a36a;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.25);--tape:rgba(170,135,75,.65);--shadow:rgba(0,0,0,.6);--kraft:#7a5d38;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.25);--tape:rgba(170,135,75,.65);--shadow:rgba(0,0,0,.6);--kraft:#7a5d38;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:'Amiri','Traditional Arabic',serif;font-size:19px;background:radial-gradient(ellipse at 15% 10%,transparent 40%,rgba(90,55,20,.25) 100%),radial-gradient(circle at 85% 90%,rgba(120,70,20,.22),transparent 35%),linear-gradient(135deg,var(--paper),var(--paper2));background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.45;mix-blend-mode:multiply;z-index:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .08 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+a{color:inherit}.wrap{position:relative;z-index:1;max-width:1120px;margin:auto;padding:24px 18px 56px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none}.brand-mark{width:48px;height:48px;border:3px double var(--red);border-radius:50%;display:grid;place-items:center;color:var(--red);font-family:'Aref Ruqaa';font-size:27px;transform:rotate(-9deg)}.brand-name{font-family:'Aref Ruqaa';font-size:34px;line-height:1}.top-actions{display:flex;gap:9px;align-items:center}.tab,.back{font:inherit;font-size:16px;color:var(--muted);background:transparent;border:1.5px solid var(--muted);border-radius:14px;padding:5px 14px;text-decoration:none;cursor:pointer}.hero{text-align:center;max-width:760px;margin:26px auto 34px}.eyebrow{display:inline-block;color:var(--red);border:1px dashed var(--red);padding:2px 14px;transform:rotate(-2deg);font-size:16px}.hero h1{font-family:'Aref Ruqaa',serif;font-size:clamp(42px,7vw,66px);line-height:1.2;margin:14px 0 8px}.hero p{color:var(--muted);font-size:20px;margin:0}
+.billing{display:flex;align-items:center;justify-content:center;gap:12px;margin:24px auto 28px}.billing button{font:inherit;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--muted);padding:6px 18px;cursor:pointer}.billing button[aria-pressed="true"]{border-color:var(--red);color:var(--red);font-weight:bold;transform:rotate(-2deg)}.save{font-size:14px;color:var(--green);border:1px dashed var(--green);padding:1px 8px;transform:rotate(2deg)}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch}.plan{position:relative;filter:drop-shadow(3px 5px 5px var(--shadow));}.plan:before{content:"";position:absolute;z-index:2;top:-12px;left:50%;width:88px;height:25px;background:var(--tape);transform:translateX(-50%) rotate(-3deg);box-shadow:0 1px 2px var(--shadow)}.paper-card{height:100%;background:var(--card);padding:28px 22px 24px;border:1px solid var(--line);background-image:repeating-linear-gradient(transparent 0 35px,var(--line) 35px 36px);clip-path:polygon(0 0,100% 0,100% 98%,97% 100%,94% 98%,91% 100%,88% 98%,85% 100%,82% 98%,79% 100%,76% 98%,73% 100%,70% 98%,67% 100%,64% 98%,61% 100%,58% 98%,55% 100%,52% 98%,49% 100%,46% 98%,43% 100%,40% 98%,37% 100%,34% 98%,31% 100%,28% 98%,25% 100%,22% 98%,19% 100%,16% 98%,13% 100%,10% 98%,7% 100%,4% 98%,0 100%)}
+.plan.featured{transform:translateY(-10px) rotate(-.5deg)}.plan.featured .paper-card{border:2px solid var(--red)}.ribbon{position:absolute;top:14px;left:14px;background:var(--red);color:#fff2d7;padding:2px 12px;font-size:14px;transform:rotate(-5deg);z-index:3}.plan h2{font-family:'Aref Ruqaa';font-size:32px;color:var(--red);margin:0}.desc{color:var(--muted);font-size:16px;min-height:48px;margin:0 0 12px}.price{display:flex;align-items:baseline;gap:5px;margin:8px 0 2px}.price strong{font-family:'Aref Ruqaa';font-size:48px;line-height:1.2;color:var(--ink)}.price span{color:var(--muted);font-size:16px}.year-note{font-size:14px;color:var(--green);min-height:22px}.rule{height:1px;background:var(--line);margin:16px 0}.features{list-style:none;padding:0;margin:0 0 18px}.features li{position:relative;padding:5px 25px 5px 0;line-height:1.55}.features li:before{content:"✓";position:absolute;right:0;color:var(--green);font-weight:bold}.features li.muted{color:var(--muted);opacity:.7}.features li.muted:before{content:"—";color:var(--muted)}.cta{display:block;text-align:center;text-decoration:none;border:1.5px solid var(--red);color:var(--red);padding:7px 12px;border-radius:8px 13px 9px 12px;font-size:18px;background:transparent}.featured .cta{background:var(--red);color:#fff0d1}.cta[aria-disabled="true"]{opacity:.75;cursor:not-allowed}.fine{text-align:center;color:var(--muted);font-size:15px;margin:20px auto 0;max-width:760px}
+.note{margin:42px auto 0;max-width:850px;background:rgba(242,230,198,.42);border:1px dashed var(--line);padding:18px 22px;transform:rotate(.25deg)}:root[data-theme="dark"] .note{background:rgba(59,47,33,.65)}.note h2{font-family:'Aref Ruqaa';color:var(--red);font-size:27px;margin:0 0 5px}.note p{margin:0;color:var(--muted);font-size:17px;line-height:1.8}.faq{max-width:850px;margin:28px auto}.faq h2{text-align:center;font-family:'Aref Ruqaa';font-size:30px;color:var(--red)}details{border-bottom:1px dashed var(--line);padding:10px 2px}summary{cursor:pointer;font-weight:bold}details p{color:var(--muted);margin:6px 0 0}.foot{text-align:center;color:var(--muted);font-size:15px;margin-top:36px}
+@media(max-width:820px){.plans{grid-template-columns:1fr;max-width:520px;margin:auto;gap:28px}.plan.featured{transform:rotate(-.4deg)}.desc{min-height:0}.hero{margin-top:10px}}@media(prefers-reduced-motion:no-preference){.plan{transition:transform .2s}.plan:hover{transform:translateY(-4px) rotate(0)}.plan.featured:hover{transform:translateY(-13px) rotate(0)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<a class="brand" href="./" aria-label="العودة إلى مِداد"><span class="brand-mark">م</span><span class="brand-name">مِداد</span></a>
+<div class="top-actions"><a class="back" href="./">العودة للمفكرة</a><button class="tab" id="theme" type="button" aria-label="تبديل المظهر">🌓</button></div>
+</header>
+<main>
+<section class="hero">
+<span class="eyebrow">كل خطوة في وقتها</span>
+<h1>مساحتك الأكبر للإنجاز</h1>
+<p>ابدأ مجانًا، وطوّر تجربتك وقت ما تحتاج أدوات ومزايا أكثر</p>
+</section>
+<section class="note" id="account"><h2>حساب مِداد</h2><p>سجّل الدخول أو أنشئ حسابًا لإرسال طلب الاشتراك ومتابعة المزامنة بين أجهزتك.</p><form id="accountForm"><div class="billing"><input id="accountEmail" type="email" placeholder="البريد الإلكتروني" required autocomplete="email"><input id="accountPassword" type="password" placeholder="كلمة المرور" required minlength="8" autocomplete="current-password"><button type="submit" id="loginAction">تسجيل الدخول</button><button type="button" id="signupAction">إنشاء حساب</button><button type="button" id="logoutAction" hidden>تسجيل الخروج</button></div></form><p id="accountStatus" class="fine" aria-live="polite">يلزم تسجيل الدخول قبل طلب الاشتراك</p></section>
+<div class="billing" role="group" aria-label="مدة الاشتراك">
+<button type="button" data-period="month" aria-pressed="true">شهري</button>
+<button type="button" data-period="year" aria-pressed="false">سنوي</button>
+<span class="save">وفّر مع السنوي</span>
+</div>
+<section class="plans" aria-label="باقات مِداد">
+<article class="plan">
+<div class="paper-card">
+<h2>مجاني</h2><p class="desc">كل الأساسيات اللي تساعدك تبدأ يومك وتنظم مذاكرتك</p>
+<div class="price"><strong>٠</strong><span>جنيه / دائمًا</span></div><div class="year-note">بدون بطاقة بنكية</div><div class="rule"></div>
+<ul class="features"><li>المهام والعادات اليومية</li><li>مواقيت الصلاة والأذكار</li><li>أدوات المذاكرة الأساسية</li><li>حفظ بياناتك على جهازك</li><li class="muted">مزايا التحليل المتقدم</li><li class="muted">أدوات الذكاء الاصطناعي المتقدمة</li></ul>
+<a class="cta" href="./">ابدأ مجانًا</a>
+</div></article>
+<article class="plan featured">
+<span class="ribbon">اختيار مميز</span><div class="paper-card">
+<h2>Plus</h2><p class="desc">لما تحب تتابع تقدمك وتخطط لمذاكرتك بشكل أذكى</p>
+<div class="price"><strong id="plusPrice">قريبًا</strong><span id="plusPeriod">بانتظار اعتماد السعر</span></div><div class="year-note" id="plusStatus">الاشتراك غير متاح حاليًا</div><div class="rule"></div>
+<ul class="features"><li>كل مميزات المجاني</li><li>إحصائيات وتقارير متقدمة</li><li>خطط مذاكرة للامتحانات</li><li>متابعة التقدم الأسبوعي والشهري</li><li>مزامنة بياناتك بين أجهزتك</li></ul>
+<a class="cta" href="#account" data-plan="plus">طلب اشتراك Plus</a>
+</div></article>
+<article class="plan">
+<div class="paper-card">
+<h2>Pro</h2><p class="desc">تجربة مِداد الكاملة بمساعد ذكي وأدوات مذاكرة متقدمة</p>
+<div class="price"><strong id="proPrice">قريبًا</strong><span id="proPeriod">بانتظار اعتماد السعر</span></div><div class="year-note" id="proStatus">الاشتراك غير متاح حاليًا</div><div class="rule"></div>
+<ul class="features"><li>كل مميزات Plus</li><li>مساعد مِداد AI</li><li>إنشاء اختبارات من الدروس</li><li>تلخيص المحتوى والملفات</li><li>خطط مذاكرة ذكية</li></ul>
+<a class="cta" href="#account" data-plan="pro">طلب اشتراك Pro</a>
+</div></article>
+</section>
+<p class="fine">تظهر الأسعار وطلبات الاشتراك عند اعتماد الباقات من إدارة مِداد. التحويل يدوي ولا يتم تفعيل الاشتراك إلا بعد مراجعة وصول المبلغ.</p>
+<section class="note" id="coming"><h2>لسه بنجهّز التجربة</h2><p>هدفنا إن مِداد الأساسي يفضل متاح مجانًا. الباقات المدفوعة هتكون اختيارية، ومش هيتم خصم أي مبلغ أو تفعيل اشتراك قبل إطلاق نظام الدفع بشكل رسمي وواضح.</p></section>
+<section class="faq"><h2>أسئلة بتهمك</h2>
+<details><summary>هل لازم أشترك عشان أستخدم مِداد؟</summary><p>لا، تقدر تفضل تستخدم المزايا الأساسية مجانًا ومن غير حساب.</p></details>
+<details><summary>هل أقدر أغيّر الباقة بعدين؟</summary><p>هنوضح خيارات الترقية والإلغاء قبل إطلاق الاشتراكات.</p></details>
+<details><summary>هل الأسعار نهائية؟</summary><p>لا، دي أسعار مقترحة للمعاينة، وممكن تتغير قبل الإطلاق الرسمي.</p></details>
+</section>
+</main>
+<footer class="foot">مِداد — رتّب يومك، وخلّي لكل خطوة أثر</footer>
+</div>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.95.0";
+const supabase=createClient("https://dheazidcgmvjauchesey.supabase.co","sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s");
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+try{const t=JSON.parse(localStorage.getItem("theme"));if(t)root.setAttribute("data-theme",t)}catch{}
+$("theme").addEventListener("click",()=>{const current=root.getAttribute("data-theme"),dark=current?current==="dark":matchMedia("(prefers-color-scheme: dark)").matches,next=dark?"light":"dark";root.setAttribute("data-theme",next);try{localStorage.setItem("theme",JSON.stringify(next))}catch{}});
+const buttons=[...document.querySelectorAll("[data-period]")];
+let billingPeriod="monthly";
+function renderPrices(){
+ if(!paymentInfo)return;
+ for(const code of ["plus","pro"]){
+  const plan=paymentInfo.plans.find(x=>x.code===code);
+  const amount=billingPeriod==="yearly"?plan?.yearly_price_piasters:plan?.monthly_price_piasters;
+  const active=!!plan?.is_active&&Number.isInteger(amount)&&amount>0;
+  $(code+"Price").textContent=active?(amount/100).toLocaleString("ar-EG"):"قريبًا";
+  $(code+"Period").textContent=active?(billingPeriod==="yearly"?"جنيه / سنويًا":"جنيه / شهريًا"):"بانتظار اعتماد السعر";
+  $(code+"Status").textContent=active?"الباقة متاحة للطلب":"الاشتراك غير متاح حاليًا";
+ }
+}
+buttons.forEach(b=>b.addEventListener("click",()=>{billingPeriod=b.dataset.period==="year"?"yearly":"monthly";buttons.forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderPrices();}));
+let session=null, paymentInfo=null;
+function status(t){$("accountStatus").textContent=t}
+function showAccount(){const on=!!session;$("logoutAction").hidden=!on;$("loginAction").hidden=on;$("signupAction").hidden=on;$("accountEmail").disabled=on;$("accountPassword").disabled=on; if(on){$("accountEmail").value=session.user.email||"";$("accountPassword").value="";status("تم تسجيل الدخول. يمكنك الآن طلب الباقة المتاحة.")}}
+async function refreshInfo(){if(!session)return;const {data,error}=await supabase.functions.invoke("midad-payments",{body:{action:"payment_info"}});if(error){status("تعذر تحميل الباقات: "+error.message);return}paymentInfo=data;renderPrices();}
+async function sync(){const {data}=await supabase.auth.getSession();session=data.session;showAccount();if(session)await refreshInfo()}
+$("accountForm").addEventListener("submit",async e=>{e.preventDefault();status("جارٍ تسجيل الدخول…");const {error}=await supabase.auth.signInWithPassword({email:$("accountEmail").value.trim(),password:$("accountPassword").value});if(error){status(error.message);return}await sync()});
+$("signupAction").addEventListener("click",async()=>{status("جارٍ إنشاء الحساب…");const {data,error}=await supabase.auth.signUp({email:$("accountEmail").value.trim(),password:$("accountPassword").value,options:{emailRedirectTo:location.href.split("#")[0]}});if(error){status(error.message);return}status(data.session?"تم إنشاء الحساب وتسجيل الدخول":"تم إنشاء الحساب. افتح رسالة التأكيد في بريدك ثم سجّل الدخول.")});
+$("logoutAction").addEventListener("click",async()=>{await supabase.auth.signOut();await sync();status("تم تسجيل الخروج")});
+supabase.auth.onAuthStateChange(()=>{setTimeout(sync,0)});
+for(const link of document.querySelectorAll("[data-plan]"))link.addEventListener("click",async e=>{e.preventDefault();const code=link.dataset.plan;if(!session){status("سجّل الدخول أو أنشئ حسابًا أولًا");$("account").scrollIntoView({behavior:"smooth"});return}if(!paymentInfo)await refreshInfo();const plan=paymentInfo?.plans?.find(x=>x.code===code);if(!plan?.is_active||!plan.monthly_price_piasters||!plan.yearly_price_piasters){status("هذه الباقة لم يتم فتحها للدفع بعد");return}const billing=billingPeriod;const amount=(billing==="yearly"?plan.yearly_price_piasters:plan.monthly_price_piasters)/100;const number=paymentInfo.vodafone_cash_number;if(!number){status("رقم المحفظة غير مضبوط من الإدارة");return}const reference=prompt("حوّل "+amount+" جنيه إلى محفظة فودافون كاش رقم "+number+" ثم اكتب الرقم المرجعي للتحويل. لا ترسل PIN أو OTP.");if(!reference)return;status("جارٍ إرسال طلب الدفع…");const {data,error}=await supabase.functions.invoke("midad-payments",{body:{action:"create_request",plan_code:code,billing_period:billing,transfer_reference:reference}});if(error){status(error.message);return}status("وصل طلبك للإدارة للمراجعة. لن يتفعل الاشتراك إلا بعد التأكد من وصول التحويل.")});
+sync();
+</script>
+</body>
+</html>
