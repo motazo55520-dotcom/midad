@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#d9c395">
+  <title>مِداد AI | رفيق رحلة التعلّم</title>
+  <meta name="description" content="اسأل مِداد AI عن دروسك، افهم الأفكار الصعبة، وتدرّب على ما تعلمته.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ai.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="العودة إلى مِداد">
+        <span class="brand-mark">م</span>
+        <span><b>مِداد</b><small>مساحة التعلّم</small></span>
+      </a>
+      <div class="top-actions">
+        <a class="back-link" href="./">العودة للمفكرة <span aria-hidden="true">↗</span></a>
+        <button id="signOut" class="quiet-btn hidden" type="button">تسجيل الخروج</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i></i> رفيقك في رحلة التعلّم</span>
+        <h1>خلّينا <em>نفهمها</em> سوا</h1>
+        <p>اسأل براحتك، جرّب أفكارك، وخلّي كل سؤال خطوة جديدة في طريقك.</p>
+      </div>
+      <div class="ink-stamp" aria-hidden="true"><span>مِداد</span><small>نكتب • نفهم • نتعلّم</small></div>
+    </section>
+
+    <section id="authPanel" class="auth-panel paper-card">
+      <div class="auth-art"><span>✦</span><b>كل سؤال<br>بداية فهم</b><small>مساحتك الخاصة للتعلّم</small></div>
+      <div class="auth-content">
+        <span class="section-kicker">أهلًا بعودتك</span>
+        <h2 id="authTitle">سجّل دخولك وابدأ</h2>
+        <p id="authHint">استخدم حساب مِداد للوصول إلى مساعدك التعليمي.</p>
+        <form id="authForm">
+          <label for="email">البريد الإلكتروني</label>
+          <input id="email" type="email" autocomplete="email" placeholder="name@example.com" required>
+          <label for="password">كلمة المرور</label>
+          <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="••••••••" required>
+          <button id="authSubmit" class="primary-btn" type="submit">دخول إلى مساحة التعلّم <span>←</span></button>
+        </form>
+        <p class="auth-switch"><span id="switchText">لسه معندكش حساب؟</span> <button id="switchAuth" type="button">إنشاء حساب</button></p>
+        <p id="authMessage" class="status" role="status"></p>
+      </div>
+    </section>
+
+    <section id="chatPanel" class="workspace hidden">
+      <aside class="side-note">
+        <div class="side-heading"><span class="mini-seal">م</span><div><b>مِداد AI</b><small>معاك خطوة بخطوة</small></div></div>
+        <div class="side-rule"></div>
+        <p class="side-quote">«وَقُل رَّبِّ زِدْنِي عِلْمًا»</p>
+        <div class="quota-card">
+          <span>رصيدك هذا الشهر</span>
+          <strong id="quotaRemaining">—</strong>
+          <small id="quotaPlan">طلب متبقٍ</small>
+          <div class="quota-track"><i id="quotaBar"></i></div>
+          <small id="quotaMeta">يتم تحديث الرصيد بعد كل إجابة</small>
+        </div>
+        <div class="privacy-note"><span>✧</span><p>اسأل براحتك. لا تكتب كلمات مرور أو بيانات شخصية حساسة.</p></div>
+        <a href="./" class="side-home">← ارجع لمفكرتك</a>
+      </aside>
+
+      <section class="chat-card paper-card" aria-label="محادثة مِداد AI">
+        <div class="chat-head">
+          <div class="assistant-avatar"><span>م</span><i></i></div>
+          <div class="chat-title"><b>رفيق رحلة التعلّم</b><small><i></i> جاهز يسمع سؤالك</small></div>
+          <button id="newChat" class="new-chat" type="button" title="محادثة جديدة">＋ <span>محادثة جديدة</span></button>
+        </div>
+        <div id="messages" class="messages" aria-live="polite" aria-relevant="additions">
+          <div id="welcome" class="welcome">
+            <div class="welcome-symbol">✳</div>
+            <span class="section-kicker">أهلًا بيك في مساحة مِداد</span>
+            <h2>نبدأ منين النهارده؟</h2>
+            <p>اختار اللي محتاجه أو اكتب سؤالك بطريقتك.</p>
+            <div class="prompt-grid">
+              <button class="prompt-card" data-prompt="اشرح لي درسًا صعبًا بطريقة بسيطة مع أمثلة." type="button"><span>01</span><b>اشرحلي درس</b><small>نفهم المعلومة من أولها</small></button>
+              <button class="prompt-card" data-prompt="اختبر فهمي في موضوع أدرسه، واسألني سؤالًا واحدًا كل مرة." type="button"><span>02</span><b>اختبر فهمي</b><small>تحدّي صغير يثبت المعلومة</small></button>
+              <button class="prompt-card" data-prompt="ساعدني في حل مسألة خطوة بخطوة، واشرح سبب كل خطوة." type="button"><span>03</span><b>حل معايا</b><small>نفكّ المسألة واحدة واحدة</small></button>
+              <button class="prompt-card" data-prompt="لخّص لي هذا الموضوع في نقاط سهلة للمراجعة." type="button"><span>04</span><b>لخّصلي</b><small>ورقة مراجعة مرتبة</small></button>
+            </div>
+          </div>
+        </div>
+        <div id="thinking" class="thinking hidden"><span></span><span></span><span></span><small>مِداد بيرتّب أفكاره…</small></div>
+        <form id="composer" class="composer">
+          <textarea id="messageInput" rows="1" maxlength="5000" placeholder="اكتب سؤالك هنا… اسأل براحتك" aria-label="اكتب سؤالك" disabled></textarea>
+          <div class="composer-bottom"><span>مِداد AI ممكن يخطئ أحيانًا — راجع المعلومات المهمة.</span><button id="sendButton" type="submit" disabled aria-label="إرسال السؤال">↑</button></div>
+        </form>
+        <p id="chatStatus" class="chat-status" role="status"></p>
+      </section>
+    </section>
+    <footer>مِداد — مساحة هادئة لكل فكرة تستحق الفهم <span>✦</span></footer>
+  </main>
+  <script type="module" src="ai.js"></script>
+</body>
+</html>
