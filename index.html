@@ -1024,8 +1024,7 @@ async function boot(){if(!sb||!enabled())return;try{const {data:{session}}=await
  if(st.has_snapshot){
   if(dirty){say("تغييرات محلية تنتظر الرفع — افتح حسابي");return}
   if(!last){say("نسخة سحابية موجودة — افتح حسابي للاستعادة");return}
-  const cloud=await call("pull");for(const [k,v] of Object.entries(cloud.payload||{})){if(validKey(k))localStorage.setItem(k,JSON.stringify(v))}
-  localStorage.setItem("midad-sync-last-version",String(cloud.version));version=cloud.version;ready=true;say("✓ البيانات متزامنة");
+  const cloud=await call("pull");const applied=localStorage.getItem("midad-sync-applied-version");if(applied!==String(cloud.version)){for(const [k,v] of Object.entries(cloud.payload||{})){if(validKey(k))localStorage.setItem(k,JSON.stringify(v))}localStorage.setItem("midad-sync-last-version",String(cloud.version));localStorage.setItem("midad-sync-applied-version",String(cloud.version));location.reload();return;}localStorage.removeItem("midad-sync-applied-version");localStorage.setItem("midad-sync-last-version",String(cloud.version));version=cloud.version;ready=true;say("✓ البيانات متزامنة");if(localStorage.getItem("midad-sync-dirty")==="1")window.MidadCloudSync.queue();
  }else{
   const res=await call("push",{payload:snapshot(),expected_version:0});version=res.version;localStorage.setItem("midad-sync-last-version",String(version));localStorage.removeItem("midad-sync-dirty");ready=true;say("✓ تم حفظ بياناتك سحابيًا");
  }
