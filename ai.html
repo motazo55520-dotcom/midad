@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d9c395">
+<title>مساحة المراجعة | مِداد</title>
+<meta name="description" content="مساحة مراجعة تفاعلية من مِداد: بطاقات أسئلة، اختبارات ذاتية، وملخصات محفوظة على جهازك وتعمل دون اتصال.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#d9c395;--paper2:#bfa56c;--card:#f2e6c6;--ink:#3a2a19;--muted:#7a6444;--red:#9a2f22;--green:#4d6139;--line:rgba(58,42,25,.22);--shadow:rgba(40,25,10,.22);color-scheme:light}
+:root[data-theme="dark"]{--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.22);--shadow:rgba(0,0,0,.38);color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font:19px 'Amiri',serif;background:radial-gradient(ellipse at 15% 10%,transparent 40%,rgba(90,55,20,.18) 100%),linear-gradient(135deg,var(--paper),var(--paper2));background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E")}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.shell{position:relative;z-index:1;max-width:1100px;margin:auto;padding:22px 18px 50px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}.mark{width:46px;height:46px;display:grid;place-items:center;border:2px double var(--red);border-radius:50%;font:700 30px 'Aref Ruqaa';color:var(--red);transform:rotate(-8deg)}.brand b{display:block;font:700 27px 'Aref Ruqaa';line-height:1}.brand small{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:9px}.link,.theme{border:1px solid var(--line);border-radius:6px 12px 6px 10px;background:rgba(255,255,255,.15);padding:7px 13px;color:var(--ink);text-decoration:none;font-size:16px}
+.hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:35px 4px 25px}.eyebrow,.kicker{color:var(--green);font-size:15px}.eyebrow:before{content:"✦";color:var(--red);margin-left:7px}.hero h1{font:700 clamp(38px,7vw,58px) 'Aref Ruqaa';margin:4px 0;line-height:1.15}.hero h1 em{color:var(--red);font-style:normal}.hero p{color:var(--muted);margin:0;font-size:18px}.seal{width:104px;height:104px;flex:none;border:3px double var(--red);border-radius:50%;display:grid;place-content:center;text-align:center;color:var(--red);transform:rotate(9deg);font-family:'Aref Ruqaa'}.seal b{font-size:32px;line-height:1}.seal small{font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}.stat,.panel{background:var(--card);border:1px solid var(--line);box-shadow:3px 5px 12px var(--shadow);border-radius:5px 14px 6px 12px}.stat{padding:12px 16px;text-align:center}.stat b{display:block;color:var(--red);font:700 32px 'Aref Ruqaa';line-height:1.1}.stat small{color:var(--muted);font-size:14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.tab{border:1.5px solid var(--muted);background:transparent;color:var(--muted);padding:7px 17px;border-radius:18px;font-size:17px}.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--card);box-shadow:2px 2px 0 var(--red)}
+.panel{padding:22px;margin-bottom:15px}.panel h2{font:700 29px 'Aref Ruqaa';color:var(--red);margin:0 0 2px}.intro{color:var(--muted);font-size:16px;margin:0 0 16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:4px}.field.full{grid-column:1/-1}.field label{font-size:15px;color:var(--muted)}.field input,.field textarea,.field select,.search{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:4px 10px 5px 9px;background:rgba(255,255,255,.24);color:var(--ink);outline:none}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus,.search:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(77,97,57,.12)}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:4px 10px 5px 9px;background:var(--ink);color:var(--card);padding:8px 18px;box-shadow:2px 2px 0 var(--red);font-weight:700}.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}.btn.danger{background:var(--red);box-shadow:none}.btn:disabled{opacity:.45;cursor:not-allowed}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:18px 0 10px}.toolbar .search{flex:1;min-width:180px}.muted{color:var(--muted)}.empty{padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:8px;color:var(--muted)}.empty b{display:block;color:var(--red);font:700 23px 'Aref Ruqaa'}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.study-card{border:1px solid var(--line);border-right:4px solid var(--green);border-radius:4px 11px 5px 9px;padding:13px;background:rgba(255,255,255,.18)}.study-card h3{font:700 20px 'Aref Ruqaa';margin:0 0 5px}.subject{display:inline-block;color:var(--green);font-size:13px;border:1px solid currentColor;border-radius:12px;padding:0 8px;margin-bottom:7px}.question{font-weight:700;line-height:1.6}.answer{margin-top:10px;padding:10px;border-top:1px dashed var(--line);white-space:pre-wrap;line-height:1.7}.card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.mini{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:5px;padding:3px 10px;font-size:14px}.mini.red{color:var(--red)}
+.quiz-box{max-width:720px;margin:0 auto;text-align:center}.quiz-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:15px}.progress{height:8px;background:rgba(90,60,25,.14);border-radius:9px;overflow:hidden;margin:9px 0 20px}.progress i{display:block;height:100%;width:0;background:var(--green);transition:width .2s}.quiz-question{font:700 clamp(24px,4vw,34px) 'Aref Ruqaa';margin:18px 0;line-height:1.5}.quiz-answer{background:rgba(255,255,255,.25);border:1px dashed var(--line);border-radius:8px;padding:15px;text-align:right;white-space:pre-wrap;line-height:1.8;margin:15px 0}.quiz-result{font:700 32px 'Aref Ruqaa';color:var(--red)}.note-list{display:grid;gap:10px}.note{border:1px solid var(--line);padding:13px;border-radius:6px;background:rgba(255,255,255,.16)}.note h3{font:700 21px 'Aref Ruqaa';margin:0}.note p{white-space:pre-wrap;margin:7px 0;line-height:1.8}.note small{color:var(--muted)}
+.hidden{display:none!important}.notice{min-height:22px;color:var(--green);font-size:14px;margin-top:8px}.privacy{margin-top:20px;padding:11px 14px;border-right:3px solid var(--green);background:rgba(255,255,255,.13);color:var(--muted);font-size:15px}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:22px 0 0}footer span{color:var(--red)}
+@media(max-width:680px){.shell{padding:14px 11px 35px}.hero{padding:26px 2px 18px}.seal{width:78px;height:78px}.seal b{font-size:25px}.seal small{font-size:10px}.stats{gap:7px}.stat{padding:9px 5px}.stat b{font-size:26px}.stat small{font-size:12px}.panel{padding:15px}.cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top-actions .link{font-size:14px;padding:6px 9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="topbar">
+<a class="brand" href="./" aria-label="العودة إلى مِداد"><span class="mark">م</span><span><b>مِداد</b><small>مساحة المراجعة</small></span></a>
+<div class="top-actions"><a class="link" href="./">العودة للمفكرة ↗</a><button class="theme" id="themeBtn" type="button" aria-label="تبديل المظهر">◐</button></div>
+</header>
+<section class="hero">
+<div><span class="eyebrow">مساحتك الخاصة للفهم والتثبيت</span><h1>ذاكرها <em>بطريقتك</em></h1><p>اصنع أسئلتك، اختبر نفسك، واجمع ملخصاتك في مكان واحد.</p></div>
+<div class="seal" aria-hidden="true"><b>مِداد</b><small>نكتب • نفهم • نتعلّم</small></div>
+</section>
+<section class="stats" aria-label="إحصائيات المراجعة">
+<div class="stat"><b id="cardCount">٠</b><small>بطاقة مراجعة</small></div><div class="stat"><b id="noteCount">٠</b><small>ملخص محفوظ</small></div><div class="stat"><b id="quizCount">٠</b><small>اختبار مكتمل</small></div>
+</section>
+<nav class="tabs" aria-label="أقسام مساحة المراجعة">
+<button class="tab" data-tab="cards" aria-selected="true">بطاقات المراجعة</button><button class="tab" data-tab="quiz" aria-selected="false">اختبر نفسك</button><button class="tab" data-tab="notes" aria-selected="false">ملخصاتي</button>
+</nav>
+<section id="view-cards" class="view">
+<div class="panel">
+<h2>أضف بطاقة جديدة</h2><p class="intro">اكتب سؤالًا في وجه البطاقة وإجابته في الخلف. بعد ذلك تقدر تراجعها أو تدخلها في اختبار.</p>
+<form id="cardForm">
+<div class="form-grid">
+<div class="field"><label for="cardSubject">المادة أو الدرس</label><input id="cardSubject" maxlength="60" placeholder="مثال: الأحياء — الخلية" required></div>
+<div class="field"><label for="cardQuestion">السؤال</label><input id="cardQuestion" maxlength="240" placeholder="اكتب سؤال المراجعة" required></div>
+<div class="field full"><label for="cardAnswer">الإجابة</label><textarea id="cardAnswer" maxlength="2500" placeholder="اكتب الإجابة أو خطوات الحل" required></textarea></div>
+</div><div class="actions"><button class="btn" type="submit">＋ حفظ البطاقة</button><button class="btn secondary" type="reset">مسح الحقول</button></div><p id="cardNotice" class="notice" role="status"></p>
+</form>
+</div>
+<div class="toolbar"><input id="cardSearch" class="search" type="search" placeholder="ابحث في أسئلتك أو موادك…"><select id="subjectFilter" class="search" aria-label="تصفية حسب المادة"><option value="">كل المواد</option></select></div>
+<div id="cardList" class="cards"></div>
+</section>
+<section id="view-quiz" class="view hidden">
+<div class="panel quiz-box">
+<h2>اختبر فهمك</h2><p class="intro">اختار المادة وابدأ اختبارًا من البطاقات اللي كتبتها بنفسك.</p>
+<div id="quizSetup">
+<div class="field"><label for="quizSubject">المادة</label><select id="quizSubject"><option value="">كل المواد</option></select></div>
+<div class="actions" style="justify-content:center"><button class="btn" id="startQuiz" type="button">ابدأ الاختبار</button></div>
+<p id="quizHint" class="notice" role="status"></p>
+</div>
+<div id="quizRun" class="hidden">
+<div class="quiz-meta"><span id="quizProgress">السؤال ١</span><span id="quizSubjectLabel"></span></div><div class="progress"><i id="quizBar"></i></div>
+<div id="quizQuestion" class="quiz-question"></div>
+<button class="btn secondary" id="showAnswer" type="button">اعرض الإجابة</button>
+<div id="quizAnswer" class="quiz-answer hidden"></div>
+<div id="quizGrade" class="actions hidden" style="justify-content:center"><button class="btn" id="knewIt" type="button">عرفتها ✓</button><button class="btn danger" id="reviewIt" type="button">هراجعها ↺</button></div>
+</div>
+<div id="quizDone" class="hidden"><div class="quiz-result" id="quizScore"></div><p id="quizSummary" class="intro"></p><button class="btn" id="againQuiz" type="button">اختبار جديد</button></div>
+</div>
+</section>
+<section id="view-notes" class="view hidden">
+<div class="panel">
+<h2>دفتر الملخصات</h2><p class="intro">اكتب ملخص الدرس بنفسك واحفظه للرجوع إليه وقت المراجعة. لا يتم إنشاء الملخص تلقائيًا.</p>
+<form id="noteForm"><div class="form-grid">
+<div class="field"><label for="noteTitle">عنوان الملخص</label><input id="noteTitle" maxlength="100" placeholder="مثال: قوانين الحركة" required></div>
+<div class="field"><label for="noteSubject">المادة</label><input id="noteSubject" maxlength="60" placeholder="مثال: الفيزياء" required></div>
+<div class="field full"><label for="noteBody">الملخص</label><textarea id="noteBody" maxlength="12000" placeholder="اكتب أهم الأفكار والقوانين والنقاط المهمة…" required style="min-height:180px"></textarea></div>
+</div><div class="actions"><button class="btn" type="submit">حفظ الملخص</button></div><p id="noteNotice" class="notice" role="status"></p></form>
+</div>
+<div id="noteList" class="note-list"></div>
+</section>
+<div class="panel">
+<div class="actions" style="justify-content:space-between;margin:0"><div><b>نسخة احتياطية لبياناتك</b><div class="muted" style="font-size:14px">بياناتك محفوظة على هذا الجهاز فقط</div></div><div class="actions" style="margin:0"><button class="btn secondary" id="exportData" type="button">تصدير البيانات</button><label class="btn secondary" for="importFile">استيراد نسخة</label><input id="importFile" class="hidden" type="file" accept="application/json"></div></div><p id="backupNotice" class="notice" role="status"></p>
+</div>
+<div class="privacy">✦ مساحة المراجعة لا تستخدم ذكاءً اصطناعيًا ولا تحتاج اشتراكًا أو مفتاح API. البطاقات والملخصات تُحفظ محليًا في متصفحك، ويمكنك تصدير نسخة احتياطية منها.</div>
+<footer>مِداد — مساحة هادئة لكل فكرة تستحق الفهم <span>✦</span></footer>
+</main>
+<script>
+(function(){
+"use strict";
+const KEY="midadStudySpaceV1";
+const $=id=>document.getElementById(id);
+const num=n=>new Intl.NumberFormat("ar-EG").format(n);
+let data={cards:[],notes:[],quizzes:0};
+let quiz={deck:[],index:0,known:0,review:0,current:null};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&Array.isArray(saved.cards)&&Array.isArray(saved.notes)){data={cards:saved.cards,notes:saved.notes,quizzes:Number(saved.quizzes)||0};}}catch(e){console.warn("Midad local data could not be read",e);}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){alert("مساحة التخزين ممتلئة. صدّر نسخة من بياناتك واحذف ما لا تحتاجه.");}}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function stats(){$("cardCount").textContent=num(data.cards.length);$("noteCount").textContent=num(data.notes.length);$("quizCount").textContent=num(data.quizzes);}
+function subjects(){return [...new Set(data.cards.map(c=>c.subject.trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"ar"));}
+function fillSubjects(){
+ const opts=subjects();["subjectFilter","quizSubject"].forEach(id=>{const el=$(id),old=el.value;el.innerHTML='<option value="">كل المواد</option>'+opts.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join("");if(opts.includes(old))el.value=old;});
+}
+function renderCards(){
+ fillSubjects();const term=$("cardSearch").value.trim().toLowerCase(),subject=$("subjectFilter").value;
+ const cards=data.cards.filter(c=>(!subject||c.subject===subject)&&(!term||(c.question+" "+c.answer+" "+c.subject).toLowerCase().includes(term)));
+ $("cardList").innerHTML=cards.length?cards.map(c=>'<article class="study-card" data-id="'+safe(c.id)+'"><span class="subject">'+safe(c.subject)+'</span><div class="question">'+safe(c.question)+'</div><div class="answer hidden" id="answer-'+safe(c.id)+'">'+safe(c.answer)+'</div><div class="card-actions"><button class="mini" data-action="reveal" data-id="'+safe(c.id)+'">إظهار الإجابة</button><button class="mini red" data-action="delete-card" data-id="'+safe(c.id)+'">حذف</button></div></article>').join(""):'<div class="empty" style="grid-column:1/-1"><b>لسه مفيش بطاقات</b>أضف أول سؤال وإجابته من النموذج اللي فوق، وبعدها ابدأ تختبر نفسك.</div>';
+ stats();
+}
+function renderNotes(){
+ $("noteList").innerHTML=data.notes.length?data.notes.slice().reverse().map(n=>'<article class="note" data-id="'+safe(n.id)+'"><span class="subject">'+safe(n.subject)+'</span><h3>'+safe(n.title)+'</h3><small>'+new Date(n.createdAt).toLocaleDateString("ar-EG")+'</small><p>'+safe(n.body)+'</p><div class="card-actions"><button class="mini" data-action="copy-note" data-id="'+safe(n.id)+'">نسخ الملخص</button><button class="mini red" data-action="delete-note" data-id="'+safe(n.id)+'">حذف</button></div></article>').join(""):'<div class="empty"><b>دفترك لسه فاضي</b>اكتب أول ملخص واحفظه هنا عشان تراجعه في أي وقت.</div>';
+ stats();
+}
+function switchTab(name){
+ document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===name)));
+ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("hidden",v.id!=="view-"+name));
+ if(name==="cards")renderCards();if(name==="notes")renderNotes();
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+$("cardForm").addEventListener("submit",e=>{e.preventDefault();const subject=$("cardSubject").value.trim(),question=$("cardQuestion").value.trim(),answer=$("cardAnswer").value.trim();if(!subject||!question||!answer)return;data.cards.push({id:id(),subject,question,answer,createdAt:Date.now()});persist();$("cardForm").reset();$("cardNotice").textContent="اتحفظت البطاقة. تقدر تضيف غيرها أو تبدأ اختبار.";renderCards();});
+$("cardSearch").addEventListener("input",renderCards);$("subjectFilter").addEventListener("change",renderCards);
+$("cardList").addEventListener("click",e=>{const b=e.target.closest("button[data-action]");if(!b)return;const c=data.cards.find(x=>x.id===b.dataset.id);if(!c)return;if(b.dataset.action==="reveal"){const a=$("answer-"+c.id),open=a.classList.toggle("hidden");b.textContent=open?"إظهار الإجابة":"إخفاء الإجابة";}if(b.dataset.action==="delete-card"&&confirm("تحذف البطاقة دي؟")){data.cards=data.cards.filter(x=>x.id!==c.id);persist();renderCards();}});
+$("noteForm").addEventListener("submit",e=>{e.preventDefault();const title=$("noteTitle").value.trim(),subject=$("noteSubject").value.trim(),body=$("noteBody").value.trim();if(!title||!subject||!body)return;data.notes.push({id:id(),title,subject,body,createdAt:Date.now()});persist();$("noteForm").reset();$("noteNotice").textContent="تم حفظ الملخص على جهازك.";renderNotes();});
+$("noteList").addEventListener("click",async e=>{const b=e.target.closest("button[data-action]");if(!b)return;const n=data.notes.find(x=>x.id===b.dataset.id);if(!n)return;if(b.dataset.action==="delete-note"&&confirm("تحذف الملخص ده؟")){data.notes=data.notes.filter(x=>x.id!==n.id);persist();renderNotes();}if(b.dataset.action==="copy-note"){try{await navigator.clipboard.writeText(n.title+"\n"+n.body);$("backupNotice").textContent="تم نسخ الملخص."; }catch{$("backupNotice").textContent="المتصفح منع النسخ التلقائي. حدّد النص وانسخه يدويًا.";}}});
+function shuffle(a){const x=a.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x;}
+function beginQuiz(){const subject=$("quizSubject").value;const pool=data.cards.filter(c=>!subject||c.subject===subject);if(!pool.length){$("quizHint").textContent="أضف بطاقات مراجعة أولًا عشان تقدر تبدأ الاختبار.";return;}quiz={deck:shuffle(pool),index:0,known:0,review:0,current:null};$("quizSetup").classList.add("hidden");$("quizDone").classList.add("hidden");$("quizRun").classList.remove("hidden");showQuestion();}
+function showQuestion(){quiz.current=quiz.deck[quiz.index];const total=quiz.deck.length;$("quizProgress").textContent="السؤال "+num(quiz.index+1)+" من "+num(total);$("quizSubjectLabel").textContent=quiz.current.subject;$("quizBar").style.width=(quiz.index/total*100)+"%";$("quizQuestion").textContent=quiz.current.question;$("quizAnswer").textContent=quiz.current.answer;$("quizAnswer").classList.add("hidden");$("showAnswer").classList.remove("hidden");$("quizGrade").classList.add("hidden");}
+function grade(known){if(known)quiz.known++;else quiz.review++;quiz.index++;if(quiz.index<quiz.deck.length){showQuestion();return;}data.quizzes++;persist();$("quizRun").classList.add("hidden");$("quizDone").classList.remove("hidden");$("quizBar").style.width="100%";$("quizScore").textContent="راجعت "+num(quiz.deck.length)+" سؤال";$("quizSummary").textContent="عرفت "+num(quiz.known)+" · محتاج مراجعة "+num(quiz.review)+". كرر الاختبار بعد ما تراجع البطاقات.";stats();}
+$("startQuiz").addEventListener("click",beginQuiz);$("showAnswer").addEventListener("click",()=>{$("quizAnswer").classList.remove("hidden");$("showAnswer").classList.add("hidden");$("quizGrade").classList.remove("hidden");});$("knewIt").addEventListener("click",()=>grade(true));$("reviewIt").addEventListener("click",()=>grade(false));$("againQuiz").addEventListener("click",()=>{$("quizDone").classList.add("hidden");$("quizSetup").classList.remove("hidden");});
+$("exportData").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({...data,exportedAt:new Date().toISOString()},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="midad-study-backup.json";a.click();URL.revokeObjectURL(url);$("backupNotice").textContent="تم تجهيز النسخة الاحتياطية للتنزيل.";});
+$("importFile").addEventListener("change",async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{const parsed=JSON.parse(await f.text());if(!parsed||!Array.isArray(parsed.cards)||!Array.isArray(parsed.notes))throw new Error("invalid");if(!confirm("سيتم استبدال بيانات مساحة المراجعة الحالية بالنسخة المختارة. هل تريد المتابعة؟"))return;data={cards:parsed.cards.filter(c=>c&&c.id&&c.subject&&c.question&&c.answer),notes:parsed.notes.filter(n=>n&&n.id&&n.title&&n.subject&&n.body),quizzes:Number(parsed.quizzes)||0};persist();renderCards();renderNotes();$("backupNotice").textContent="تم استيراد النسخة الاحتياطية."; }catch{$("backupNotice").textContent="الملف غير صالح أو ليس نسخة من مِداد.";}finally{e.target.value="";}});
+$("themeBtn").addEventListener("click",()=>{const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;try{localStorage.setItem("theme",JSON.stringify(next));}catch{}});
+try{const theme=JSON.parse(localStorage.getItem("theme")||"null");if(theme==="dark"||theme==="light")document.documentElement.dataset.theme=theme;}catch{}
+renderCards();renderNotes();stats();
+})();
+</script>
+</body>
+</html>
