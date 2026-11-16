@@ -83,17 +83,29 @@ const root=document.documentElement;
 try{const t=JSON.parse(localStorage.getItem("theme"));if(t)root.setAttribute("data-theme",t)}catch{}
 $("theme").addEventListener("click",()=>{const current=root.getAttribute("data-theme"),dark=current?current==="dark":matchMedia("(prefers-color-scheme: dark)").matches,next=dark?"light":"dark";root.setAttribute("data-theme",next);try{localStorage.setItem("theme",JSON.stringify(next))}catch{}});
 const buttons=[...document.querySelectorAll("[data-period]")];
-buttons.forEach(b=>b.addEventListener("click",()=>{buttons.forEach(x=>x.setAttribute("aria-pressed",String(x===b)));}));
+let billingPeriod="monthly";
+function renderPrices(){
+ if(!paymentInfo)return;
+ for(const code of ["plus","pro"]){
+  const plan=paymentInfo.plans.find(x=>x.code===code);
+  const amount=billingPeriod==="yearly"?plan?.yearly_price_piasters:plan?.monthly_price_piasters;
+  const active=!!plan?.is_active&&Number.isInteger(amount)&&amount>0;
+  $(code+"Price").textContent=active?(amount/100).toLocaleString("ar-EG"):"قريبًا";
+  $(code+"Period").textContent=active?(billingPeriod==="yearly"?"جنيه / سنويًا":"جنيه / شهريًا"):"بانتظار اعتماد السعر";
+  $(code+"Status").textContent=active?"الباقة متاحة للطلب":"الاشتراك غير متاح حاليًا";
+ }
+}
+buttons.forEach(b=>b.addEventListener("click",()=>{billingPeriod=b.dataset.period==="year"?"yearly":"monthly";buttons.forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderPrices();}));
 let session=null, paymentInfo=null;
 function status(t){$("accountStatus").textContent=t}
 function showAccount(){const on=!!session;$("logoutAction").hidden=!on;$("loginAction").hidden=on;$("signupAction").hidden=on;$("accountEmail").disabled=on;$("accountPassword").disabled=on; if(on){$("accountEmail").value=session.user.email||"";$("accountPassword").value="";status("تم تسجيل الدخول. يمكنك الآن طلب الباقة المتاحة.")}}
-async function refreshInfo(){if(!session)return;const {data,error}=await supabase.functions.invoke("midad-payments",{body:{action:"payment_info"}});if(error){status("تعذر تحميل الباقات: "+error.message);return}paymentInfo=data;for(const code of ["plus","pro"]){const p=data.plans.find(x=>x.code===code),active=!!p?.is_active&&p.monthly_price_piasters>0&&p.yearly_price_piasters>0;$(`${code}Price`).textContent=active?(p.monthly_price_piasters/100).toLocaleString("ar-EG"):"قريبًا";$ (`${code}Period`).textContent=active?"جنيه / شهريًا":"بانتظار اعتماد السعر";$ (`${code}Status`).textContent=active?"الباقة متاحة للطلب":"الاشتراك غير متاح حاليًا"}}
+async function refreshInfo(){if(!session)return;const {data,error}=await supabase.functions.invoke("midad-payments",{body:{action:"payment_info"}});if(error){status("تعذر تحميل الباقات: "+error.message);return}paymentInfo=data;renderPrices();}
 async function sync(){const {data}=await supabase.auth.getSession();session=data.session;showAccount();if(session)await refreshInfo()}
 $("accountForm").addEventListener("submit",async e=>{e.preventDefault();status("جارٍ تسجيل الدخول…");const {error}=await supabase.auth.signInWithPassword({email:$("accountEmail").value.trim(),password:$("accountPassword").value});if(error){status(error.message);return}await sync()});
 $("signupAction").addEventListener("click",async()=>{status("جارٍ إنشاء الحساب…");const {data,error}=await supabase.auth.signUp({email:$("accountEmail").value.trim(),password:$("accountPassword").value,options:{emailRedirectTo:location.href.split("#")[0]}});if(error){status(error.message);return}status(data.session?"تم إنشاء الحساب وتسجيل الدخول":"تم إنشاء الحساب. افتح رسالة التأكيد في بريدك ثم سجّل الدخول.")});
 $("logoutAction").addEventListener("click",async()=>{await supabase.auth.signOut();await sync();status("تم تسجيل الخروج")});
 supabase.auth.onAuthStateChange(()=>{setTimeout(sync,0)});
-for(const link of document.querySelectorAll("[data-plan]"))link.addEventListener("click",async e=>{e.preventDefault();const code=link.dataset.plan;if(!session){status("سجّل الدخول أو أنشئ حسابًا أولًا");$("account").scrollIntoView({behavior:"smooth"});return}if(!paymentInfo)await refreshInfo();const plan=paymentInfo?.plans?.find(x=>x.code===code);if(!plan?.is_active||!plan.monthly_price_piasters||!plan.yearly_price_piasters){status("هذه الباقة لم يتم فتحها للدفع بعد");return}const period=prompt("اكتب m للاشتراك الشهري أو y للاشتراك السنوي","m");if(!period)return;const billing=period.toLowerCase()==="y"?"yearly":"monthly";const amount=(billing==="yearly"?plan.yearly_price_piasters:plan.monthly_price_piasters)/100;const number=paymentInfo.vodafone_cash_number;if(!number){status("رقم المحفظة غير مضبوط من الإدارة");return}const reference=prompt("حوّل "+amount+" جنيه إلى محفظة فودافون كاش رقم "+number+" ثم اكتب الرقم المرجعي للتحويل. لا ترسل PIN أو OTP.");if(!reference)return;status("جارٍ إرسال طلب الدفع…");const {data,error}=await supabase.functions.invoke("midad-payments",{body:{action:"create_request",plan_code:code,billing_period:billing,transfer_reference:reference}});if(error){status(error.message);return}status("وصل طلبك للإدارة للمراجعة. لن يتفعل الاشتراك إلا بعد التأكد من وصول التحويل.")});
+for(const link of document.querySelectorAll("[data-plan]"))link.addEventListener("click",async e=>{e.preventDefault();const code=link.dataset.plan;if(!session){status("سجّل الدخول أو أنشئ حسابًا أولًا");$("account").scrollIntoView({behavior:"smooth"});return}if(!paymentInfo)await refreshInfo();const plan=paymentInfo?.plans?.find(x=>x.code===code);if(!plan?.is_active||!plan.monthly_price_piasters||!plan.yearly_price_piasters){status("هذه الباقة لم يتم فتحها للدفع بعد");return}const billing=billingPeriod;const amount=(billing==="yearly"?plan.yearly_price_piasters:plan.monthly_price_piasters)/100;const number=paymentInfo.vodafone_cash_number;if(!number){status("رقم المحفظة غير مضبوط من الإدارة");return}const reference=prompt("حوّل "+amount+" جنيه إلى محفظة فودافون كاش رقم "+number+" ثم اكتب الرقم المرجعي للتحويل. لا ترسل PIN أو OTP.");if(!reference)return;status("جارٍ إرسال طلب الدفع…");const {data,error}=await supabase.functions.invoke("midad-payments",{body:{action:"create_request",plan_code:code,billing_period:billing,transfer_reference:reference}});if(error){status(error.message);return}status("وصل طلبك للإدارة للمراجعة. لن يتفعل الاشتراك إلا بعد التأكد من وصول التحويل.")});
 sync();
 </script>
 </body>
