@@ -41,7 +41,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;fl
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <script>
-const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=URL+"/functions/v1/midad-community";
+const SUPABASE_URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=SUPABASE_URL+"/functions/v1/midad-community";
 const $=id=>document.getElementById(id);
 let sb=null,currentPlan="plus",dashboard=null;
 function notice(text,error=false){$("notice").textContent=text;$("notice").className="msg"+(error?" error":"");}
@@ -66,7 +66,7 @@ async function startCommunity(){
    });
   }
   if(!window.supabase?.createClient)throw new Error("مكتبة الاتصال لم تبدأ بشكل صحيح.");
-  sb=window.supabase.createClient(URL,KEY);
+  sb=window.supabase.createClient(SUPABASE_URL.trim(),KEY.trim());
   $("createForm").addEventListener("submit",async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;$("createMsg").textContent="جارٍ إنشاء التحدي…";try{const r=await api("create",{title:$("challengeTitle").value,description:$("challengeDesc").value,duration_days:Number($("duration").value)});$("createForm").reset();$("createMsg").textContent="تم إنشاء التحدي. كود الدعوة: "+r.challenge.invite_code;await load();}catch(err){$("createMsg").textContent=err.message;}finally{b.disabled=false;}});
   $("joinForm").addEventListener("submit",async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;$("joinMsg").textContent="جارٍ التحقق من الكود…";try{const r=await api("join",{invite_code:$("inviteCode").value});$("joinMsg").textContent=r.message;$("inviteCode").value="";await load();}catch(err){$("joinMsg").textContent=err.message;}finally{b.disabled=false;}});
   $("saveName").addEventListener("click",async()=>{const b=$("saveName");b.disabled=true;try{await api("profile",{display_name:$("displayName").value});$("profileMsg").textContent="تم حفظ اسمك الظاهر.";await load();}catch(e){$("profileMsg").textContent=e.message;}finally{b.disabled=false;}});
