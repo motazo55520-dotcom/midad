@@ -945,5 +945,60 @@ dates();render();
 <script src="site-content.js" defer></script>
 <script src="analytics.js" defer></script>
 <script>if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
-</body>
+
+<style>
+#installWelcome{position:fixed;inset:0;z-index:99999;display:none;place-items:center;padding:18px;background:rgba(35,24,14,.58);backdrop-filter:blur(5px)}
+#installWelcome.show{display:grid}
+#installWelcome .iw-card{width:min(420px,100%);background:#f2e6c6;color:#3a2a19;border:2px solid #9a2f22;border-radius:18px;padding:25px 22px;text-align:center;box-shadow:0 18px 60px #160d08aa;font-family:'Amiri',serif}
+#installWelcome .iw-title{font-family:'Aref Ruqaa','Amiri',serif;font-size:36px;color:#9a2f22;margin:0 0 6px}
+#installWelcome .iw-copy{font-size:19px;line-height:1.7;margin:0 0 17px}
+#installWelcome .iw-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+#installWelcome button{font:inherit;border:0;border-radius:8px;padding:9px 18px;cursor:pointer}
+#installNow{background:#3a2a19;color:#f2e6c6;box-shadow:2px 2px 0 #9a2f22;font-weight:bold}
+#installLater{background:transparent;color:#7a6444;text-decoration:underline}
+#installHelp{font-size:14px;color:#7a6444;margin:13px 0 0;line-height:1.6}
+</style>
+<div id="installWelcome" role="dialog" aria-modal="true" aria-labelledby="iwTitle">
+ <div class="iw-card">
+  <h2 class="iw-title" id="iwTitle">ثبّت مِداد على جهازك</h2>
+  <p class="iw-copy">خلي مِداد معاك دايمًا وافتحه من الشاشة الرئيسية، واستخدمه كتطبيق بسهولة.</p>
+  <div class="iw-actions">
+   <button id="installNow" type="button">تثبيت مِداد</button>
+   <button id="installLater" type="button">مش دلوقتي</button>
+  </div>
+  <p id="installHelp"></p>
+ </div>
+</div>
+<script>
+(()=> {
+ const modal=document.getElementById('installWelcome');
+ if(!modal)return;
+ const installBtn=document.getElementById('installNow');
+ const laterBtn=document.getElementById('installLater');
+ const help=document.getElementById('installHelp');
+ const KEY='midad-install-welcome-v1';
+ let installPrompt=null;
+ const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+ const close=()=>{modal.classList.remove('show');try{localStorage.setItem(KEY,'1')}catch(e){}};
+ if(isStandalone())return;
+ let dismissed=false;try{dismissed=localStorage.getItem(KEY)==='1'}catch(e){}
+ if(dismissed)return;
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ const show=()=>modal.classList.add('show');
+ if(ios){help.textContent='على iPhone: اضغط مشاركة في Safari ثم «إضافة إلى الشاشة الرئيسية».';installBtn.textContent='طريقة التثبيت';installBtn.addEventListener('click',()=>{help.textContent='افتح قائمة المشاركة في Safari ثم اختر «إضافة إلى الشاشة الرئيسية» واضغط إضافة.';});}
+ else {installBtn.addEventListener('click',async()=>{
+   if(!installPrompt){help.textContent='لو زر التثبيت مش ظاهر، افتح قائمة المتصفح واختر «تثبيت مِداد» أو «إضافة إلى الشاشة الرئيسية».';return;}
+   installPrompt.prompt();
+   await installPrompt.userChoice.catch(()=>null);
+   installPrompt=null;close();
+  });
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;installBtn.textContent='تثبيت مِداد';show();});
+  window.addEventListener('appinstalled',close);
+  installBtn.addEventListener('click',()=>{if(!installPrompt)help.textContent='افتح قائمة المتصفح واختر «تثبيت مِداد» أو «إضافة إلى الشاشة الرئيسية».';});
+ }
+ laterBtn.addEventListener('click',close);
+ if(ios)show();
+})();
+</script>
+\n</body>
 </html>
