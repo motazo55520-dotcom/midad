@@ -47,6 +47,8 @@
       <button data-tab="analytics">الإحصائيات</button>
       <button data-tab="content">محتوى الموقع</button>
       <button data-tab="settings">إعدادات الموقع</button>
+      <button data-tab="subscriptions">الاشتراكات والمدفوعات</button>
+      <button data-tab="community">مجتمع مِداد</button>
     </nav>
 
     <section id="tab-visitors" class="card section">
@@ -95,6 +97,41 @@
       </div>
       <p id="settingMsg" class="status"></p>
       <div class="table-wrap"><table><thead><tr><th>الإعداد</th><th>القيمة</th><th>آخر تحديث</th><th>إجراءات</th></tr></thead><tbody id="settingRows"></tbody></table></div>
+    </section>
+
+    <section id="tab-subscriptions" class="card section hidden">
+      <div class="section-head"><h2>إدارة الاشتراكات</h2><button class="secondary" id="refreshSubscriptions">تحديث</button></div>
+      <p class="note">تعديل الأسعار لا يفعّل الدفع. الباقات تظل مغلقة حتى اكتمال الاختبار ومراجعة الجاهزية.</p>
+      <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:16px">
+        <article class="card metric"><div class="label">طلبات الدفع المعلقة</div><div class="value" id="pendingPayments">—</div></article>
+        <article class="card metric"><div class="label">الباقات المدفوعة المتاحة</div><div class="value" id="activePlans">—</div></article>
+      </div>
+      <div class="editor">
+        <div class="field"><label for="planCode">الباقة</label><select id="planCode"><option value="plus">Plus</option><option value="pro">Pro</option></select></div>
+        <div class="field"><label>حالة الباقة</label><input id="planStatus" readonly value="مغلقة"></div>
+        <div class="field"><label for="planMonthly">السعر الشهري بالجنيه</label><input id="planMonthly" type="number" min="1" step="1"></div>
+        <div class="field"><label for="planYearly">السعر السنوي بالجنيه</label><input id="planYearly" type="number" min="1" step="1"></div>
+        <div class="actions wide"><button id="savePlan">حفظ الأسعار فقط</button></div>
+      </div>
+      <p id="planMsg" class="status"></p>
+      <h3 style="margin-top:22px">طلبات التحويل</h3>
+      <div class="table-wrap"><table><thead><tr><th>الحساب</th><th>الباقة</th><th>المدة</th><th>المبلغ</th><th>مرجع التحويل</th><th>الحالة</th><th>التاريخ</th><th>مراجعة</th></tr></thead><tbody id="paymentRows"></tbody></table></div>
+      <p class="note">لا تضغط «اعتماد» إلا بعد التأكد من وصول التحويل فعلًا إلى محفظة فودافون كاش. اعتماد الطلب يفعّل الاشتراك مباشرة.</p>
+    </section>
+    <section id="tab-community" class="card section hidden">
+      <div class="section-head"><h2>إدارة مجتمع مِداد</h2><button class="secondary" id="refreshCommunity">تحديث</button></div>
+      <div class="grid">
+        <article class="card metric"><div class="label">عدد التحديات</div><div class="value" id="communityChallenges">—</div></article>
+        <article class="card metric"><div class="label">المشاركون</div><div class="value" id="communityParticipants">—</div></article>
+        <article class="card metric"><div class="label">الإنجازات اليومية</div><div class="value" id="communityCheckins">—</div></article>
+        <article class="card metric"><div class="label">أعضاء المجتمع</div><div class="value" id="communityMembers">—</div></article>
+      </div>
+      <p id="communityMsg" class="status"></p>
+      <h3 style="margin-top:20px">التحديات المنشأة</h3>
+      <div class="table-wrap"><table><thead><tr><th>التحدي</th><th>الحالة</th><th>البداية</th><th>النهاية</th><th>إجراء</th></tr></thead><tbody id="communityRows"></tbody></table></div>
+      <h3 style="margin-top:20px">أعلى الأعضاء بالنقاط</h3>
+      <div class="table-wrap"><table><thead><tr><th>الترتيب</th><th>الاسم الظاهر</th><th>المستوى</th><th>النقاط</th></tr></thead><tbody id="communityTop"></tbody></table></div>
+      <p class="note">لوحة الإدارة تعرض أسماء المجتمع الظاهرة فقط ولا تعرض عناوين البريد أو أرقام الهواتف.</p>
     </section>
   </main>
 </div>
