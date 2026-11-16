@@ -59,11 +59,62 @@ header .muted{font-size:17px}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 @media(max-width:700px){.wrap{margin-top:14px}.panel:hover{transform:none}.stats{gap:6px}.stat{padding:9px 5px}.stat b{font-size:24px}#notice{top:4px}}
 
+
+/* مساحة تحديات مِداد — تصميم بصري جديد */
+.community-hero{position:relative;min-height:285px;margin:18px 0 16px;padding:30px 30px 22px;display:grid;grid-template-columns:1fr 1.05fr;align-items:center;gap:16px;overflow:hidden;border:1px solid var(--line);border-radius:12px 26px 12px 20px;background:linear-gradient(115deg,rgba(242,230,198,.96),rgba(217,195,149,.88));box-shadow:5px 7px 0 var(--shadow)}
+.community-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 20%,rgba(255,255,255,.5),transparent 30%),repeating-linear-gradient(135deg,transparent 0 22px,rgba(77,97,57,.045) 23px 24px);pointer-events:none}
+.hero-copy{position:relative;z-index:2;max-width:430px}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;color:var(--green);font-size:14px;font-weight:bold;letter-spacing:.3px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(77,97,57,.12);animation:dotPulse 1.8s infinite}
+.hero-copy h2{font:700 clamp(29px,4vw,43px) 'Aref Ruqaa',serif;line-height:1.25;margin:12px 0 8px}
+.hero-copy h2 em{font-style:normal;color:var(--red);text-shadow:1px 2px 0 rgba(167,131,63,.2)}
+.hero-copy p{color:var(--muted);font-size:17px;max-width:340px;line-height:1.7;margin-bottom:18px}
+.hero-cta{display:inline-flex;align-items:center;gap:18px;padding:9px 16px;border-radius:7px 14px 7px 12px;background:var(--ink);color:var(--card);text-decoration:none;font-weight:bold;box-shadow:3px 4px 0 rgba(58,42,25,.2);transition:transform .2s,box-shadow .2s}
+.hero-cta:hover{transform:translateY(-3px);box-shadow:4px 7px 0 rgba(58,42,25,.2)}
+.hero-cta span{font-size:23px;line-height:15px;transition:transform .2s}.hero-cta:hover span{transform:translateX(-4px)}
+.hero-art{height:210px;position:relative;display:flex;align-items:stretch;justify-content:center;gap:5px;perspective:700px;transform:rotate(-2deg)}
+.energy-panel{position:relative;flex:1;max-width:112px;overflow:hidden;border:2px solid rgba(58,42,25,.65);box-shadow:5px 5px 0 rgba(58,42,25,.15);transform:skewY(-5deg);animation:panelFloat 4.8s ease-in-out infinite}
+.energy-panel:before{content:"";position:absolute;inset:-30%;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.48) 0 2deg,transparent 2deg 11deg);opacity:.48;animation:raySpin 16s linear infinite}
+.energy-panel:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.58) 48%,transparent 62%);transform:translateX(-130%);animation:panelShine 4s ease-in-out infinite}
+.energy-panel span{position:absolute;z-index:1;bottom:15px;right:0;left:0;text-align:center;color:#fff8e8;font:700 22px 'Aref Ruqaa',serif;text-shadow:0 2px 5px rgba(0,0,0,.5)}
+.energy-one{background:radial-gradient(circle at 60% 35%,#d6bd82,#7b5735 55%,#3a2a19);animation-delay:-.2s}
+.energy-two{background:radial-gradient(circle at 40% 30%,#d5e0bd,#71845a 52%,#35452b);animation-delay:-1.2s}
+.energy-three{background:radial-gradient(circle at 55% 30%,#f0d69a,#b47d3e 55%,#704a28);animation-delay:-2.2s}
+.energy-four{background:radial-gradient(circle at 45% 30%,#e5b2a3,#a34c3e 55%,#572820);animation-delay:-3.2s}
+.energy-orbit{position:absolute;width:210px;height:210px;border:1px solid rgba(167,131,63,.5);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 0 14px rgba(167,131,63,.05),0 0 0 28px rgba(167,131,63,.035);animation:orbitPulse 5s ease-in-out infinite}
+.hero-foot{position:absolute;bottom:13px;right:30px;left:30px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+.hero-line{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold,#a7833f),transparent)}
+#notice:empty{display:none}#notice{transition:opacity .25s,transform .25s}
+@keyframes dotPulse{50%{box-shadow:0 0 0 9px rgba(77,97,57,0)}}
+@keyframes panelFloat{0%,100%{transform:skewY(-5deg) translateY(0)}50%{transform:skewY(-5deg) translateY(-8px)}}
+@keyframes raySpin{to{transform:rotate(360deg)}}
+@keyframes panelShine{0%,55%{transform:translateX(-130%)}85%,100%{transform:translateX(130%)}}
+@keyframes orbitPulse{50%{transform:translate(-50%,-50%) scale(1.08);opacity:.5}}
+@media(max-width:700px){.community-hero{grid-template-columns:1fr;padding:22px 18px 42px;gap:8px}.hero-copy{max-width:none}.hero-copy h2{font-size:34px}.hero-copy p{max-width:100%;font-size:16px}.hero-art{height:150px;margin:4px 8px 0}.energy-panel{max-width:none}.energy-panel span{font-size:18px}.energy-orbit{width:150px;height:150px}.hero-foot{right:18px;left:18px;bottom:12px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){.live-dot,.energy-panel,.energy-panel:before,.energy-panel:after,.energy-orbit{animation:none!important}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <header><div><h1>مجتمع مِداد</h1><div class="muted">خطوة كل يوم… وإنجاز أكبر مع بعض</div></div><div class="nav"><a class="link" href="/">الرئيسية</a><a class="link" href="account.html">حسابي</a><a class="link" href="subscriptions.html">الباقات</a></div></header>
+
+<section class="community-hero" aria-label="مساحة التحديات">
+ <div class="hero-copy">
+  <span class="hero-kicker"><span class="live-dot"></span> مساحة الإنجاز الجماعي</span>
+  <h2>كل تحدّي… <em>حكاية إنجاز</em></h2>
+  <p>ابدأ بخطوة صغيرة، شارك تقدمك، وخلي كل يوم يقرّبك من هدفك.</p>
+  <a class="hero-cta" href="#challengeList">اكتشف تحدياتك <span aria-hidden="true">←</span></a>
+ </div>
+ <div class="hero-art" aria-hidden="true">
+  <div class="energy-panel energy-one"><span>ابدأ</span></div>
+  <div class="energy-panel energy-two"><span>استمر</span></div>
+  <div class="energy-panel energy-three"><span>تقدّم</span></div>
+  <div class="energy-panel energy-four"><span>أنجز</span></div>
+  <div class="energy-orbit"></div>
+ </div>
+ <div class="hero-foot"><span>خطوة كل يوم</span><span class="hero-line"></span><span>إنجاز أكبر مع بعض</span></div>
+</section>
 <div id="notice" class="msg">جارٍ تحميل المجتمع…</div>
 <section id="locked" class="panel hidden"><h2>مجتمع مِداد للمشتركين</h2><p id="lockedText">سجّل الدخول بحساب Plus أو Pro نشط للمشاركة في التحديات.</p><a class="btn primary" href="account.html">افتح حسابك</a> <a class="btn" href="subscriptions.html">عرض الباقات</a></section>
 <div id="app" class="hidden">
@@ -157,7 +208,7 @@ function renderEnglishQuiz(){
 function renderBadges(data){const root=$("badgeList");root.replaceChildren();const earned=new Set(data.badges.map(x=>x.badge_code));data.badge_catalog.forEach(b=>{const el=document.createElement("div");el.className="badgeitem"+(earned.has(b.code)?"":" locked");safe(el,"div",b.icon,"emoji");safe(el,"b",b.label);safe(el,"div",b.description,"tiny");if(earned.has(b.code))safe(el,"div","تم الحصول عليها ✓","tiny");root.append(el);});}
 function renderLeaderboard(rows){const root=$("leaderboard");root.replaceChildren();if(!rows.length){safe(root,"p","لسه مفيش ترتيب — كن أول من يجمع النقاط!","muted");return;}rows.forEach((p,i)=>{const row=document.createElement("div");row.className="rank";safe(row,"span",String(i+1),"ranknum");const label=document.createElement("div");safe(label,"b",p.display_name);safe(label,"div","المستوى "+p.level,"tiny");row.append(label);safe(row,"b",p.points_total+" نقطة");root.append(row);});}
 async function load(){const data=await api("dashboard");dashboard=data;const total=Number(data.profile.points_total)||0;const progress=total%100;const fill=$("levelProgressFill");const track=fill?.parentElement;if(fill){fill.style.width=progress+"%";if(track)track.setAttribute("aria-valuenow",String(progress));}$("levelProgressText").textContent=progress+" / 100 نقطة";$("points").textContent=total;$("level").textContent=data.profile.level;$("badgeCount").textContent=data.badges.length;$("displayName").value=data.profile.display_name;renderChallenges(data.challenges);renderBadges(data);renderLeaderboard(data.leaderboard);}
-async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel").classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel").classList.add("hidden");}$("app").classList.remove("hidden");await load();renderEnglishQuiz();notice("أهلًا بك في مجتمع مِداد.");}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
+async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel").classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel").classList.add("hidden");}$("app").classList.remove("hidden");await load();renderEnglishQuiz();$("notice").textContent="";$("notice").className="msg hidden";}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
 async function startCommunity(){
  try{
   if(!window.supabase){
