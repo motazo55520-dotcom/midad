@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d9c395"><title>مذاكرتي المتقدمة | مِداد</title>
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#d9c395;--paper2:#bfa56c;--card:#f2e6c6;--ink:#3a2a19;--muted:#7a6444;--red:#9a2f22;--green:#4d6139;--line:rgba(58,42,25,.25);--shadow:rgba(40,25,10,.25)}
+@media(prefers-color-scheme:dark){:root{--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.22);--shadow:rgba(0,0,0,.45)}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font:19px 'Amiri',serif;background:radial-gradient(ellipse at 15% 10%,transparent 40%,rgba(90,55,20,.18) 100%),linear-gradient(135deg,var(--paper),var(--paper2));background-attachment:fixed}
+main{max-width:1000px;margin:auto;padding:25px 16px 55px}header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1,h2,h3{font-family:'Aref Ruqaa','Amiri',serif}h1{font-size:48px;color:var(--red);margin:0}h2{font-size:28px;color:var(--red);margin:0 0 10px}h3{font-size:23px;margin:0}.muted{color:var(--muted);line-height:1.8}.panel{background:var(--card);border:1px solid var(--line);padding:20px;margin:18px 0;box-shadow:3px 5px 10px var(--shadow)}.panel[hidden]{display:none}
+a{color:var(--red)}.back,.btn{display:inline-block;font:inherit;text-decoration:none;border:1px solid var(--ink);border-radius:7px;padding:8px 15px;color:var(--ink);background:transparent;cursor:pointer}.btn.primary{background:var(--ink);color:var(--card);box-shadow:2px 2px 0 var(--red)}button:disabled{opacity:.5;cursor:not-allowed}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tabs button.active{background:var(--red);color:#fff5df;border-color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:4px}.full{grid-column:1/-1}label{font-size:16px;color:var(--muted)}
+input,textarea,select{font:18px 'Amiri',serif;background:rgba(255,255,255,.18);border:1px solid var(--muted);border-radius:6px;padding:8px 10px;color:var(--ink);width:100%}textarea{min-height:95px;resize:vertical}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.msg{border:1px dashed var(--muted);padding:10px 12px;margin-top:12px;white-space:pre-wrap}.msg.error{border-color:var(--red);color:var(--red)}.msg.good{border-color:var(--green);color:var(--green)}
+.item{padding:12px 0;border-bottom:1px dashed var(--line)}.item b{display:block}.item small{color:var(--muted)}.schedule{margin-top:10px}.schedule-day{display:grid;grid-template-columns:120px 1fr;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}.schedule-day b{color:var(--red)}
+.flashcard{min-height:180px;background:rgba(120,90,45,.10);border:1px dashed var(--muted);padding:22px;display:grid;place-items:center;text-align:center;font-size:24px;line-height:1.8;white-space:pre-wrap}.flashcard small{display:block;color:var(--muted);font-size:15px}
+.statrow{display:flex;gap:10px;flex-wrap:wrap}.stat{padding:10px 14px;background:rgba(120,90,45,.12);min-width:120px}.stat b{display:block;font:26px 'Aref Ruqaa',serif;color:var(--red)}
+@media(max-width:700px){.grid,.fields{grid-template-columns:1fr}.full{grid-column:auto}.schedule-day{grid-template-columns:1fr;gap:0}h1{font-size:40px}}
+</style></head>
+<body><main>
+<header><div><h1>مذاكرتي المتقدمة</h1><div class="muted">خطط مذاكرة وبطاقات ومراجعة ذكية — بدون ذكاء اصطناعي</div></div><a class="back" href="/">العودة لمِداد ←</a></header>
+<section class="panel" id="locked"><h2>الميزة لمشتركي Plus وPro</h2><p class="muted" id="lockedText">سجّل الدخول بحسابك المدفوع للوصول إلى أدوات المذاكرة المتقدمة.</p><div class="actions"><a class="btn primary" href="account.html">حسابي</a><a class="btn" href="subscriptions.html">عرض الباقات</a></div></section>
+<div id="workspace" hidden>
+<div class="statrow" id="stats"></div>
+<nav class="tabs" aria-label="أدوات المذاكرة"><button class="btn active" data-tab="plans">خطط المذاكرة</button><button class="btn" data-tab="cards">البطاقات</button><button class="btn" data-tab="review">مراجعة اليوم</button></nav>
+<section class="panel tabpanel" id="plansPanel">
+<h2>إنشاء خطة استعداد للامتحان</h2><p class="muted">اكتب الموضوعات أو الدروس، ومِداد يوزعها على الأيام المتاحة قبل الامتحان. التخطيط حسابي ومحلي داخل الموقع وليس توليدًا بالذكاء الاصطناعي.</p>
+<div class="fields">
+<div class="field"><label for="planTitle">اسم الخطة</label><input id="planTitle" maxlength="100" placeholder="خطة امتحان الشهر"></div>
+<div class="field"><label for="subject">المادة</label><input id="subject" maxlength="80" placeholder="الرياضيات"></div>
+<div class="field"><label for="examDate">موعد الامتحان</label><input id="examDate" type="date"></div>
+<div class="field"><label for="minutes">وقت المذاكرة اليومي بالدقائق</label><input id="minutes" type="number" min="15" max="600" value="60"></div>
+<div class="field full"><label for="topics">الدروس أو الموضوعات (كل درس في سطر)</label><textarea id="topics" maxlength="5000" placeholder="الوحدة الأولى&#10;الوحدة الثانية&#10;حل تدريبات&#10;مراجعة نهائية"></textarea></div>
+</div>
+<div class="actions"><button class="btn primary" id="createPlan">إنشاء الخطة</button></div><div class="msg" id="planMsg" role="status"></div>
+<h2 style="margin-top:24px">خططي المحفوظة</h2><div id="plansList"></div>
+</section>
+<section class="panel tabpanel" id="cardsPanel" hidden>
+<h2>مجموعات البطاقات التعليمية</h2>
+<div class="grid">
+<div><div class="field"><label for="deckName">اسم المجموعة</label><input id="deckName" maxlength="80" placeholder="مصطلحات الأحياء"></div><div class="field" style="margin-top:8px"><label for="deckSubject">المادة</label><input id="deckSubject" maxlength="80" placeholder="الأحياء"></div><div class="actions"><button class="btn primary" id="createDeck">إنشاء مجموعة</button></div></div>
+<div><label for="deckSelect">المجموعة الحالية</label><select id="deckSelect"></select><div class="muted" id="deckInfo">أنشئ مجموعة لبدء إضافة البطاقات.</div></div>
+</div>
+<div class="fields" style="margin-top:18px">
+<div class="field"><label for="front">السؤال أو المصطلح</label><textarea id="front" maxlength="2000" placeholder="ما تعريف الخلية؟"></textarea></div>
+<div class="field"><label for="back">الإجابة أو الشرح</label><textarea id="back" maxlength="4000" placeholder="هي الوحدة الأساسية لبناء الكائن الحي..."></textarea></div>
+</div>
+<div class="actions"><button class="btn primary" id="addCard">إضافة بطاقة</button></div><div class="msg" id="cardMsg" role="status"></div>
+<h2 style="margin-top:24px">بطاقات المجموعة</h2><div id="cardsList"></div>
+</section>
+<section class="panel tabpanel" id="reviewPanel" hidden>
+<h2>مراجعة البطاقات المستحقة</h2><p class="muted">جاوب من ذاكرتك، اكشف الإجابة، ثم اختار مدى سهولة التذكر. المواعيد تتغير تلقائيًا حسب تقييمك.</p>
+<div class="statrow" id="reviewStats"></div>
+<div class="flashcard" id="reviewCard">جارٍ تحميل البطاقات…</div>
+<div class="actions" style="justify-content:center"><button class="btn" id="reveal">إظهار الإجابة</button></div>
+<div class="actions" id="ratingActions" hidden style="justify-content:center"><button class="btn" data-rating="again">صعب جدًا</button><button class="btn" data-rating="hard">صعب</button><button class="btn primary" data-rating="good">جيد</button><button class="btn" data-rating="easy">سهل</button></div>
+<div class="msg" id="reviewMsg" role="status"></div>
+</section>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<script>
+(()=> {
+"use strict";
+const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s";
+const sb=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+let user=null,decks=[],plans=[],cards=[],currentCard=null,revealed=false;
+const msg=(id,t,type="")=>{$(id).textContent=t;$(id).className="msg"+(type?" "+type:"")};
+async function init(){const {data:{session}}=await sb.auth.getSession();if(!session){$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";return;}user=session.user;const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",user.id).maybeSingle();const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(error||!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("lockedText").textContent="أدوات المذاكرة المتقدمة متاحة لمشتركي Plus وPro النشطين فقط.";return;}$("locked").hidden=true;$("workspace").hidden=false;await loadAll();}
+async function loadAll(){const [p,d,c]=await Promise.all([sb.from("study_plans").select("*").order("exam_date"),sb.from("flashcard_decks").select("*").order("created_at",{ascending:false}),sb.from("flashcards").select("*").order("due_at")]);if(p.error||d.error||c.error){msg("planMsg",(p.error||d.error||c.error).message,"error");return;}plans=p.data||[];decks=d.data||[];cards=c.data||[];renderStats();renderPlans();renderDecks();renderCards();renderReview();}
+function renderStats(){const due=cards.filter(x=>new Date(x.due_at)<=new Date()).length;$("stats").replaceChildren();[["خطط",plans.length],["مجموعات",decks.length],["بطاقات",cards.length],["مراجعات مستحقة",due]].forEach(([l,n])=>{const e=document.createElement("div");e.className="stat";const b=document.createElement("b");b.textContent=n;const t=document.createElement("span");t.textContent=l;e.append(b,t);$("stats").append(e)});}
+function renderPlans(){const root=$("plansList");root.replaceChildren();if(!plans.length){root.textContent="لسه مفيش خطط محفوظة.";return;}plans.forEach(p=>{const box=document.createElement("div");box.className="item";const title=document.createElement("b");title.textContent=p.title+" — "+p.subject;const meta=document.createElement("small");meta.textContent="الامتحان: "+p.exam_date+" · "+p.daily_minutes+" دقيقة يوميًا";box.append(title,meta);const days=document.createElement("div");days.className="schedule";(p.schedule||[]).slice(0,14).forEach(d=>{const row=document.createElement("div");row.className="schedule-day";const date=document.createElement("b");date.textContent=d.date;const topics=document.createElement("span");topics.textContent=(d.topics||[]).join("، ");row.append(date,topics);days.append(row)});if((p.schedule||[]).length>14){const more=document.createElement("small");more.textContent="تم إخفاء بقية الأيام لتسهيل العرض";days.append(more)}box.append(days);const del=document.createElement("button");del.className="btn";del.textContent="حذف الخطة";del.addEventListener("click",async()=>{if(!confirm("حذف الخطة؟"))return;const {error}=await sb.from("study_plans").delete().eq("id",p.id);if(error){msg("planMsg",error.message,"error");return;}await loadAll()});box.append(del);root.append(box)});}
+function renderDecks(){const select=$("deckSelect"),previous=select.value;select.replaceChildren();decks.forEach(d=>{const o=document.createElement("option");o.value=d.id;o.textContent=d.name+(d.subject?" — "+d.subject:"");select.append(o)});if(decks.some(d=>d.id===previous))select.value=previous;$("deckInfo").textContent=decks.length?"عدد المجموعات: "+decks.length:"أنشئ مجموعة لبدء إضافة البطاقات.";}
+function renderCards(){const root=$("cardsList");root.replaceChildren();const deck=decks.find(d=>d.id===$("deckSelect").value);const list=deck?cards.filter(c=>c.deck_id===deck.id):cards;if(!list.length){root.textContent="لا توجد بطاقات في المجموعة الحالية.";return;}list.forEach(c=>{const box=document.createElement("div");box.className="item";const q=document.createElement("b");q.textContent=c.front;const a=document.createElement("small");a.textContent=c.back;const del=document.createElement("button");del.className="btn";del.textContent="حذف";del.addEventListener("click",async()=>{const {error}=await sb.from("flashcards").delete().eq("id",c.id);if(error){msg("cardMsg",error.message,"error");return;}await loadAll()});box.append(q,a,del);root.append(box)});}
+function renderReview(){const due=cards.filter(c=>new Date(c.due_at)<=new Date()).sort((a,b)=>new Date(a.due_at)-new Date(b.due_at));$("reviewStats").textContent="المستحق الآن: "+due.length+" بطاقة";currentCard=due[0]||null;revealed=false;$("ratingActions").hidden=true;$("reveal").hidden=!currentCard;$("reviewCard").textContent=currentCard?currentCard.front:"ممتاز! مفيش بطاقات مستحقة دلوقتي.";msg("reviewMsg",currentCard?"فكر في الإجابة قبل ما تكشفها.":"ارجع لاحقًا لمراجعة بطاقات جديدة.","good");}
+$("createPlan").addEventListener("click",async()=>{const title=$("planTitle").value.trim(),subject=$("subject").value.trim(),date=$("examDate").value,minutes=Number($("minutes").value),topics=$("topics").value.split(/\n|،|,/).map(x=>x.trim()).filter(Boolean);if(title.length<2||subject.length<2||!date||!Number.isInteger(minutes)||minutes<15||minutes>600||!topics.length){msg("planMsg","راجع اسم الخطة والمادة والتاريخ والوقت واكتب درسًا واحدًا على الأقل.","error");return;}const start=new Date();start.setHours(0,0,0,0);const exam=new Date(date+"T00:00:00");const days=Math.ceil((exam-start)/86400000);if(days<1||days>365){msg("planMsg","اختار موعد امتحان من بكرة وحتى سنة من الآن.","error");return;}const schedule=[];for(let i=0;i<days;i++){const d=new Date(start);d.setDate(d.getDate()+i);const begin=Math.floor(i*topics.length/days),finish=Math.floor((i+1)*topics.length/days);const daily=topics.slice(begin,Math.max(begin+1,finish));schedule.push({date:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"),topics:daily,minutes});}const {error}=await sb.from("study_plans").insert({user_id:user.id,title,subject,exam_date:date,daily_minutes:minutes,schedule});if(error){msg("planMsg",error.message,"error");return;}msg("planMsg","تم إنشاء خطة المذاكرة وحفظها في حسابك.","good");$("planTitle").value="";$("topics").value="";await loadAll();});
+$("createDeck").addEventListener("click",async()=>{const name=$("deckName").value.trim(),subject=$("deckSubject").value.trim();if(name.length<2){msg("cardMsg","اكتب اسمًا للمجموعة.","error");return;}const {error}=await sb.from("flashcard_decks").insert({user_id:user.id,name,subject});if(error){msg("cardMsg",error.message,"error");return;}$("deckName").value="";await loadAll();msg("cardMsg","تم إنشاء المجموعة.","good");});
+$("addCard").addEventListener("click",async()=>{const deckId=$("deckSelect").value,front=$("front").value.trim(),back=$("back").value.trim();if(!deckId||!front||!back){msg("cardMsg","اختار مجموعة واكتب السؤال والإجابة.","error");return;}const {error}=await sb.from("flashcards").insert({user_id:user.id,deck_id:deckId,front,back});if(error){msg("cardMsg",error.message,"error");return;}$("front").value="";$("back").value="";await loadAll();msg("cardMsg","تمت إضافة البطاقة.","good");});
+$("deckSelect").addEventListener("change",renderCards);
+$("reveal").addEventListener("click",()=>{if(!currentCard)return;$("reviewCard").textContent=currentCard.back;revealed=true;$("ratingActions").hidden=false;$("reveal").hidden=true;});
+$("ratingActions").addEventListener("click",async e=>{const b=e.target.closest("[data-rating]");if(!b||!currentCard||!revealed)return;const rating=b.dataset.rating;let ease=Number(currentCard.ease_factor),interval=Number(currentCard.interval_days),reps=Number(currentCard.repetitions);if(rating==="again"){reps=0;interval=1;ease=Math.max(1.3,ease-.2)}else if(rating==="hard"){interval=Math.max(1,Math.round(Math.max(1,interval)*1.2));ease=Math.max(1.3,ease-.15);reps++}else if(rating==="good"){interval=reps===0?1:reps===1?3:Math.round(Math.max(1,interval)*ease);reps++}else{interval=Math.max(4,Math.round(Math.max(1,interval)*(ease+.3)));ease=Math.min(3,ease+.15);reps++;}const due=new Date();due.setDate(due.getDate()+interval);const {error}=await sb.from("flashcards").update({ease_factor:Number(ease.toFixed(2)),interval_days:interval,repetitions:reps,last_reviewed_at:new Date().toISOString(),due_at:due.toISOString()}).eq("id",currentCard.id);if(error){msg("reviewMsg",error.message,"error");return;}await loadAll();});
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".tabpanel").forEach(x=>x.hidden=x.id!==b.dataset.tab+"Panel")}));
+init();
+})();
+</script></body></html>
