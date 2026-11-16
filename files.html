@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d9c395"><title>ملفاتي السحابية | مِداد</title>
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#d9c395;--paper2:#bfa56c;--card:#f2e6c6;--ink:#3a2a19;--muted:#7a6444;--red:#9a2f22;--green:#4d6139;--line:rgba(58,42,25,.25);--shadow:rgba(40,25,10,.25)}
+@media(prefers-color-scheme:dark){:root{--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.22);--shadow:rgba(0,0,0,.45)}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font:19px 'Amiri',serif;background:radial-gradient(ellipse at 15% 10%,transparent 40%,rgba(90,55,20,.18) 100%),linear-gradient(135deg,var(--paper),var(--paper2));background-attachment:fixed}
+main{max-width:850px;margin:auto;padding:25px 16px 50px}header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1,h2,h3{font-family:'Aref Ruqaa','Amiri',serif}h1{font-size:48px;color:var(--red);margin:0}h2{font-size:28px;color:var(--red);margin:0 0 8px}.muted{color:var(--muted);line-height:1.8}.panel{background:var(--card);border:1px solid var(--line);padding:20px;margin:20px 0;box-shadow:3px 5px 10px var(--shadow)}.panel[hidden]{display:none}
+a{color:var(--red)}.back,.btn{display:inline-block;font:inherit;text-decoration:none;border:1px solid var(--ink);border-radius:7px;padding:8px 15px;color:var(--ink);background:transparent;cursor:pointer}.btn.primary{background:var(--ink);color:var(--card);box-shadow:2px 2px 0 var(--red)}button:disabled{opacity:.5;cursor:not-allowed}
+input[type=file]{display:block;width:100%;padding:12px;border:1px dashed var(--muted);background:rgba(255,255,255,.16);font:16px 'Amiri',serif;color:var(--ink)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.msg{border:1px dashed var(--muted);padding:10px 12px;margin-top:12px;white-space:pre-wrap;line-height:1.7}.msg.good{border-color:var(--green);color:var(--green)}.msg.error{border-color:var(--red);color:var(--red)}
+.meter{height:12px;background:rgba(100,70,30,.2);border-radius:9px;overflow:hidden;margin:12px 0}.meter i{display:block;height:100%;background:var(--green);width:0;transition:width .2s}.file{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}.file-info{min-width:0}.file-info b{display:block;overflow-wrap:anywhere}.file-info small{color:var(--muted)}.file-actions{display:flex;gap:7px;flex-wrap:wrap}.file-actions button{font-size:16px;padding:5px 10px}.empty{color:var(--muted);text-align:center;padding:24px}
+@media(max-width:600px){h1{font-size:40px}.file{align-items:flex-start;flex-direction:column}.file-actions{width:100%}}
+</style></head>
+<body><main>
+<header><div><h1>ملفاتي السحابية</h1><div class="muted">ملفاتك الدراسية محفوظة في مساحة خاصة بحسابك</div></div><a class="back" href="account.html">حسابي ←</a></header>
+<section class="panel" id="loginNotice"><h2>سجّل الدخول أولًا</h2><p class="muted">إدارة الملفات السحابية متاحة لحسابات Plus وPro النشطة.</p><a class="btn primary" href="account.html">فتح حسابي</a></section>
+<section class="panel" id="filesPanel" hidden>
+<h2>مساحة التخزين</h2><div id="usageText" class="muted">جارٍ تحميل المساحة…</div><div class="meter"><i id="usageBar"></i></div>
+<div class="muted">PDF وJPG وPNG فقط — الحد الأقصى للملف الواحد 20 MB — الملفات خاصة ولا يمكن فتحها دون رابط مؤقت.</div>
+<div style="margin-top:15px"><input id="fileInput" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"></div>
+<div class="actions"><button class="btn primary" id="upload">رفع الملف</button><button class="btn" id="reload">تحديث الملفات</button></div>
+<div class="msg" id="msg" role="status" aria-live="polite">جارٍ تحميل ملفاتك…</div>
+<h2 style="margin-top:22px">ملفاتي</h2><div id="fileList"><div class="empty">جارٍ التحميل…</div></div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<script>
+(()=> {
+"use strict";
+const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",API=URL+"/functions/v1/midad-files";
+const sb=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+const set=(m,t="")=>{$("msg").textContent=m;$("msg").className="msg"+(t?" "+t:"")};
+async function call(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول أولًا");const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||"تعذر تنفيذ الطلب");return d}
+const size=n=>n<1024*1024?(n/1024).toFixed(0)+" KB":(n/1024/1024).toFixed(1)+" MB";
+async function refresh(){try{const {data:{session}}=await sb.auth.getSession();$("loginNotice").hidden=!!session;$("filesPanel").hidden=!session;if(!session)return;const d=await call("list");$("usageText").textContent="استخدمت "+size(d.used_bytes)+" من "+size(d.quota_bytes)+" — المتبقي "+size(d.remaining_bytes);$("usageBar").style.width=Math.min(100,d.used_bytes/d.quota_bytes*100)+"%";const root=$("fileList");root.replaceChildren();if(!d.files.length){root.innerHTML='<div class="empty">لسه مفيش ملفات مرفوعة</div>';set("ارفع أول ملف دراسي ليظهر هنا.");return;}d.files.forEach(f=>{const row=document.createElement("div");row.className="file";const info=document.createElement("div");info.className="file-info";const name=document.createElement("b");name.textContent=f.file_name;const meta=document.createElement("small");meta.textContent=size(f.size_bytes)+" · "+new Date(f.created_at).toLocaleDateString("ar-EG");info.append(name,meta);const actions=document.createElement("div");actions.className="file-actions";const down=document.createElement("button");down.className="btn";down.textContent="فتح / تنزيل";down.addEventListener("click",async()=>{try{const x=await call("download",{file_id:f.id});window.open(x.url,"_blank","noopener,noreferrer")}catch(e){set(e.message,"error")}});const del=document.createElement("button");del.className="btn";del.textContent="حذف";del.addEventListener("click",async()=>{if(!confirm("حذف الملف نهائيًا؟"))return;try{await call("delete",{file_id:f.id});set("تم حذف الملف وتحرير مساحته.","good");await refresh()}catch(e){set(e.message,"error")}});actions.append(down,del);row.append(info,actions);root.append(row)});set("تم تحميل ملفاتك.","good");}catch(e){set(e.message,"error");if(e.message.includes("Plus")||e.message.includes("Pro")){$("filesPanel").hidden=true;$("loginNotice").hidden=false;$("loginNotice").querySelector("p").textContent=e.message;}}}
+$("upload").addEventListener("click",async()=>{const file=$("fileInput").files[0];if(!file){set("اختار ملفًا أولًا.","error");return;}const b=$("upload");b.disabled=true;set("جاري رفع الملف…");try{const {data:{session}}=await sb.auth.getSession();const form=new FormData();form.append("file",file);const r=await fetch(API,{method:"POST",headers:{"apikey":KEY,"Authorization":"Bearer "+session.access_token},body:form});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||"فشل رفع الملف");$("fileInput").value="";set("تم رفع الملف بنجاح.","good");await refresh()}catch(e){set(e.message,"error")}finally{b.disabled=false}});
+$("reload").addEventListener("click",refresh);sb.auth.onAuthStateChange(()=>setTimeout(refresh,0));refresh();
+})();
+</script></body></html>
