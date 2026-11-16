@@ -148,11 +148,92 @@ async function loadVisitors() {
   }
   for (const v of data) {
     const tr = document.createElement("tr");
-    [v.page_path, v.device_type, date(v.started_at), duration(v.started_at), date(v.last_seen_at), v.referrer_domain || "مباشر"].forEach((val) => {
+    const sessionCell = document.createElement("td");
+    const sessionLabel = document.createElement("span");
+    sessionLabel.className = "session-id";
+    sessionLabel.textContent = (v.session_id || "").slice(0, 12) + "…";
+    sessionCell.append(sessionLabel);
+    tr.append(sessionCell);
+    [v.page_path, ({mobile:"موبايل",tablet:"تابلت",desktop:"كمبيوتر",unknown:"غير معروف"})[v.device_type] || v.device_type || "غير معروف", date(v.started_at), duration(v.started_at), date(v.last_seen_at), v.referrer_domain || "مباشر"].forEach((val) => {
       const td = document.createElement("td"); td.textContent = val; tr.append(td);
     });
+    const actionCell = document.createElement("td");
+    const detailsButton = document.createElement("button");
+    detailsButton.type = "button";
+    detailsButton.className = "detail-btn";
+    detailsButton.textContent = "تفاصيل";
+    detailsButton.setAttribute("aria-expanded", "false");
+    detailsButton.addEventListener("click", async () => {
+      const existing = tr.nextElementSibling;
+      if (existing?.classList.contains("session-detail")) {
+        existing.remove();
+        detailsButton.textContent = "تفاصيل";
+        detailsButton.setAttribute("aria-expanded", "false");
+        return;
+      }
+      document.querySelectorAll(".session-detail").forEach(row => row.remove());
+      document.querySelectorAll("#visitors .detail-btn").forEach(button => {
+        button.textContent = "تفاصيل";
+        button.setAttribute("aria-expanded", "false");
+      });
+      detailsButton.textContent = "إخفاء";
+      detailsButton.setAttribute("aria-expanded", "true");
+      const detailRow = document.createElement("tr");
+      detailRow.className = "session-detail";
+      const detailCell = document.createElement("td");
+      detailCell.colSpan = 8;
+      detailCell.textContent = "جارٍ تحميل سجل الصفحات…";
+      detailRow.append(detailCell);
+      tr.after(detailRow);
+      await loadSessionDetails(v.session_id, detailCell);
+    });
+    actionCell.append(detailsButton);
+    tr.append(actionCell);
     body.append(tr);
   }
+}
+
+async function loadSessionDetails(sessionId, container) {
+  const { data, error } = await supabase.from("analytics_events")
+    .select("page_path,occurred_at,event_name,referrer_domain")
+    .eq("session_id", sessionId)
+    .order("occurred_at", { ascending: true })
+    .limit(200);
+  container.replaceChildren();
+  if (error) {
+    container.textContent = "تعذر تحميل تفاصيل الجلسة: " + error.message;
+    return;
+  }
+  const heading = document.createElement("strong");
+  heading.textContent = "سجل الصفحات في هذه الجلسة";
+  container.append(heading);
+  if (!data?.length) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "لا توجد مشاهدات صفحات مسجلة لهذه الجلسة بعد";
+    container.append(empty);
+    return;
+  }
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const header = document.createElement("tr");
+  ["الوقت","الصفحة","نوع الحدث","مصدر الإحالة"].forEach(label => {
+    const th = document.createElement("th"); th.textContent = label; header.append(th);
+  });
+  thead.append(header); table.append(thead);
+  const tbody = document.createElement("tbody");
+  for (const event of data) {
+    const row = document.createElement("tr");
+    [date(event.occurred_at), event.page_path || "/", event.event_name || "page_view", event.referrer_domain || "مباشر"].forEach(value => {
+      const cell = document.createElement("td"); cell.textContent = value; row.append(cell);
+    });
+    tbody.append(row);
+  }
+  table.append(tbody); container.append(table);
+  const session = document.createElement("p");
+  session.className = "session-id";
+  session.textContent = "Session: " + sessionId;
+  container.append(session);
 }
 
 let lastAnalyticsExport = [];
