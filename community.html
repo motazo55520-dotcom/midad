@@ -91,6 +91,7 @@ function renderEnglishQuiz(){
     root.replaceChildren();
     safe(root,"h2","نتيجتك: "+result.attempt.score+" / "+result.attempt.total_questions);
     safe(root,"p",result.message,"msg");
+    try{await load();}catch(refreshError){$("points").textContent=result.profile?.points_total??$("points").textContent;$("level").textContent=result.profile?.level??$("level").textContent;}
     englishQuestions.forEach((q,i)=>{
      const correct=result.correct_answers[i],selected=englishAnswers[i],box=document.createElement("div");box.className="challenge";
      safe(box,"b",(i+1)+". "+(selected===correct?"إجابة صحيحة ✓":"الإجابة الصحيحة: "+String.fromCharCode(65+correct)+". "+q.o[correct]));
