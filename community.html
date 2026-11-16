@@ -42,8 +42,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;fl
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <script>
 const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=URL+"/functions/v1/midad-community";
-const sb=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
-let currentPlan="plus",dashboard=null;
+const $=id=>document.getElementById(id);
+let sb=null,currentPlan="plus",dashboard=null;
 function notice(text,error=false){$("notice").textContent=text;$("notice").className="msg"+(error?" error":"");}
 function safe(el,tag,text,cls){const n=document.createElement(tag);if(cls)n.className=cls;n.textContent=text;el.append(n);return n;}
 async function api(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول أولًا من صفحة حسابي.");const res=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||"تعذر تنفيذ الطلب.");return data;}
@@ -53,10 +53,31 @@ function renderBadges(data){const root=$("badgeList");root.replaceChildren();con
 function renderLeaderboard(rows){const root=$("leaderboard");root.replaceChildren();if(!rows.length){safe(root,"p","لسه مفيش ترتيب — كن أول من يجمع النقاط!","muted");return;}rows.forEach((p,i)=>{const row=document.createElement("div");row.className="rank";safe(row,"span",String(i+1),"ranknum");const label=document.createElement("div");safe(label,"b",p.display_name);safe(label,"div","المستوى "+p.level,"tiny");row.append(label);safe(row,"b",p.points_total+" نقطة");root.append(row);});}
 async function load(){const data=await api("dashboard");dashboard=data;$("points").textContent=data.profile.points_total;$("level").textContent=data.profile.level;$("badgeCount").textContent=data.badges.length;$("displayName").value=data.profile.display_name;renderChallenges(data.challenges);renderBadges(data);renderLeaderboard(data.leaderboard);}
 async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel").classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel").classList.add("hidden");}$("app").classList.remove("hidden");await load();notice("أهلًا بك في مجتمع مِداد.");}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
-$("createForm").addEventListener("submit",async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;$("createMsg").textContent="جارٍ إنشاء التحدي…";try{const r=await api("create",{title:$("challengeTitle").value,description:$("challengeDesc").value,duration_days:Number($("duration").value)});$("createForm").reset();$("createMsg").textContent="تم إنشاء التحدي. كود الدعوة: "+r.challenge.invite_code;await load();}catch(err){$("createMsg").textContent=err.message;}finally{b.disabled=false;}});
-$("joinForm").addEventListener("submit",async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;$("joinMsg").textContent="جارٍ التحقق من الكود…";try{const r=await api("join",{invite_code:$("inviteCode").value});$("joinMsg").textContent=r.message;$("inviteCode").value="";await load();}catch(err){$("joinMsg").textContent=err.message;}finally{b.disabled=false;}});
-$("saveName").addEventListener("click",async()=>{const b=$("saveName");b.disabled=true;try{await api("profile",{display_name:$("displayName").value});$("profileMsg").textContent="تم حفظ اسمك الظاهر.";await load();}catch(e){$("profileMsg").textContent=e.message;}finally{b.disabled=false;}});
-$("refresh").addEventListener("click",async()=>{try{await load();notice("تم تحديث بيانات المجتمع.");}catch(e){notice(e.message,true);}});
-boot();
+async function startCommunity(){
+ try{
+  if(!window.supabase){
+   notice("جارٍ تحميل مكتبة الاتصال…");
+   await new Promise((resolve,reject)=>{
+    const fallback=document.createElement("script");
+    fallback.src="https://unpkg.com/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js";
+    fallback.onload=resolve;
+    fallback.onerror=()=>reject(new Error("تعذر تحميل مكتبة الاتصال. تحقق من الإنترنت أو جرّب تعطيل مانع الإعلانات لهذه الصفحة."));
+    document.head.appendChild(fallback);
+   });
+  }
+  if(!window.supabase?.createClient)throw new Error("مكتبة الاتصال لم تبدأ بشكل صحيح.");
+  sb=window.supabase.createClient(URL,KEY);
+  $("createForm").addEventListener("submit",async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;$("createMsg").textContent="جارٍ إنشاء التحدي…";try{const r=await api("create",{title:$("challengeTitle").value,description:$("challengeDesc").value,duration_days:Number($("duration").value)});$("createForm").reset();$("createMsg").textContent="تم إنشاء التحدي. كود الدعوة: "+r.challenge.invite_code;await load();}catch(err){$("createMsg").textContent=err.message;}finally{b.disabled=false;}});
+  $("joinForm").addEventListener("submit",async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;$("joinMsg").textContent="جارٍ التحقق من الكود…";try{const r=await api("join",{invite_code:$("inviteCode").value});$("joinMsg").textContent=r.message;$("inviteCode").value="";await load();}catch(err){$("joinMsg").textContent=err.message;}finally{b.disabled=false;}});
+  $("saveName").addEventListener("click",async()=>{const b=$("saveName");b.disabled=true;try{await api("profile",{display_name:$("displayName").value});$("profileMsg").textContent="تم حفظ اسمك الظاهر.";await load();}catch(e){$("profileMsg").textContent=e.message;}finally{b.disabled=false;}});
+  $("refresh").addEventListener("click",async()=>{try{await load();notice("تم تحديث بيانات المجتمع.");}catch(e){notice(e.message,true);}});
+  await boot();
+ }catch(e){
+  $("locked").classList.remove("hidden");
+  $("lockedText").textContent=e.message||"تعذر بدء صفحة المجتمع.";
+  notice(e.message||"تعذر بدء صفحة المجتمع.",true);
+ }
+}
+startCommunity();
 </script>
 </body></html>
