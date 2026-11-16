@@ -14,6 +14,51 @@
 a{color:var(--red)}button,input,textarea,select{font:inherit}button{cursor:pointer}.wrap{width:min(1050px,94%);margin:24px auto 60px}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}h1,h2,h3,p{margin-top:0}h1{font:700 42px 'Aref Ruqaa',serif;margin-bottom:2px}h2{font:700 27px 'Aref Ruqaa',serif;margin-bottom:10px}h3{font:700 22px 'Aref Ruqaa',serif;margin-bottom:8px}.muted,.sub{color:var(--muted);font-size:16px}.nav{display:flex;gap:8px;flex-wrap:wrap}.link,.btn{border:1px solid var(--line);border-radius:8px 14px 8px 12px;padding:8px 13px;text-decoration:none;background:var(--card);color:var(--ink);box-shadow:2px 2px 0 var(--shadow);font-weight:700}.btn.primary{background:var(--ink);color:var(--card)}.btn.green{background:var(--green);color:#fff5df}.btn.red{background:var(--red);color:#fff5df}.btn:disabled{opacity:.5;cursor:not-allowed}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.panel{grid-column:span 12;background:var(--card);border:1px solid var(--line);border-radius:8px 18px 8px 14px;padding:18px;box-shadow:4px 5px 0 var(--shadow);position:relative}.half{grid-column:span 6}.third{grid-column:span 4}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{border:1px dashed var(--line);border-radius:10px;padding:12px;text-align:center}.stat b{display:block;font:700 28px 'Aref Ruqaa',serif}.formrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.field{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.25);color:var(--ink)}.formrow .field{flex:1;min-width:140px}.msg{padding:9px 12px;border-radius:8px;margin:10px 0;background:rgba(77,97,57,.12);color:var(--green)}.msg.error{background:rgba(154,47,34,.12);color:var(--red)}.challenge{border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;background:rgba(255,255,255,.13)}.challenge-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}.code{font:bold 20px ui-monospace,monospace;letter-spacing:2px;background:rgba(58,42,25,.09);padding:5px 9px;border-radius:6px;direction:ltr;display:inline-block}.people{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.person{padding:4px 9px;border:1px solid var(--line);border-radius:20px;font-size:15px}.badgegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px}.badgeitem{padding:12px;border:1px dashed var(--line);border-radius:10px;text-align:center}.badgeitem .emoji{font-size:27px}.badgeitem.locked{opacity:.45;filter:grayscale(1)}.rank{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:8px;border-bottom:1px dashed var(--line)}.rank:last-child{border:0}.ranknum{font-weight:bold;text-align:center}.hidden{display:none!important}.tiny{font-size:14px;color:var(--muted)}footer{text-align:center;color:var(--muted);margin:24px}
 @media(max-width:700px){.half,.third{grid-column:span 12}.stats{grid-template-columns:repeat(3,1fr)}h1{font-size:35px}.panel{padding:14px}}
+
+/* مِداد — لمسات تفاعلية هادئة */
+:root{--gold:#a7833f;--glow:rgba(167,131,63,.2)}
+body{background-image:radial-gradient(circle at 8% 8%,rgba(255,248,220,.34),transparent 26%),radial-gradient(circle at 92% 24%,rgba(77,97,57,.12),transparent 24%),radial-gradient(ellipse at 15% 10%,transparent 40%,rgba(90,55,20,.18) 100%),linear-gradient(135deg,var(--paper),var(--paper2))}
+.wrap{animation:pageIn .65s cubic-bezier(.2,.75,.25,1) both}
+header{position:relative;padding:10px 4px 16px;border-bottom:1px solid var(--line)}
+h1{letter-spacing:.2px;text-shadow:1px 2px 0 rgba(167,131,63,.18)}
+header .muted{font-size:17px}
+.panel{overflow:hidden;isolation:isolate;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.panel:before{content:"";position:absolute;z-index:-1;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--gold),var(--green));opacity:.65}
+.panel:hover{transform:translateY(-3px);box-shadow:5px 9px 0 var(--shadow),0 10px 24px var(--glow);border-color:rgba(167,131,63,.48)}
+#app>.panel:first-child{background:linear-gradient(125deg,var(--card),rgba(242,230,198,.72));}
+.stat{background:rgba(255,255,255,.13);transition:transform .2s ease,background .2s ease}
+.stat:hover{transform:translateY(-3px) scale(1.015);background:var(--glow)}
+.stat b{color:var(--green);font-variant-numeric:tabular-nums;text-shadow:0 2px 0 rgba(167,131,63,.14)}
+.level-track{height:10px;border-radius:30px;background:rgba(58,42,25,.14);overflow:hidden;margin-top:12px;border:1px solid var(--line)}
+.level-fill{height:100%;width:0;border-radius:30px;background:linear-gradient(90deg,var(--green),#a7833f);transition:width .8s cubic-bezier(.2,.8,.2,1);position:relative}
+.level-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.45) 48%,transparent 70%);transform:translateX(-100%);animation:shine 3.2s ease-in-out infinite}
+.challenge{position:relative;overflow:hidden;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(167,131,63,.07))}
+.challenge:after{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(var(--gold),var(--green));opacity:.55}
+.challenge:hover{transform:translateY(-2px);border-color:rgba(167,131,63,.55);box-shadow:0 7px 18px var(--glow)}
+.btn,.link{transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+.btn:hover,.link:hover{transform:translateY(-2px);box-shadow:3px 5px 0 var(--shadow);filter:brightness(1.04)}
+.btn:active,.link:active{transform:translateY(1px) scale(.985);box-shadow:1px 1px 0 var(--shadow)}
+.btn:focus-visible,.link:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.field{transition:border-color .2s ease,box-shadow .2s ease}
+.field:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--glow);outline:0}
+.badgeitem{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.badgeitem:not(.locked):hover{transform:translateY(-4px) rotate(-1deg);box-shadow:0 7px 18px var(--glow);border-color:var(--gold)}
+.badgeitem .emoji{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:rgba(167,131,63,.14);margin-bottom:7px;transition:transform .25s ease}
+.badgeitem:not(.locked):hover .emoji{transform:rotate(10deg) scale(1.1)}
+.rank{transition:background .2s ease;padding-inline:10px;border-radius:8px}
+.rank:hover{background:rgba(167,131,63,.12)}
+.person{background:rgba(255,255,255,.12)}
+.msg{border:1px solid rgba(77,97,57,.16);animation:softIn .35s ease both}
+#notice{position:sticky;top:8px;z-index:5;backdrop-filter:blur(8px)}
+#notice.error{border-color:rgba(154,47,34,.25)}
+.code{transition:transform .2s ease,background .2s ease}
+.code:hover{transform:scale(1.04);background:var(--glow)}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shine{0%,65%{transform:translateX(-110%)}100%{transform:translateX(110%)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media(max-width:700px){.wrap{margin-top:14px}.panel:hover{transform:none}.stats{gap:6px}.stat{padding:9px 5px}.stat b{font-size:24px}#notice{top:4px}}
+
 </style>
 </head>
 <body>
@@ -25,6 +70,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;fl
 <section class="panel">
  <div class="challenge-top"><div><h2>ملفي في المجتمع</h2><p class="muted">اسمك ونقاطك ومستواك — من غير عرض بريدك الإلكتروني.</p><p class="tiny">نصيحة خصوصية: استخدم اسمًا مستعارًا ولا تكتب اسمك الكامل أو رقم هاتفك. المجتمع للتحديات والترتيب فقط، بدون شات أو رسائل خاصة.</p></div><button class="btn" id="refresh">تحديث</button></div>
  <div class="stats"><div class="stat"><b id="points">0</b><span>نقطة</span></div><div class="stat"><b id="level">1</b><span>المستوى</span></div><div class="stat"><b id="badgeCount">0</b><span>شارة</span></div></div>
+
+ <div class="level-progress" style="margin-top:14px">
+  <div class="challenge-top"><span class="tiny">تقدمك للمستوى التالي</span><b id="levelProgressText" class="tiny">0 / 100 نقطة</b></div>
+  <div class="level-track" role="progressbar" aria-label="التقدم للمستوى التالي" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="levelProgressFill" class="level-fill"></div></div>
+ </div>
  <div class="formrow"><input id="displayName" class="field" maxlength="30" placeholder="الاسم الظاهر للأصدقاء"><button id="saveName" class="btn green">حفظ الاسم</button></div>
  <div id="profileMsg" class="tiny"></div>
 </section>
@@ -106,7 +156,7 @@ function renderEnglishQuiz(){
 }
 function renderBadges(data){const root=$("badgeList");root.replaceChildren();const earned=new Set(data.badges.map(x=>x.badge_code));data.badge_catalog.forEach(b=>{const el=document.createElement("div");el.className="badgeitem"+(earned.has(b.code)?"":" locked");safe(el,"div",b.icon,"emoji");safe(el,"b",b.label);safe(el,"div",b.description,"tiny");if(earned.has(b.code))safe(el,"div","تم الحصول عليها ✓","tiny");root.append(el);});}
 function renderLeaderboard(rows){const root=$("leaderboard");root.replaceChildren();if(!rows.length){safe(root,"p","لسه مفيش ترتيب — كن أول من يجمع النقاط!","muted");return;}rows.forEach((p,i)=>{const row=document.createElement("div");row.className="rank";safe(row,"span",String(i+1),"ranknum");const label=document.createElement("div");safe(label,"b",p.display_name);safe(label,"div","المستوى "+p.level,"tiny");row.append(label);safe(row,"b",p.points_total+" نقطة");root.append(row);});}
-async function load(){const data=await api("dashboard");dashboard=data;$("points").textContent=data.profile.points_total;$("level").textContent=data.profile.level;$("badgeCount").textContent=data.badges.length;$("displayName").value=data.profile.display_name;renderChallenges(data.challenges);renderBadges(data);renderLeaderboard(data.leaderboard);}
+async function load(){const data=await api("dashboard");dashboard=data;const total=Number(data.profile.points_total)||0;const progress=total%100;const fill=$("levelProgressFill");const track=fill?.parentElement;if(fill){fill.style.width=progress+"%";if(track)track.setAttribute("aria-valuenow",String(progress));}$("levelProgressText").textContent=progress+" / 100 نقطة";$("points").textContent=total;$("level").textContent=data.profile.level;$("badgeCount").textContent=data.badges.length;$("displayName").value=data.profile.display_name;renderChallenges(data.challenges);renderBadges(data);renderLeaderboard(data.leaderboard);}
 async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel").classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel").classList.add("hidden");}$("app").classList.remove("hidden");await load();renderEnglishQuiz();notice("أهلًا بك في مجتمع مِداد.");}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
 async function startCommunity(){
  try{
