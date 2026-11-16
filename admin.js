@@ -128,7 +128,7 @@ async function loadDashboard() {
   $("week").textContent = fmt(week.count);
   $("month").textContent = fmt(month.count);
   $("online").textContent = fmt(online.count);
-  await Promise.all([loadVisitors(), loadAnalytics(), loadContent(), loadSettings()]);
+  await Promise.all([loadVisitors(), loadAnalytics(), loadContent(), loadSettings(), loadSubscriptions(), loadCommunity()]);
 }
 
 async function loadVisitors() {
@@ -318,8 +318,160 @@ async function deleteSetting(key){
 
 document.querySelectorAll("[data-tab]").forEach(btn=>btn.addEventListener("click",()=>{
   document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===btn));
-  ["visitors","analytics","content","settings"].forEach(tab=>$("tab-"+tab).classList.toggle("hidden",tab!==btn.dataset.tab));
+  ["visitors","analytics","content","settings","subscriptions","community"].forEach(tab=>$("tab-"+tab).classList.toggle("hidden",tab!==btn.dataset.tab));
 }));
 
 setInterval(()=>{if(!$("dashboard").classList.contains("hidden"))loadDashboard()},60000);
 checkSession();
+
+
+// الاشتراكات والمدفوعات — لا يتم تفعيل باقة من هذه الواجهة تلقائيًا.
+const PAYMENTS_FN = "midad-payments";
+const COMMUNITY_FN = "midad-community";
+let cachedPlans = {};
+async function callAdminFunction(name, action, extra = {}) {
+  const { data, error } = await supabase.functions.invoke(name, { body: { action, ...extra } });
+  if (error) throw new Error(error.message || "تعذر الاتصال بالخدمة");
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+function addCell(row, value) {
+  const td = document.createElement("td");
+  td.textContent = value == null ? "—" : String(value);
+  row.append(td);
+  return td;
+}
+function showPlanForm() {
+  const code = $("planCode").value;
+  const plan = cachedPlans[code];
+  if (!plan) return;
+  $("planMonthly").value = Math.round(plan.monthly_price_piasters / 100);
+  $("planYearly").value = Math.round(plan.yearly_price_piasters / 100);
+  $("planStatus").value = plan.is_active ? "مفعّلة" : "مغلقة — الدفع متوقف";
+}
+async function loadSubscriptions() {
+  try {
+    const [info, list] = await Promise.all([
+      callAdminFunction(PAYMENTS_FN, "payment_info"),
+      callAdminFunction(PAYMENTS_FN, "admin_list_requests")
+    ]);
+    if (!info.is_admin) throw new Error("الحساب لا يملك صلاحية الإدارة");
+    cachedPlans = Object.fromEntries((info.plans || []).map(p => [p.code, p]));
+    $("activePlans").textContent = fmt((info.plans || []).filter(p => p.code !== "free" && p.is_active).length);
+    $("pendingPayments").textContent = fmt((list.requests || []).filter(r => r.status === "pending").length);
+    showPlanForm();
+    const body = $("paymentRows");
+    body.replaceChildren();
+    const requests = list.requests || [];
+    if (!requests.length) {
+      const tr = document.createElement("tr"), td = document.createElement("td");
+      td.colSpan = 8; td.className = "empty"; td.textContent = "لا توجد طلبات دفع حتى الآن";
+      tr.append(td); body.append(tr);
+    }
+    for (const request of requests) {
+      const tr = document.createElement("tr");
+      addCell(tr, request.email);
+      addCell(tr, request.plan_code === "plus" ? "Plus" : "Pro");
+      addCell(tr, request.billing_period === "yearly" ? "سنوي" : "شهري");
+      addCell(tr, (request.amount_piasters / 100).toLocaleString("ar-EG") + " جنيه");
+      addCell(tr, request.transfer_reference);
+      addCell(tr, ({pending:"قيد المراجعة",approved:"مقبول",rejected:"مرفوض"})[request.status] || request.status);
+      addCell(tr, date(request.created_at));
+      const actions = document.createElement("td");
+      if (request.status === "pending") {
+        const approve = document.createElement("button");
+        approve.textContent = "اعتماد"; approve.addEventListener("click", async () => {
+          if (!confirm("تأكدت بنفسك من وصول المبلغ إلى المحفظة؟ اعتماد الطلب سيفعّل اشتراك المستخدم فورًا.")) return;
+          approve.disabled = true;
+          try {
+            await callAdminFunction(PAYMENTS_FN, "admin_review_request", {request_id:request.id,decision:"approve"});
+            message("planMsg", "تم اعتماد التحويل وتفعيل الاشتراك.", true);
+            await loadSubscriptions();
+          } catch (e) { message("planMsg", e.message); approve.disabled = false; }
+        });
+        const reject = document.createElement("button");
+        reject.textContent = "رفض"; reject.className = "danger";
+        reject.addEventListener("click", async () => {
+          if (!confirm("هل تريد رفض طلب الدفع هذا؟")) return;
+          reject.disabled = true;
+          try {
+            await callAdminFunction(PAYMENTS_FN, "admin_review_request", {request_id:request.id,decision:"reject"});
+            message("planMsg", "تم رفض الطلب.");
+            await loadSubscriptions();
+          } catch (e) { message("planMsg", e.message); reject.disabled = false; }
+        });
+        actions.append(approve, reject);
+      } else {
+        actions.textContent = "تمت المراجعة";
+      }
+      tr.append(actions); body.append(tr);
+    }
+    message("planMsg", "تم تحميل الأسعار وطلبات الدفع.", true);
+  } catch (e) {
+    message("planMsg", "تعذر تحميل الاشتراكات: " + e.message);
+  }
+}
+$("planCode").addEventListener("change", showPlanForm);
+$("refreshSubscriptions").addEventListener("click", loadSubscriptions);
+$("savePlan").addEventListener("click", async () => {
+  const code = $("planCode").value;
+  const monthly = Number($("planMonthly").value), yearly = Number($("planYearly").value);
+  if (!Number.isInteger(monthly) || !Number.isInteger(yearly) || monthly < 1 || yearly < 1) return message("planMsg", "اكتب أسعارًا صحيحة بالجنيه.");
+  $("savePlan").disabled = true;
+  try {
+    await callAdminFunction(PAYMENTS_FN, "admin_update_plan", {
+      plan_code: code, monthly_price_egp: monthly, yearly_price_egp: yearly,
+      is_active: Boolean(cachedPlans[code]?.is_active)
+    });
+    message("planMsg", "تم حفظ الأسعار مع الحفاظ على حالة التفعيل الحالية.", true);
+    await loadSubscriptions();
+  } catch (e) { message("planMsg", e.message); }
+  finally { $("savePlan").disabled = false; }
+});
+
+// متابعة مجتمع مِداد من لوحة الإدارة.
+async function loadCommunity() {
+  try {
+    const data = await callAdminFunction(COMMUNITY_FN, "admin_dashboard");
+    $("communityChallenges").textContent = fmt(data.stats.challenges);
+    $("communityParticipants").textContent = fmt(data.stats.participants);
+    $("communityCheckins").textContent = fmt(data.stats.checkins);
+    $("communityMembers").textContent = fmt(data.stats.members);
+    const rows = $("communityRows"); rows.replaceChildren();
+    if (!data.challenges.length) {
+      const tr = document.createElement("tr"), td = document.createElement("td");
+      td.colSpan = 5; td.className = "empty"; td.textContent = "لا توجد تحديات حتى الآن";
+      tr.append(td); rows.append(tr);
+    }
+    for (const challenge of data.challenges) {
+      const tr = document.createElement("tr");
+      addCell(tr, challenge.title);
+      addCell(tr, ({active:"نشط",completed:"مكتمل",cancelled:"ملغي"})[challenge.status] || challenge.status);
+      addCell(tr, date(challenge.starts_at));
+      addCell(tr, date(challenge.ends_at));
+      const td = document.createElement("td");
+      if (challenge.status === "active") {
+        const cancel = document.createElement("button"); cancel.className = "danger"; cancel.textContent = "إيقاف التحدي";
+        cancel.addEventListener("click", async () => {
+          if (!confirm("هل تريد إيقاف هذا التحدي؟ لن يستطيع المشاركون تسجيل إنجازات جديدة.")) return;
+          cancel.disabled = true;
+          try { await callAdminFunction(COMMUNITY_FN, "admin_cancel_challenge", {challenge_id:challenge.id}); message("communityMsg", "تم إيقاف التحدي.", true); await loadCommunity(); }
+          catch (e) { message("communityMsg", e.message); cancel.disabled = false; }
+        });
+        td.append(cancel);
+      } else td.textContent = "—";
+      tr.append(td); rows.append(tr);
+    }
+    const top = $("communityTop"); top.replaceChildren();
+    (data.leaderboard || []).forEach((member, index) => {
+      const tr = document.createElement("tr");
+      addCell(tr, index + 1); addCell(tr, member.display_name);
+      addCell(tr, member.level); addCell(tr, fmt(member.points_total));
+      top.append(tr);
+    });
+    message("communityMsg", "تم تحديث إحصائيات المجتمع.", true);
+  } catch (e) {
+    message("communityMsg", "تعذر تحميل المجتمع: " + e.message);
+  }
+}
+$("refreshCommunity").addEventListener("click", loadCommunity);
