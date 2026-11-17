@@ -958,6 +958,7 @@ document.body.appendChild(lockLayer);
 function strictUnlock(){
   pm.locked=false;lockLayer.classList.remove('active');
   [...document.body.children].forEach(el=>{if(el!==lockLayer)el.inert=false});
+  if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});
   $('#pms').disabled=false;$('#pmr').disabled=false;
   document.querySelectorAll('#pmtabs .tab').forEach(t=>t.disabled=false);
   strictToggle.disabled=false;
