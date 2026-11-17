@@ -110,7 +110,8 @@ function renderRoom(state) {
     safe(row, "div", timeText(member.focus_seconds) + " تركيز · " + member.progress + "%", "social-muted");
     members.append(row);
   });
-  $("leaveRoom").disabled = room.status === "completed";
+  $("leaveRoom").disabled = false;
+  $("leaveRoom").textContent = room.status === "completed" ? "إغلاق الغرفة" : "إنهاء مشاركتي";
   updateCountdown();
 }
 function updateCountdown() {
