@@ -221,6 +221,20 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
 @media(max-width:700px){.site-nav{order:4;width:100%;overflow-x:visible;flex-wrap:wrap;justify-content:flex-start}.site-nav a{font-size:14px;padding:7px 9px}.grid{gap:18px}.wrap{padding-top:18px}.stamp{width:86px;height:86px}}
 .site-nav a[href="ai.html"]{display:none!important}
 </style>
+<style id="midad-strict-focus">
+.strict-option{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-weight:700;color:var(--red);cursor:pointer}
+.strict-option input{width:19px;height:19px;accent-color:var(--red);cursor:pointer}
+.strict-hint{display:block;text-align:center;color:var(--muted);font-size:13px;margin-top:3px}
+#pmStrictOverlay{display:none;position:fixed;inset:0;z-index:999999;background:radial-gradient(circle at 50% 35%,#4c3925,#1e170f 78%);color:#f2e6c6;align-items:center;justify-content:center;padding:24px;text-align:center}
+#pmStrictOverlay.active{display:flex}
+#pmStrictOverlay .strict-card{width:min(520px,100%);padding:38px 24px;border:2px solid #b99152;border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(0,0,0,.24));box-shadow:0 25px 80px #0008}
+#pmStrictOverlay .strict-lock{font-size:46px}
+#pmStrictOverlay h2{color:#e4c58b;font-size:32px;margin:12px 0}
+#pmStrictOverlay p{color:#eadfc9;font-size:18px}
+#pmStrictOverlay strong{display:block;font:700 clamp(58px,13vw,92px)/1.2 system-ui;color:#f4d99f;direction:ltr;margin:18px 0}
+#pmStrictOverlay small{color:#d2bd98;font-size:15px}
+body:has(#pmStrictOverlay.active){overflow:hidden}
+</style>
 </head>
 <body>
 <noscript><p style="padding:20px;text-align:center">مِداد يحتاج تفعيل JavaScript في المتصفح ليعمل.</p></noscript>
@@ -307,7 +321,7 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
 <div class="grid g2">
 <section class="card wide c1" aria-labelledby="sh"><div class="sheet plain">
 <h2 id="sh" data-admin-key="study_heading">المذاكرة</h2>
-<div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p></div>
+<div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
 <div id="sj"></div></div>
 </div></section>
 <section class="card wide c2" aria-labelledby="hh"><div class="sheet plain">
@@ -930,23 +944,52 @@ function sjRender(){
     box.appendChild(f);c.appendChild(box)
   });
 }
-/* pomodoro */
-const pm={mode:'f',left:1500,run:0,end:0},PMD={f:1500,b:300};
+/* pomodoro + optional strict focus lock */
+const pm={mode:'f',left:1500,run:0,end:0,locked:false},PMD={f:1500,b:300};
+let strictEnabled=localStorage.getItem('midad-pomo-strict')==='1';
+const strictToggle=$('#pmStrictToggle');
+strictToggle.checked=strictEnabled;
+const lockLayer=document.createElement('div');
+lockLayer.id='pmStrictOverlay';lockLayer.innerHTML='<div class="strict-card"><div class="strict-lock">🔒</div><h2>أنت في وضع التركيز</h2><p>خليك مع مذاكرتك… مِداد مستنيك تخلص الجلسة</p><strong id="strictClock">٢٥:٠٠</strong><small>الأقسام والأزرار متوقفة مؤقتًا</small></div>';
+document.body.appendChild(lockLayer);
+function strictUnlock(){
+  pm.locked=false;lockLayer.classList.remove('active');
+  $('#pms').disabled=false;$('#pmr').disabled=false;
+  document.querySelectorAll('#pmtabs .tab').forEach(t=>t.disabled=false);
+  strictToggle.disabled=false;
+}
+function strictLock(){
+  pm.locked=true;lockLayer.classList.add('active');
+  $('#pms').disabled=true;$('#pmr').disabled=true;
+  document.querySelectorAll('#pmtabs .tab').forEach(t=>t.disabled=true);
+  strictToggle.disabled=true;
+}
 function pmUi(){
   const s=Math.max(0,Math.round(pm.run?(pm.end-Date.now())/1000:pm.left));
-  $('#pmt').textContent=ad(p2(Math.floor(s/60))+':'+p2(s%60));$('#pms').textContent=pm.run?'إيقاف مؤقت':'ابدأ';
+  const clock=ad(p2(Math.floor(s/60))+':'+p2(s%60));
+  $('#pmt').textContent=clock;$('#pms').textContent=pm.run?(pm.locked?'الجلسة جارية':'إيقاف مؤقت'):'ابدأ';
+  const sc=$('#strictClock');if(sc)sc.textContent=clock;
   document.querySelectorAll('#pmtabs .tab').forEach(t=>t.setAttribute('aria-pressed',t.dataset.m===pm.mode));
   const d=load('pomo:'+dayKey(),{n:0,m:0});$('#pmi').textContent='جلسات اليوم: '+arn(d.n)+' · دقائق التركيز: '+arn(d.m);return s;
 }
+strictToggle.addEventListener('change',()=>{strictEnabled=strictToggle.checked;localStorage.setItem('midad-pomo-strict',strictEnabled?'1':'0')});
 setInterval(()=>{
   if(!pm.run)return;if(pmUi()>0)return;
-  pm.run=0;if(pm.mode==='f'){const k='pomo:'+dayKey(),d=load(k,{n:0,m:0});d.n++;d.m+=25;save(k,d);wkRender()}
+  pm.run=0;
+  if(pm.locked)strictUnlock();
+  if(pm.mode==='f'){const k='pomo:'+dayKey(),d=load(k,{n:0,m:0});d.n++;d.m+=25;save(k,d);wkRender()}
   try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();a.close()},500)}catch(e){}
   pm.mode=pm.mode==='f'?'b':'f';pm.left=PMD[pm.mode];pmUi();
 },500);
-$('#pms').addEventListener('click',()=>{if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0}else{pm.end=Date.now()+pm.left*1000;pm.run=1}pmUi()});
-$('#pmr').addEventListener('click',()=>{pm.run=0;pm.left=PMD[pm.mode];pmUi()});
-$('#pmtabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
+$('#pms').addEventListener('click',()=>{
+  if(pm.locked)return;
+  if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0}
+  else{pm.end=Date.now()+pm.left*1000;pm.run=1;if(strictEnabled)strictLock()}
+  pmUi()
+});
+$('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
+$('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
+document.addEventListener('visibilitychange',()=>{if(pm.locked&&document.hidden){try{if(navigator.vibrate)navigator.vibrate([120,60,120])}catch{}}});
 /* weekly summary */
 function wkRender(){
   const c=$('#wk');if(!c)return;c.replaceChildren();
