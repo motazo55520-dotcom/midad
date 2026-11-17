@@ -20,7 +20,28 @@ input,textarea,select{font:18px 'Amiri',serif;background:rgba(255,255,255,.18);b
 .flashcard{min-height:180px;background:rgba(120,90,45,.10);border:1px dashed var(--muted);padding:22px;display:grid;place-items:center;text-align:center;font-size:24px;line-height:1.8;white-space:pre-wrap}.flashcard small{display:block;color:var(--muted);font-size:15px}
 .statrow{display:flex;gap:10px;flex-wrap:wrap}.stat{padding:10px 14px;background:rgba(120,90,45,.12);min-width:120px}.stat b{display:block;font:26px 'Aref Ruqaa',serif;color:var(--red)}
 @media(max-width:700px){.grid,.fields{grid-template-columns:1fr}.full{grid-column:auto}.schedule-day{grid-template-columns:1fr;gap:0}h1{font-size:40px}}
-</style></head>
+</style><style id="midad-mobile-normalization">
+/* Midad mobile layout normalization */
+html{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+*,*::before,*::after{box-sizing:border-box}
+img,svg,video,canvas,iframe{max-width:100%}
+button,input,select,textarea{max-width:100%;min-width:0}
+main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:0}
+@media(max-width:700px){
+  .wrap,.shell,main{width:100%;max-width:100%;margin-left:auto;margin-right:auto;padding-left:14px;padding-right:14px}
+  header{max-width:100%;gap:10px}
+  h1{overflow-wrap:anywhere;line-height:1.25}
+  p,small,label,a,button{overflow-wrap:anywhere}
+  .row,.actions,.nav,.site-nav{max-width:100%;min-width:0;flex-wrap:wrap}
+  .grid,.fields,.form-grid,.cards{grid-template-columns:minmax(0,1fr)!important}
+  .panel,.card,.plan{width:100%;max-width:100%;min-width:0}
+  input,select,textarea{width:100%;font-size:16px}
+  button,.btn,.link{min-height:42px}
+}
+
+@media(max-width:700px){h1{font-size:34px}.panel{padding:15px}.statrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.stat{min-width:0}.schedule-day{grid-template-columns:minmax(0,1fr);gap:3px}}</style>
+</head>
 <body><main>
 <header><div><h1>مذاكرتي المتقدمة</h1><div class="muted">خطط مذاكرة وبطاقات ومراجعة ذكية — بدون ذكاء اصطناعي</div></div><a class="back" href="/">العودة لمِداد ←</a></header>
 <section class="panel" id="locked"><h2>الميزة لمشتركي Plus وPro</h2><p class="muted" id="lockedText">سجّل الدخول بحسابك المدفوع للوصول إلى أدوات المذاكرة المتقدمة.</p><div class="actions"><a class="btn primary" href="account.html">حسابي</a><a class="btn" href="subscriptions.html">عرض الباقات</a></div></section>
