@@ -34,7 +34,7 @@ input,select{font:18px 'Amiri',serif;color:var(--ink);background:rgba(255,255,25
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.msg{padding:10px 12px;margin-top:12px;border:1px dashed var(--muted);white-space:pre-wrap}.msg.error{border-color:var(--red);color:var(--red)}.msg.good{border-color:var(--green);color:var(--green)}
 .payment-number{font-size:26px;direction:ltr;display:inline-block;color:var(--red);font-weight:bold;letter-spacing:1px}
 footer{text-align:center;color:var(--muted);margin-top:34px;font-size:16px}
-@media(max-width:800px){.plans{grid-template-columns:1fr;max-width:520px;margin:auto}.plan,.plan:nth-child(2),.plan.pro{transform:none}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}
+@media(max-width:800px){.plans{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:14px 4px 20px;scroll-snap-type:x mandatory;scroll-padding-inline:4px;-webkit-overflow-scrolling:touch}.plan,.plan:nth-child(2),.plan.pro{flex:0 0 min(82vw,340px);transform:none;scroll-snap-align:start}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -58,11 +58,11 @@ footer{text-align:center;color:var(--muted);margin-top:34px;font-size:16px}
 </section>
 <section class="panel" id="paymentPanel" hidden>
 <h2>إتمام طلب الاشتراك</h2><p id="selectedPlanText"></p>
-<div class="notice">حوّل المبلغ إلى رقم فودافون كاش التالي، ثم اكتب مرجع التحويل كما يظهر في رسالة العملية.</div>
+<div class="notice"><b>1)</b> حوّل قيمة الاشتراك إلى رقم فودافون كاش الظاهر بالأسفل. <b>2)</b> بعد نجاح التحويل ستصلك رسالة من فودافون كاش. <b>3)</b> افتح الرسالة وابحث عن <b>رقم العملية / Transaction ID / مرجع العملية</b> وانسخه كما هو في الخانة التالية. <b>ملحوظة:</b> هذا ليس رقم موبايلك ولا رقم المحفظة ولا المبلغ المحوّل.</div>
 <div><span class="payment-number" id="cashNumber">جارٍ تحميل الرقم...</span> <button class="btn" id="copyNumber" type="button">نسخ الرقم</button></div>
-<div class="fields" style="margin-top:14px"><div class="field full"><label for="transferRef">رقم العملية أو مرجع التحويل</label><input id="transferRef" maxlength="120" minlength="4" placeholder="اكتب مرجع التحويل"></div></div>
+<div class="fields" style="margin-top:14px"><div class="field full"><label for="transferRef">رقم العملية أو مرجع التحويل</label><input id="transferRef" maxlength="120" minlength="4" autocomplete="off" placeholder="مثال: الرقم الموجود في رسالة تأكيد التحويل"><small class="muted">هتلاقيه في رسالة SMS اللي وصلتك بعد التحويل من فودافون كاش، وقد يظهر باسم رقم العملية أو Transaction ID. انسخ الرقم فقط بدون كتابة رقم محفظتك.</small></div></div>
 <div class="actions"><button class="btn primary" id="sendRequest">إرسال طلب المراجعة</button><button class="btn" id="cancelPayment">إلغاء</button></div>
-<div class="msg" id="paymentMsg" role="status" aria-live="polite">لن يتم تفعيل الاشتراك قبل مراجعة التحويل.</div>
+<div class="msg" id="paymentMsg" role="status" aria-live="polite">مرجع التحويل هو رقم العملية الموجود في رسالة فودافون كاش بعد نجاح التحويل. لن يتم تفعيل الاشتراك قبل مراجعة وصول المبلغ.</div>
 </section>
 <footer>مِداد — صُنع ليساعدك على تنظيم يومك ومذاكرتك</footer>
 </div>
