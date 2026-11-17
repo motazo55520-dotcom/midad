@@ -954,16 +954,21 @@ lockLayer.id='pmStrictOverlay';lockLayer.innerHTML='<div class="strict-card"><di
 document.body.appendChild(lockLayer);
 function strictUnlock(){
   pm.locked=false;lockLayer.classList.remove('active');
+  [...document.body.children].forEach(el=>{if(el!==lockLayer)el.inert=false});
   $('#pms').disabled=false;$('#pmr').disabled=false;
   document.querySelectorAll('#pmtabs .tab').forEach(t=>t.disabled=false);
   strictToggle.disabled=false;
 }
 function strictLock(){
   pm.locked=true;lockLayer.classList.add('active');
+  [...document.body.children].forEach(el=>{if(el!==lockLayer)el.inert=true});
+  history.pushState({midadStrictFocus:true},'','#focus-session');
   $('#pms').disabled=true;$('#pmr').disabled=true;
   document.querySelectorAll('#pmtabs .tab').forEach(t=>t.disabled=true);
   strictToggle.disabled=true;
 }
+window.addEventListener('popstate',()=>{if(pm.locked)history.pushState({midadStrictFocus:true},'','#focus-session')});
+window.addEventListener('beforeunload',e=>{if(pm.locked){e.preventDefault();e.returnValue=''}});
 function pmUi(){
   const s=Math.max(0,Math.round(pm.run?(pm.end-Date.now())/1000:pm.left));
   const clock=ad(p2(Math.floor(s/60))+':'+p2(s%60));
