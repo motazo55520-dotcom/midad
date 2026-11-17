@@ -148,29 +148,55 @@ async function openRoom(id) {
   clockTimer = setInterval(updateCountdown, 1000);
 }
 async function loadWeekly() {
-  const root = $("weeklyLeaderboard");
+  const root = $("weeklyLeaderboard"), podium = $("weeklyPodium"), meBox = $("leagueMe");
   try {
     const result = await api("leaderboard_weekly");
-    root.replaceChildren();
+    root.replaceChildren(); podium?.replaceChildren();
+    if (meBox) { meBox.replaceChildren(); meBox.hidden = true; }
     $("weeklyMeta").textContent = "الأسبوع بدأ " + dateText(result.week_starts_at);
-    if (!result.leaderboard.length) {
-      safe(root, "div", "لسه مفيش نقاط مسجلة الأسبوع ده. ابدأ أول إنجاز!", "social-empty");
+    const rows = result.leaderboard || [];
+    if (!rows.length) {
+      safe(root, "div", "لسه مفيش نقاط مسجلة الأسبوع ده… ابدأ أول إنجاز وخد مكانك على منصة الأبطال! ✨", "league-empty");
       return;
     }
-    result.leaderboard.forEach((person, index) => {
+    const medals = ["👑", "🥈", "🥉"], classes = ["first", "second", "third"], labels = ["المركز الأول", "المركز الثاني", "المركز الثالث"];
+    rows.slice(0, 3).forEach((person, index) => {
+      const card = document.createElement("article");
+      card.className = "league-champion " + classes[index];
+      card.style.setProperty("--delay", (index * .13) + "s");
+      safe(card, "span", medals[index], "league-crown");
+      const avatar = safe(card, "div", (person.display_name || "م").trim().slice(0,1), "league-avatar");
+      avatar.setAttribute("aria-hidden", "true");
+      safe(card, "b", person.display_name + (person.is_me ? " · أنت" : ""), "league-player-name");
+      safe(card, "div", "المستوى " + person.level, "league-player-level");
+      safe(card, "div", "✦ " + person.weekly_points + " نقطة", "league-score");
+      safe(card, "div", labels[index], "league-podium-base");
+      podium?.append(card);
+    });
+    rows.slice(3).forEach((person, index) => {
       const row = document.createElement("div");
-      row.className = "social-week-rank";
-      safe(row, "span", String(index + 1), "social-rank-no");
-      const name = document.createElement("div");
-      safe(name, "b", person.display_name + (person.is_me ? " (أنت)" : ""));
-      safe(name, "div", "المستوى " + person.level, "social-muted");
-      row.append(name);
-      safe(row, "b", person.weekly_points + " نقطة");
+      row.className = "league-rank-row" + (person.is_me ? " is-me" : "");
+      row.style.setProperty("--delay", Math.min(index * .045, .5) + "s");
+      safe(row, "span", String(index + 4).padStart(2,"0"), "league-rank-number");
+      const identity = document.createElement("div");
+      safe(identity, "div", person.display_name + (person.is_me ? " (أنت)" : ""), "league-rank-name");
+      safe(identity, "div", "المستوى " + person.level, "league-rank-meta");
+      row.append(identity);
+      safe(row, "b", person.weekly_points + " نقطة", "league-rank-points");
       root.append(row);
     });
+    const mine = rows.findIndex(person => person.is_me);
+    if (mine >= 0 && meBox) {
+      meBox.hidden = false;
+      safe(meBox, "span", "🎯");
+      const message = document.createElement("div");
+      safe(message, "div", "مكانك في الدوري", "league-rank-meta");
+      safe(message, "strong", "المركز " + (mine + 1) + " · " + rows[mine].weekly_points + " نقطة");
+      meBox.append(message);
+    }
   } catch (e) {
     root.replaceChildren();
-    safe(root, "div", e.message, "social-empty");
+    safe(root, "div", e.message, "league-empty");
   }
 }
 function renderFeed(posts) {
