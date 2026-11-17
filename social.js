@@ -192,7 +192,7 @@ function renderFeed(posts) {
     const right = document.createElement("div");
     safe(right, "span", post.visibility === "private" ? "خاص بيك" : "للمجتمع", "social-muted");
     if (post.is_mine) {
-      const remove = safe(right, "button", "حذف", "btn");
+      const remove = safe(right, "button", "حذف الإنجاز", "btn social-post-delete");
       remove.type = "button";
       remove.addEventListener("click", async () => {
         if (!confirm("تحذف المنشور؟")) return;
