@@ -347,7 +347,10 @@ function showPlanForm() {
   if (!plan) return;
   $("planMonthly").value = Math.round(plan.monthly_price_piasters / 100);
   $("planYearly").value = Math.round(plan.yearly_price_piasters / 100);
-  $("planStatus").value = plan.is_active ? "مفعّلة" : "مغلقة — الدفع متوقف";
+  $("planStatus").value = plan.is_active ? "مفعّلة — استقبال طلبات الاشتراك" : "مغلقة — الاشتراك الجديد متوقف";
+  const toggle = $("togglePlan");
+  toggle.textContent = plan.is_active ? "إيقاف الباقة" : "تشغيل الباقة";
+  toggle.className = plan.is_active ? "danger" : "";
 }
 async function loadSubscriptions() {
   try {
@@ -413,20 +416,43 @@ async function loadSubscriptions() {
 }
 $("planCode").addEventListener("change", showPlanForm);
 $("refreshSubscriptions").addEventListener("click", loadSubscriptions);
-$("savePlan").addEventListener("click", async () => {
+async function updateSelectedPlan(isActive, successMessage) {
   const code = $("planCode").value;
   const monthly = Number($("planMonthly").value), yearly = Number($("planYearly").value);
-  if (!Number.isInteger(monthly) || !Number.isInteger(yearly) || monthly < 1 || yearly < 1) return message("planMsg", "اكتب أسعارًا صحيحة بالجنيه.");
+  if (!Number.isInteger(monthly) || !Number.isInteger(yearly) || monthly < 1 || yearly < 1) {
+    return message("planMsg", "اكتب أسعارًا صحيحة بالجنيه قبل حفظ التغييرات.");
+  }
   $("savePlan").disabled = true;
+  $("togglePlan").disabled = true;
   try {
     await callAdminFunction(PAYMENTS_FN, "admin_update_plan", {
-      plan_code: code, monthly_price_egp: monthly, yearly_price_egp: yearly,
-      is_active: Boolean(cachedPlans[code]?.is_active)
+      plan_code: code,
+      monthly_price_egp: monthly,
+      yearly_price_egp: yearly,
+      is_active: isActive
     });
-    message("planMsg", "تم حفظ الأسعار مع الحفاظ على حالة التفعيل الحالية.", true);
+    message("planMsg", successMessage, true);
     await loadSubscriptions();
-  } catch (e) { message("planMsg", e.message); }
-  finally { $("savePlan").disabled = false; }
+  } catch (e) {
+    message("planMsg", e.message);
+  } finally {
+    $("savePlan").disabled = false;
+    $("togglePlan").disabled = false;
+  }
+}
+$("savePlan").addEventListener("click", async () => {
+  const code = $("planCode").value;
+  await updateSelectedPlan(Boolean(cachedPlans[code]?.is_active), "تم حفظ الأسعار مع الحفاظ على حالة الباقة.");
+});
+$("togglePlan").addEventListener("click", async () => {
+  const code = $("planCode").value;
+  const currentlyActive = Boolean(cachedPlans[code]?.is_active);
+  const planName = code === "plus" ? "Plus" : "Pro";
+  const prompt = currentlyActive
+    ? `هل تريد إيقاف باقة ${planName}؟ سيُمنع إنشاء طلبات اشتراك جديدة، ولن تُلغى اشتراكات العملاء الحالية.`
+    : `هل تريد تشغيل باقة ${planName} والسماح بطلبات اشتراك جديدة؟ سيظل التفعيل بعد مراجعة التحويل يدويًا.`;
+  if (!confirm(prompt)) return;
+  await updateSelectedPlan(!currentlyActive, currentlyActive ? "تم إيقاف استقبال الاشتراكات الجديدة لهذه الباقة." : "تم تشغيل الباقة وأصبحت متاحة لطلبات الاشتراك الجديدة.");
 });
 
 // متابعة مجتمع مِداد من لوحة الإدارة.
