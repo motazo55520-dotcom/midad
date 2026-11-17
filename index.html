@@ -259,7 +259,7 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
     <section class="card c2" aria-labelledby="th"><div class="sheet">
       <h2 id="th" data-admin-key="tasks_heading">مهام اليوم</h2>
       <form class="add" id="form">
-        <input type="text" id="txt" placeholder="اكتب مهمة جديدة…" aria-label="مهمة جديدة" maxlength="120" autocomplete="off">
+        <input type="text" id="txt" placeholder="اكتب اسم المهمة أولًا…" aria-label="اسم المهمة (إجباري)" maxlength="120" autocomplete="off" required>
         <select id="cat" aria-label="التصنيف"><option>عمل</option><option>دراسة</option><option>بيت</option><option>شخصي</option></select><select id="pri" aria-label="الأولوية"><option value="1">عادية</option><option value="2">عاجلة</option><option value="0">مؤجلة</option></select><input type="date" id="tdue" aria-label="موعد التسليم"><label class="rep"><input type="checkbox" id="trep"> يومية</label>
         <button class="btn" type="submit">أضف</button>
       </form>
@@ -425,10 +425,13 @@ function render(){
   $('#pct').textContent=ar(Math.round(done/total*100))+'٪';
 }
 $('#form').addEventListener('submit',e=>{
-  e.preventDefault();const v=$('#txt').value.trim();if(!v)return;
+  e.preventDefault();const input=$('#txt'),v=input.value.trim();
+  if(!v){input.setCustomValidity('لازم تكتب اسم المهمة قبل إضافتها');input.reportValidity();input.focus();return;}
+  input.setCustomValidity('');
   tasks.unshift({id:Date.now(),text:v,cat:$('#cat').value,d:false,pr:+$('#pri').value,due:$('#tdue').value,rep:$('#trep').checked});$('#tdue').value='';$('#trep').checked=false;
-  save('tasks',tasks);$('#txt').value='';render();
+  save('tasks',tasks);input.value='';render();
 });
+$('#txt').addEventListener('input',()=>$('#txt').setCustomValidity(''));
 $('#tabs').addEventListener('click',e=>{
   const b=e.target.closest('.tab');if(!b)return;filter=b.dataset.f;
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-pressed',t===b));render();
@@ -1063,6 +1066,49 @@ async function boot(){if(!sb||!enabled())return;try{const {data:{session}}=await
  }catch(e){say(e.message.includes("المزامنة السحابية")?"المزامنة تتطلب Plus أو Pro":e.message);}}
 window.MidadCloudSync={queue(){if(!enabled())return;localStorage.setItem("midad-sync-dirty","1");if(!ready)return;clearTimeout(timer);timer=setTimeout(pushNow,1800)}};
 boot();
+})();
+</script>
+
+<style id="midad-main-tabs">
+#mainWorkspace{margin:0 0 28px;position:relative;z-index:1}
+#mainTabs{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;padding:8px 3px 14px;margin:0 0 10px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+#mainTabs .main-tab{flex:0 0 auto;border:1.5px solid var(--muted);background:rgba(255,255,255,.18);color:var(--ink);border-radius:14px 6px 13px 7px;padding:9px 17px;font:700 17px 'Amiri',serif;white-space:nowrap;box-shadow:1px 2px 0 var(--shadow);transition:transform .18s,background .18s}
+#mainTabs .main-tab[aria-selected="true"]{background:var(--ink);color:var(--card);border-color:var(--red);box-shadow:2px 3px 0 var(--red);transform:translateY(-2px)}
+#mainTabs .main-tab:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.main-panel[hidden]{display:none!important}
+#mainWorkspace .main-panel>.grid{margin-top:0}
+#mainWorkspace .main-panel .card{min-width:0}
+@media(max-width:780px){#mainTabs{gap:6px;margin-inline:-4px;padding-inline:4px}#mainTabs .main-tab{font-size:16px;padding:8px 13px}#mainWorkspace .grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+
+<script id="midad-main-tabs-script">
+(()=>{
+ const groups=[
+  {id:'tasks',label:'المهام',sections:['th']},
+  {id:'prayers',label:'الصلوات والعادات',sections:['ph']},
+  {id:'azkar',label:'الأذكار',sections:['zh']},
+  {id:'quran',label:'القرآن',sections:['qh']},
+  {id:'exams',label:'الامتحانات',sections:['ch']},
+  {id:'study',label:'المذاكرة',sections:['sh']},
+  {id:'history',label:'سجل الإنجاز',sections:['hh']},
+  {id:'coffee',label:'ركن القهوة',sections:['kh']}
+ ];
+ const firstGrid=document.querySelector('.grid');if(!firstGrid)return;
+ const workspace=document.createElement('div');workspace.id='mainWorkspace';
+ const tabs=document.createElement('div');tabs.id='mainTabs';tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label','الأقسام الرئيسية');workspace.appendChild(tabs);
+ const panels=new Map();
+ groups.forEach((g,index)=>{
+  const panel=document.createElement('div');panel.className='main-panel';panel.id='panel-'+g.id;panel.hidden=index!==0;
+  const grid=document.createElement('div');grid.className='grid g2';grid.style.marginTop='0';
+  g.sections.forEach(id=>{const section=document.querySelector('section[aria-labelledby="'+id+'"]');if(section)grid.appendChild(section)});
+  panel.appendChild(grid);workspace.appendChild(panel);panels.set(g.id,panel);
+  const b=document.createElement('button');b.type='button';b.className='main-tab';b.textContent=g.label;b.dataset.panel=g.id;b.setAttribute('role','tab');b.setAttribute('aria-controls',panel.id);b.setAttribute('aria-selected',index===0?'true':'false');b.tabIndex=index===0?0:-1;tabs.appendChild(b);
+ });
+ firstGrid.parentNode.insertBefore(workspace,firstGrid);
+ document.querySelectorAll('body > .grid, body > div.grid').forEach(el=>{if(!el.querySelector('.about'))el.hidden=true});
+ const activate=id=>groups.forEach(g=>{const active=g.id===id,b=tabs.querySelector('[data-panel="'+g.id+'"]');b.setAttribute('aria-selected',active?'true':'false');b.tabIndex=active?0:-1;panels.get(g.id).hidden=!active});
+ tabs.addEventListener('click',e=>{const b=e.target.closest('[data-panel]');if(b)activate(b.dataset.panel)});
+ tabs.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const bs=[...tabs.querySelectorAll('[role="tab"]')],i=bs.indexOf(document.activeElement);let n=i;if(e.key==='Home')n=0;else if(e.key==='End')n=bs.length-1;else n=(i+(e.key==='ArrowRight'?1:-1)+bs.length)%bs.length;e.preventDefault();bs[n].focus();activate(bs[n].dataset.panel)});
 })();
 </script>
 </body>
