@@ -222,6 +222,9 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
 .site-nav a[href="ai.html"]{display:none!important}
 </style>
 <style id="midad-strict-focus">
+.pm-add-time,.strict-add-time{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px auto}
+.pm-add-time span{font-size:14px;color:var(--muted);width:100%;text-align:center}
+.strict-add-time button{border:1px solid #d6b77e;border-radius:12px;background:#f0d9aa;color:#382616;padding:10px 16px;font:700 16px system-ui;cursor:pointer}
 .strict-option{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-weight:700;color:var(--red);cursor:pointer}
 .strict-option input{width:19px;height:19px;accent-color:var(--red);cursor:pointer}
 .strict-hint{display:block;text-align:center;color:var(--muted);font-size:13px;margin-top:3px}
@@ -321,7 +324,7 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
 <div class="grid g2">
 <section class="card wide c1" aria-labelledby="sh"><div class="sheet plain">
 <h2 id="sh" data-admin-key="study_heading">المذاكرة</h2>
-<div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
+<div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><div class="pm-add-time"><span>زود وقت المؤقت</span><button class="tab" type="button" data-pm-add="5">+٥ دقائق</button><button class="tab" type="button" data-pm-add="10">+١٠ دقائق</button></div><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
 <div id="sj"></div></div>
 </div></section>
 <section class="card wide c2" aria-labelledby="hh"><div class="sheet plain">
@@ -950,7 +953,7 @@ let strictEnabled=localStorage.getItem('midad-pomo-strict')==='1';
 const strictToggle=$('#pmStrictToggle');
 strictToggle.checked=strictEnabled;
 const lockLayer=document.createElement('div');
-lockLayer.id='pmStrictOverlay';lockLayer.innerHTML='<div class="strict-card"><div class="strict-lock">🔒</div><h2>أنت في وضع التركيز</h2><p>خليك مع مذاكرتك… مِداد مستنيك تخلص الجلسة</p><strong id="strictClock">٢٥:٠٠</strong><small>الأقسام والأزرار متوقفة مؤقتًا</small></div>';
+lockLayer.id='pmStrictOverlay';lockLayer.innerHTML='<div class="strict-card"><div class="strict-lock">🔒</div><h2>أنت في وضع التركيز</h2><p>خليك مع مذاكرتك… مِداد مستنيك تخلص الجلسة</p><strong id="strictClock">٢٥:٠٠</strong><div class="strict-add-time"><button type="button" data-pm-add="5">+٥ دقائق</button><button type="button" data-pm-add="10">+١٠ دقائق</button></div><small>الأقسام والأزرار متوقفة مؤقتًا</small></div>';
 document.body.appendChild(lockLayer);
 function strictUnlock(){
   pm.locked=false;lockLayer.classList.remove('active');
@@ -989,8 +992,14 @@ setInterval(()=>{
 $('#pms').addEventListener('click',()=>{
   if(pm.locked)return;
   if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0}
-  else{pm.end=Date.now()+pm.left*1000;pm.run=1;if(strictEnabled)strictLock()}
+  else{pm.end=Date.now()+pm.left*1000;pm.run=1;if(strictEnabled){strictLock();if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}}
   pmUi()
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pm-add]');if(!b)return;
+  const mins=Number(b.dataset.pmAdd);if(![5,10].includes(mins))return;
+  if(pm.run)pm.end+=mins*60000;else pm.left+=mins*60;
+  pmUi();
 });
 $('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
 $('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
