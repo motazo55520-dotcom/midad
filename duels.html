@@ -40,7 +40,7 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 </head>
 <body>
 <div class="wrap">
-<header><div class="brand"><div class="logo">م</div><div><h1>مواجهات مِداد</h1><p class="sub">ذاكر، نافس، واكسب الجولة</p></div></div><nav class="nav"><a href="/">الرئيسية</a><a href="/community.html">المجتمع</a><a href="/account.html">حسابي</a></nav></header>
+<header><div class="brand"><div class="logo">م</div><div><h1>مواجهات مِداد</h1><p class="sub">ذاكر، نافس، واكسب الجولة</p></div></div><nav class="nav"><a href="/">الرئيسية</a><a href="/community.html">العب وتحدّى</a><a href="/account.html">حسابي</a></nav></header>
 <section class="hero"><div class="hero-main"><span class="kicker"><i class="dot"></i> تحديات مباشرة 1 ضد 1</span><h2>مين فيكم بطل الإنجليزي؟</h2><p>اختار عدد الأسئلة، ادخل مواجهة مع طالب أونلاين أو ابعت كود لصاحبك. كل إجابة صحيحة بنقطة، وفي النهاية هتشوف النتيجة والتصحيح.</p></div><div class="hero-side"><div><div class="versus"><div class="avatar">🧑‍🎓</div><div class="vs">VS</div><div class="avatar">🏆</div></div><strong>مواجهة على القمة</strong><small>تانية بكالوريا · English</small></div></div></section>
 <div id="setup" class="grid">
 <section class="panel"><h2>⚡ العب الآن</h2><p class="muted">هنوصلك بأول طالب اختار نفس إعدادات المواجهة.</p>
@@ -59,7 +59,7 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 </div><div id="confetti" class="confetti" aria-hidden="true"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <script>
-const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=URL+"/functions/v1/midad-duels";
+const SUPABASE_URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=SUPABASE_URL+"/functions/v1/midad-duels";
 let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="";
 const $=id=>document.getElementById(id);
 function note(id,msg,error=false){$(id).textContent=msg;$(id).className="note"+(error?" error":"");}
@@ -119,7 +119,7 @@ $("createBtn").addEventListener("click",async()=>{const b=$("createBtn");b.disab
 $("joinBtn").addEventListener("click",async()=>{const b=$("joinBtn");b.disabled=true;note("friendMsg","بنتحقق من الكود…");try{const d=await api("join",{invite_code:$("inviteCode").value});inviteCodeCurrent=null;note("friendMsg","دخلت المواجهة! بالتوفيق.");beginRoom(d.room_id);}catch(e){note("friendMsg",e.message,true);}finally{b.disabled=false;}});
 async function boot(){
  if(!window.supabase?.createClient)throw new Error("تعذر تحميل خدمة تسجيل الدخول.");
- sb=window.supabase.createClient(URL,KEY);
+ sb=window.supabase.createClient(SUPABASE_URL,KEY);
  const {data:{session}}=await sb.auth.getSession();if(!session)throw new Error("سجّل الدخول من صفحة حسابي عشان تقدر تلعب أونلاين.");
 }
 boot().catch(e=>{note("quickMsg",e.message,true);note("friendMsg",e.message,true);$("quickBtn").disabled=true;$("createBtn").disabled=true;$("joinBtn").disabled=true;});
