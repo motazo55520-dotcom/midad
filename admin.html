@@ -101,7 +101,7 @@
 
     <section id="tab-subscriptions" class="card section hidden">
       <div class="section-head"><h2>إدارة الاشتراكات</h2><button class="secondary" id="refreshSubscriptions">تحديث</button></div>
-      <p class="note">تعديل الأسعار لا يفعّل الدفع. الباقات تظل مغلقة حتى اكتمال الاختبار ومراجعة الجاهزية.</p>
+      <p class="note">يمكنك تشغيل أو إيقاف استقبال الاشتراكات لكل باقة بشكل مستقل. إيقاف الباقة يمنع طلبات الاشتراك الجديدة ولا يلغي اشتراكات العملاء الحالية. اعتماد التحويل يظل يدويًا بعد التأكد من وصول المبلغ.</p>
       <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:16px">
         <article class="card metric"><div class="label">طلبات الدفع المعلقة</div><div class="value" id="pendingPayments">—</div></article>
         <article class="card metric"><div class="label">الباقات المدفوعة المتاحة</div><div class="value" id="activePlans">—</div></article>
@@ -111,7 +111,7 @@
         <div class="field"><label>حالة الباقة</label><input id="planStatus" readonly value="مغلقة"></div>
         <div class="field"><label for="planMonthly">السعر الشهري بالجنيه</label><input id="planMonthly" type="number" min="1" step="1"></div>
         <div class="field"><label for="planYearly">السعر السنوي بالجنيه</label><input id="planYearly" type="number" min="1" step="1"></div>
-        <div class="actions wide"><button id="savePlan">حفظ الأسعار فقط</button></div>
+        <div class="actions wide"><button id="savePlan" class="secondary">حفظ الأسعار</button><button id="togglePlan">تشغيل الباقة</button></div>
       </div>
       <p id="planMsg" class="status"></p>
       <h3 style="margin-top:22px">طلبات التحويل</h3>
