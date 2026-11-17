@@ -1105,7 +1105,7 @@ boot();
   const b=document.createElement('button');b.type='button';b.className='main-tab';b.textContent=g.label;b.dataset.panel=g.id;b.setAttribute('role','tab');b.setAttribute('aria-controls',panel.id);b.setAttribute('aria-selected',index===0?'true':'false');b.tabIndex=index===0?0:-1;tabs.appendChild(b);
  });
  firstGrid.parentNode.insertBefore(workspace,firstGrid);
- document.querySelectorAll('body > .grid, body > div.grid').forEach(el=>{if(!el.querySelector('.about'))el.hidden=true});
+ document.querySelectorAll('.grid').forEach(el=>{if(!el.closest('#mainWorkspace')&&!el.querySelector('section'))el.remove()});
  const activate=id=>groups.forEach(g=>{const active=g.id===id,b=tabs.querySelector('[data-panel="'+g.id+'"]');b.setAttribute('aria-selected',active?'true':'false');b.tabIndex=active?0:-1;panels.get(g.id).hidden=!active});
  tabs.addEventListener('click',e=>{const b=e.target.closest('[data-panel]');if(b)activate(b.dataset.panel)});
  tabs.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const bs=[...tabs.querySelectorAll('[role="tab"]')],i=bs.indexOf(document.activeElement);let n=i;if(e.key==='Home')n=0;else if(e.key==='End')n=bs.length-1;else n=(i+(e.key==='ArrowRight'?1:-1)+bs.length)%bs.length;e.preventDefault();bs[n].focus();activate(bs[n].dataset.panel)});
