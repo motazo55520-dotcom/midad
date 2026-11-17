@@ -264,6 +264,35 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
 
 @media(max-width:700px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{min-width:0}.rank{grid-template-columns:30px minmax(0,1fr) auto;gap:6px}.nav{width:100%}.link,.btn{max-width:100%}.community-hero{width:100%;max-width:100%}#app>.grid{grid-template-columns:minmax(0,1fr)!important}}
 </style>
+
+<style id="midad-social-styles">
+.social-form{display:grid;gap:10px;margin:12px 0}
+.social-form .field{width:100%}
+.social-inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.social-inline>*{flex:1;min-width:130px}
+.social-check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:15px}
+.social-check input{width:auto;accent-color:#7c65ff}
+.social-card{border:1px solid rgba(160,177,255,.18);border-radius:16px;padding:14px;margin:10px 0;background:linear-gradient(135deg,rgba(99,82,190,.12),rgba(40,190,180,.07))}
+.social-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.social-code{direction:ltr;letter-spacing:2px;font:700 19px ui-monospace,monospace;padding:6px 10px;border-radius:9px;background:rgba(5,9,28,.7);border:1px solid rgba(170,180,255,.2);color:#b8fff2}
+.social-progress{height:9px;border-radius:20px;overflow:hidden;background:rgba(4,8,25,.7);margin:7px 0 4px}
+.social-progress>span{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#36e0c1,#6a82ff,#ff68a9);transition:width .4s}
+.social-member{padding:9px 0;border-bottom:1px solid rgba(160,177,255,.12)}
+.social-member:last-child{border-bottom:0}
+.social-muted{color:var(--muted);font-size:14px}
+.social-post{border:1px solid rgba(160,177,255,.18);border-radius:18px;padding:15px;margin:12px 0;background:linear-gradient(145deg,rgba(37,43,88,.6),rgba(18,33,62,.7))}
+.social-post-body{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;margin:12px 0}
+.social-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.social-comment{padding:8px 10px;margin:7px 0;border-radius:10px;background:rgba(8,13,34,.48);font-size:15px}
+.social-comment-form{display:flex;gap:8px;margin-top:10px}
+.social-comment-form .field{flex:1;min-width:0}
+.social-week-rank{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:9px;padding:10px 6px;border-bottom:1px solid rgba(160,177,255,.12)}
+.social-week-rank:last-child{border-bottom:0}
+.social-rank-no{display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#6255df,#a44fba);font-weight:bold}
+.social-empty{padding:16px;text-align:center;color:var(--muted);border:1px dashed rgba(160,177,255,.2);border-radius:14px}
+@media(max-width:700px){.social-inline,.social-comment-form{display:grid;grid-template-columns:1fr}.social-inline>*{min-width:0}.social-post{padding:12px}}
+</style>
+
 </head>
 <body>
 <div class="entry-gate" id="entryGate" role="dialog" aria-modal="true" aria-label="بوابة دخول مجتمع مِداد">
@@ -314,6 +343,54 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
  <div id="profileMsg" class="tiny"></div>
 </section>
 <div class="grid" style="margin-top:14px">
+<section class="panel half" id="roomsPanel">
+ <h2>📚 غرف المذاكرة</h2>
+ <p class="muted">ذاكر مع أصحابك في جلسة تركيز مشتركة. أنشئ غرفة وشارك كودها أو انضم لغرفة عامة.</p>
+ <form id="roomCreateForm" class="social-form">
+  <input id="roomTitle" class="field" maxlength="60" minlength="3" required placeholder="اسم الغرفة — مثال: مذاكرة الإنجليزي">
+  <div class="social-inline">
+   <select id="roomDuration" class="field"><option value="25">25 دقيقة</option><option value="45">45 دقيقة</option><option value="60">60 دقيقة</option><option value="90">90 دقيقة</option></select>
+   <button class="btn primary" type="submit">إنشاء غرفة وابدأ</button>
+  </div>
+  <label class="social-check"><input id="roomPublic" type="checkbox"> إظهار الغرفة في قائمة الغرف العامة</label>
+ </form>
+ <form id="roomJoinForm" class="social-inline">
+  <input id="roomCode" class="field" maxlength="8" minlength="8" dir="ltr" placeholder="كود الغرفة" style="text-transform:uppercase">
+  <button class="btn green" type="submit">انضم بكود</button>
+ </form>
+ <div id="roomNotice" class="social-muted" aria-live="polite"></div>
+ <div id="roomCurrent" class="social-card" hidden>
+  <div class="social-card-top"><div><h3 id="roomCurrentTitle"></h3><div class="social-muted" id="roomCurrentMeta"></div></div><div class="social-code" id="roomCurrentCode"></div></div>
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:14px"><b>الوقت المتبقي</b><strong id="roomCountdown">--:--</strong></div>
+  <p class="social-muted" id="roomStatusText">جلسة التركيز جارية</p>
+  <h3 style="margin-top:14px">تقدم المشاركين</h3>
+  <div id="roomMembers"></div>
+  <button id="leaveRoom" class="btn" type="button" style="margin-top:12px">إنهاء مشاركتي</button>
+ </div>
+ <h3 style="margin-top:16px">الغرف المتاحة</h3>
+ <div id="roomsList"><div class="social-empty">جارٍ تحميل الغرف…</div></div>
+</section>
+<section class="panel half" id="weeklyPanel">
+ <h2>🏁 دوري مِداد</h2>
+ <p class="muted">ترتيب أسبوعي حسب النقاط التي جمعها الأعضاء خلال الأسبوع الحالي. بدون جوائز — التقدم هو المكسب.</p>
+ <div class="social-muted" id="weeklyMeta"></div>
+ <div id="weeklyLeaderboard"><div class="social-empty">جارٍ تحميل الترتيب…</div></div>
+ <button id="refreshWeekly" class="btn" type="button" style="margin-top:12px">تحديث الترتيب</button>
+</section>
+<section class="panel" id="feedPanel">
+ <h2>🌱 مساحة إنجازاتي</h2>
+ <p class="muted">شارك إنجازك اليومي وشجّع غيرك. تقدر تخلي المنشور ظاهرًا للمجتمع أو خاصًا بيك فقط.</p>
+ <form id="postForm" class="social-form">
+  <textarea id="postBody" class="field" rows="3" maxlength="500" minlength="2" placeholder="إيه الإنجاز اللي حابب تشاركه النهارده؟" required></textarea>
+  <div class="social-inline">
+   <select id="postVisibility" class="field"><option value="public">ظاهر للمجتمع</option><option value="private">خاص بي فقط</option></select>
+   <button class="btn primary" type="submit">نشر الإنجاز</button>
+  </div>
+ </form>
+ <div class="social-inline" style="justify-content:space-between"><span class="social-muted">آخر الإنجازات</span><button id="refreshFeed" class="btn" type="button">تحديث المنشورات</button></div>
+ <div id="socialFeed"><div class="social-empty">جارٍ تحميل المنشورات…</div></div>
+</section>
+
 <section class="panel half" id="createPanel"><h2>أنشئ تحديًا جديدًا</h2><p class="muted">إنشاء التحديات لمشتركي Pro — حتى 10 تحديات نشطة، وكل تحدٍ يستوعب 20 شخصًا.</p>
 <form id="createForm"><input id="challengeTitle" class="field" maxlength="70" minlength="3" required placeholder="مثال: 7 أيام مذاكرة منتظمة"><textarea id="challengeDesc" class="field" rows="2" maxlength="240" placeholder="وصف بسيط للتحدي (اختياري)" style="margin-top:8px"></textarea><div class="formrow"><select id="duration" class="field"><option value="3">3 أيام</option><option value="7" selected>7 أيام</option><option value="14">14 يومًا</option></select><button class="btn primary" type="submit">إنشاء التحدي</button></div></form><div id="createMsg" class="tiny"></div></section>
 <section class="panel half"><h2>انضم بكود دعوة</h2><p class="muted">اطلب كودًا من صديقك واكتبه هنا. الحد الأقصى 20 مشتركًا في التحدي.</p><form id="joinForm" class="formrow"><input id="inviteCode" class="field" maxlength="8" minlength="8" required placeholder="ABCDEFGH" dir="ltr" style="text-transform:uppercase"><button class="btn green" type="submit">انضمام</button></form><div id="joinMsg" class="tiny"></div></section>
@@ -392,7 +469,7 @@ function renderEnglishQuiz(){
 function renderBadges(data){const root=$("badgeList");root.replaceChildren();const earned=new Set(data.badges.map(x=>x.badge_code));data.badge_catalog.forEach(b=>{const el=document.createElement("div");el.className="badgeitem"+(earned.has(b.code)?"":" locked");safe(el,"div",b.icon,"emoji");safe(el,"b",b.label);safe(el,"div",b.description,"tiny");if(earned.has(b.code))safe(el,"div","تم الحصول عليها ✓","tiny");root.append(el);});}
 function renderLeaderboard(rows){const root=$("leaderboard");root.replaceChildren();if(!rows.length){safe(root,"p","لسه مفيش ترتيب — كن أول من يجمع النقاط!","muted");return;}rows.forEach((p,i)=>{const row=document.createElement("div");row.className="rank";safe(row,"span",String(i+1),"ranknum");const label=document.createElement("div");safe(label,"b",p.display_name);safe(label,"div","المستوى "+p.level,"tiny");row.append(label);safe(row,"b",p.points_total+" نقطة");root.append(row);});}
 async function load(){const data=await api("dashboard");dashboard=data;const total=Number(data.profile.points_total)||0;const progress=total%100;const fill=$("levelProgressFill");const track=fill?.parentElement;if(fill){fill.style.width=progress+"%";if(track)track.setAttribute("aria-valuenow",String(progress));}$("levelProgressText").textContent=progress+" / 100 نقطة";$("points").textContent=total;$("level").textContent=data.profile.level;$("badgeCount").textContent=data.badges.length;$("displayName").value=data.profile.display_name;renderChallenges(data.challenges);renderBadges(data);renderLeaderboard(data.leaderboard);}
-async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel").classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel").classList.add("hidden");}$("app").classList.remove("hidden");await load();renderEnglishQuiz();$("notice").textContent="";$("notice").className="msg hidden";}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
+async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel").classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel").classList.add("hidden");}$("app").classList.remove("hidden");await load();renderEnglishQuiz();window.dispatchEvent(new Event("midad-community-ready"));$("notice").textContent="";$("notice").className="msg hidden";}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
 async function startCommunity(){
  try{
   if(!window.supabase){
@@ -438,4 +515,5 @@ gateEnter?.addEventListener("click",()=>{
 });
 startCommunity();
 </script>
+<script src="social.js"></script>
 </body></html>
