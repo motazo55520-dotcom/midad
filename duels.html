@@ -60,7 +60,7 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <script>
 const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=URL+"/functions/v1/midad-duels";
-let sb=null,roomId=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="";
+let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="";
 const $=id=>document.getElementById(id);
 function note(id,msg,error=false){$(id).textContent=msg;$(id).className="note"+(error?" error":"");}
 async function api(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول من صفحة حسابي الأول.");const res=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||"حصلت مشكلة، جرّب تاني.");return data;}
@@ -75,7 +75,7 @@ async function renderState(){
  try{
   const d=await api("state",{room_id:roomId});const root=$("game");
   if(d.status==="waiting"){
-   root.replaceChildren();safe(root,"div","⏳ في انتظار صاحبك يدخل بالكود…","question");safe(root,"p","خليك في الصفحة، أول ما يدخل هنبدأ تلقائيًا.","muted");return;
+   root.replaceChildren();safe(root,"div","⏳ في انتظار صاحبك يدخل بالكود…","question");safe(root,"p","خليك في الصفحة، أول ما يدخل هنبدأ تلقائيًا.","muted");if(inviteCodeCurrent){safe(root,"p","كود الدعوة: "+inviteCodeCurrent,"question");const copy=document.createElement("button");copy.className="btn secondary full";copy.textContent="نسخ كود الدعوة";copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(inviteCodeCurrent);copy.textContent="تم نسخ الكود ✓";}catch{copy.textContent="الكود: "+inviteCodeCurrent;}});root.append(copy);}return;
   }
   if(d.status==="completed"){stopTimers();renderResult(d);return;}
   if(d.status!=="playing")return;
@@ -115,8 +115,8 @@ async function startQuick(){
 }
 async function cancelQueue(){try{await api("cancel_queue");}catch{}stopTimers();$("quickBtn").disabled=false;$("cancelQueue").classList.add("hidden");note("quickMsg","تم إلغاء البحث.");}
 $("quickBtn").addEventListener("click",startQuick);$("cancelQueue").addEventListener("click",cancelQueue);
-$("createBtn").addEventListener("click",async()=>{const b=$("createBtn");b.disabled=true;note("createdCode","بنجهز المواجهة…");try{const d=await api("create",{question_count:Number($("friendCount").value)});roomId=d.room_id;const box=$("createdCode");box.textContent="كود صاحبك: "+d.invite_code+" — اضغط لنسخه";box.style.cursor="pointer";box.onclick=()=>navigator.clipboard?.writeText(d.invite_code);beginRoom(d.room_id);}catch(e){note("createdCode",e.message,true);}finally{b.disabled=false;}});
-$("joinBtn").addEventListener("click",async()=>{const b=$("joinBtn");b.disabled=true;note("friendMsg","بنتحقق من الكود…");try{const d=await api("join",{invite_code:$("inviteCode").value});note("friendMsg","دخلت المواجهة! بالتوفيق.");beginRoom(d.room_id);}catch(e){note("friendMsg",e.message,true);}finally{b.disabled=false;}});
+$("createBtn").addEventListener("click",async()=>{const b=$("createBtn");b.disabled=true;note("createdCode","بنجهز المواجهة…");try{const d=await api("create",{question_count:Number($("friendCount").value)});roomId=d.room_id;inviteCodeCurrent=d.invite_code;const box=$("createdCode");box.textContent="كود صاحبك: "+d.invite_code+" — اضغط لنسخه";box.style.cursor="pointer";box.onclick=()=>navigator.clipboard?.writeText(d.invite_code);beginRoom(d.room_id);}catch(e){note("createdCode",e.message,true);}finally{b.disabled=false;}});
+$("joinBtn").addEventListener("click",async()=>{const b=$("joinBtn");b.disabled=true;note("friendMsg","بنتحقق من الكود…");try{const d=await api("join",{invite_code:$("inviteCode").value});inviteCodeCurrent=null;note("friendMsg","دخلت المواجهة! بالتوفيق.");beginRoom(d.room_id);}catch(e){note("friendMsg",e.message,true);}finally{b.disabled=false;}});
 async function boot(){
  if(!window.supabase?.createClient)throw new Error("تعذر تحميل خدمة تسجيل الدخول.");
  sb=window.supabase.createClient(URL,KEY);
