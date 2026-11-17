@@ -36,6 +36,29 @@ input,select{font:18px 'Amiri',serif;color:var(--ink);background:rgba(255,255,25
 footer{text-align:center;color:var(--muted);margin-top:34px;font-size:16px}
 @media(max-width:800px){.plans{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:14px 4px 20px;scroll-snap-type:x mandatory;scroll-padding-inline:4px;-webkit-overflow-scrolling:touch}.plan,.plan:nth-child(2),.plan.pro{flex:0 0 min(82vw,340px);transform:none;scroll-snap-align:start}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}}
 </style>
+<style id="midad-mobile-normalization">
+/* Midad mobile layout normalization */
+html{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+*,*::before,*::after{box-sizing:border-box}
+img,svg,video,canvas,iframe{max-width:100%}
+button,input,select,textarea{max-width:100%;min-width:0}
+main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:0}
+@media(max-width:700px){
+  .wrap,.shell,main{width:100%;max-width:100%;margin-left:auto;margin-right:auto;padding-left:14px;padding-right:14px}
+  header{max-width:100%;gap:10px}
+  h1{overflow-wrap:anywhere;line-height:1.25}
+  p,small,label,a,button{overflow-wrap:anywhere}
+  .row,.actions,.nav,.site-nav{max-width:100%;min-width:0;flex-wrap:wrap}
+  .grid,.fields,.form-grid,.cards{grid-template-columns:minmax(0,1fr)!important}
+  .panel,.card,.plan{width:100%;max-width:100%;min-width:0}
+  input,select,textarea{width:100%;font-size:16px}
+  button,.btn,.link{min-height:42px}
+}
+
+
+@media(max-width:800px){.plans{display:grid!important;grid-template-columns:minmax(0,1fr)!important;overflow:visible!important;scroll-snap-type:none!important;padding:8px 0 16px!important}.plan,.plan:nth-child(2),.plan.pro{width:100%;max-width:100%;min-width:0;flex:auto!important}.wrap{padding-top:16px}.panel{padding:16px}}
+</style>
 </head>
 <body>
 <div class="wrap">
