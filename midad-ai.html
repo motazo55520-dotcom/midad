@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d9c395">
+<title>مِداد AI | مساعدك في الفهم والإنجاز</title>
+<meta name="description" content="مِداد AI — مساعدك الذكي للمذاكرة والفهم وتنظيم يومك.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#d9c395;--paper2:#bfa56c;--card:#f2e6c6;--ink:#3a2a19;--muted:#7a6444;--red:#9a2f22;--green:#4d6139;--line:rgba(58,42,25,.22);--shadow:rgba(40,25,10,.22);color-scheme:light}
+:root[data-theme="dark"]{--paper:#2b2218;--paper2:#1c150d;--card:#3b2f21;--ink:#ecdcb9;--muted:#b39e78;--red:#e0725f;--green:#9fb87f;--line:rgba(236,220,185,.22);--shadow:rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;color:var(--ink);font-family:'Amiri',serif}body{min-height:100vh;background:radial-gradient(ellipse at 12% 8%,transparent 35%,rgba(90,55,20,.17) 100%),linear-gradient(135deg,var(--paper),var(--paper2));background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
+button,input,textarea{font:inherit}button{cursor:pointer}.shell{position:relative;z-index:1;max-width:1050px;margin:auto;padding:18px 16px 35px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}.mark{width:46px;height:46px;border:3px double var(--red);border-radius:50%;display:grid;place-items:center;color:var(--red);font:700 29px 'Aref Ruqaa';transform:rotate(-8deg)}.brand b{display:block;font:700 27px 'Aref Ruqaa';line-height:1}.brand small{color:var(--muted);font-size:13px}.top-actions{display:flex;gap:8px;align-items:center}.top-actions a,.top-actions button{border:1px solid var(--line);border-radius:6px 12px 6px 10px;padding:7px 12px;color:var(--ink);text-decoration:none;background:rgba(255,255,255,.13);font-size:16px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px 3px 18px}.eyebrow{color:var(--green);font-size:15px}.eyebrow:before{content:"✦";color:var(--red);margin-left:7px}.hero h1{font:700 clamp(38px,7vw,57px) 'Aref Ruqaa';line-height:1.12;margin:4px 0;color:var(--red)}.hero p{color:var(--muted);font-size:18px;margin:3px 0}.seal{width:92px;height:92px;flex:none;border:3px double var(--red);border-radius:50%;display:grid;place-content:center;text-align:center;color:var(--red);transform:rotate(8deg);font-family:'Aref Ruqaa'}.seal b{font-size:28px;line-height:1}.seal small{font-size:11px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px;align-items:start}.chat-panel,.side-panel{background:var(--card);border:1px solid var(--line);box-shadow:3px 5px 12px var(--shadow);border-radius:5px 14px 6px 12px;min-width:0}.chat-panel{overflow:hidden}.chat-head{padding:14px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.assistant-name{display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;display:grid;place-items:center;background:var(--ink);color:var(--card);border-radius:50%;font:700 22px 'Aref Ruqaa'}.assistant-name b{display:block;font:700 21px 'Aref Ruqaa'}.assistant-name small{display:block;color:var(--green);font-size:13px}.online{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-left:5px}.clear{border:1px solid var(--line);background:transparent;color:var(--muted);padding:5px 10px;border-radius:6px;font-size:14px}
+.messages{height:min(58vh,590px);min-height:350px;overflow:auto;padding:17px;display:flex;flex-direction:column;gap:13px;scroll-behavior:smooth}.welcome{text-align:center;margin:auto;max-width:510px;padding:22px 12px}.welcome-mark{font:700 50px 'Aref Ruqaa';color:var(--red);line-height:1}.welcome h2{font:700 27px 'Aref Ruqaa';margin:8px 0 3px}.welcome p{color:var(--muted);font-size:17px;margin:0}.bubble{max-width:min(85%,690px);padding:10px 14px;border:1px solid var(--line);border-radius:5px 14px 6px 12px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8;font-size:17px;box-shadow:1px 2px 5px var(--shadow)}.bubble.user{align-self:flex-start;background:rgba(77,97,57,.13);border-right:4px solid var(--green)}.bubble.assistant{align-self:flex-end;background:rgba(255,255,255,.25);border-right:4px solid var(--red)}.bubble .who{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}.typing{align-self:flex-end;color:var(--muted);font-size:14px;padding:5px 12px}.composer{border-top:1px solid var(--line);padding:12px 14px}.composer textarea{width:100%;min-height:58px;max-height:150px;resize:vertical;border:1px solid var(--line);border-radius:6px 12px 6px 10px;background:rgba(255,255,255,.22);color:var(--ink);padding:10px 12px;outline:none;font-size:17px}.composer textarea:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(77,97,57,.12)}.composer-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px}.hint{color:var(--muted);font-size:13px}.send{border:0;border-radius:5px 12px 6px 10px;background:var(--ink);color:var(--card);padding:7px 20px;box-shadow:2px 2px 0 var(--red);font-weight:700}.send:disabled{opacity:.45;cursor:not-allowed}
+.side-panel{padding:15px}.side-panel h2{font:700 24px 'Aref Ruqaa';color:var(--red);margin:0 0 8px}.quota-top{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:14px}.quota-number{font:700 27px 'Aref Ruqaa';color:var(--green);margin:3px 0}.meter{height:8px;border-radius:10px;background:rgba(90,60,25,.15);overflow:hidden}.meter i{display:block;height:100%;width:0;background:var(--green);transition:width .25s}.side-note{font-size:14px;color:var(--muted);line-height:1.7;margin:8px 0 16px}.quick{display:grid;gap:7px}.quick button{border:1px solid var(--line);background:rgba(255,255,255,.17);color:var(--ink);text-align:right;padding:8px 10px;border-radius:5px 10px 5px 9px;font-size:16px;transition:transform .15s,border-color .15s}.quick button:hover{transform:translateX(-2px);border-color:var(--green)}.side-divider{border:0;border-top:1px dashed var(--line);margin:15px 0}.upgrade{display:block;text-align:center;text-decoration:none;background:var(--ink);color:var(--card);padding:8px 12px;border-radius:5px 10px 5px 9px}.status{min-height:22px;color:var(--muted);font-size:14px;margin-top:9px}.login-box{padding:13px;border:1px dashed var(--red);border-radius:7px;line-height:1.7}.login-box a{color:var(--red);font-weight:700}.privacy{font-size:13px;color:var(--muted);line-height:1.7;margin-top:12px}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:14px;padding:18px 0 0}footer span{color:var(--red)}
+@media(max-width:780px){.workspace{grid-template-columns:1fr}.side-panel{order:-1}.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.messages{height:50vh;min-height:320px}.hero{padding:20px 2px 14px}.seal{width:75px;height:75px}.seal b{font-size:23px}.seal small{font-size:9px}}
+@media(max-width:430px){.shell{padding:12px 9px 25px}.top-actions a,.top-actions button{font-size:14px;padding:6px 8px}.hero h1{font-size:38px}.hero p{font-size:16px}.quick{grid-template-columns:1fr 1fr}.messages{padding:12px;min-height:300px}.bubble{max-width:94%;font-size:16px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header>
+<a class="brand" href="/" aria-label="العودة إلى مِداد"><span class="mark">م</span><span><b>مِداد</b><small>مساعدك للفهم والإنجاز</small></span></a>
+<div class="top-actions"><a href="/">الرئيسية ←</a><a href="account.html">حسابي</a><button id="themeBtn" type="button" aria-label="تبديل المظهر">◐</button></div>
+</header>
+<section class="hero"><div><span class="eyebrow">فكّر • اسأل • اتقدّم</span><h1>مِداد <span style="color:var(--ink)">AI</span></h1><p>مساحتك الذكية للفهم والمذاكرة وتنظيم يومك</p></div><div class="seal"><b>مِداد</b><small>معاك خطوة بخطوة</small></div></section>
+<div class="workspace">
+<section class="chat-panel" aria-label="محادثة مِداد AI">
+<div class="chat-head"><div class="assistant-name"><span class="avatar">م</span><div><b>مساعد مِداد</b><small><i class="online"></i>جاهز يساعدك</small></div></div><button class="clear" id="clearChat" type="button">محادثة جديدة ↺</button></div>
+<div class="messages" id="messages" aria-live="polite"><div class="welcome" id="welcome"><div class="welcome-mark">مِداد</div><h2>أهلًا بيك في مِداد AI</h2><p>اسأل براحتك، وهنفهم الموضوع مع بعض خطوة بخطوة. ابدأ باختيار فكرة من الجنب أو اكتب سؤالك.</p></div></div>
+<form class="composer" id="chatForm"><textarea id="messageInput" maxlength="1200" placeholder="اكتب سؤالك هنا..." aria-label="اكتب رسالتك" required></textarea><div class="composer-row"><span class="hint">Enter للإرسال · Shift + Enter لسطر جديد</span><button class="send" id="sendBtn" type="submit">إرسال ←</button></div></form>
+</section>
+<aside class="side-panel">
+<h2>رصيدك في مِداد AI</h2>
+<div id="quotaArea"><div class="quota-top"><span>الرسائل المتبقية</span><span id="planLabel">—</span></div><div class="quota-number" id="quotaNumber">— / —</div><div class="meter"><i id="quotaMeter"></i></div><p class="side-note" id="quotaNote">سجّل الدخول لعرض رصيدك.</p></div>
+<div id="loginBox" class="login-box">استخدام مِداد AI يحتاج حسابًا. <a href="account.html">سجّل الدخول أو أنشئ حسابًا</a> وارجع هنا.</div>
+<hr class="side-divider">
+<h2>ابدأ من هنا</h2>
+<div class="quick">
+<button type="button" data-prompt="اشرح لي هذا الدرس بطريقة بسيطة ومنظمة، مع مثال يوضح الفكرة: ">📘 شرح درس</button>
+<button type="button" data-prompt="اعمل لي اختبارًا قصيرًا من 5 أسئلة عن: ">✍️ اختبرني</button>
+<button type="button" data-prompt="لخّص لي الموضوع التالي في نقاط واضحة، ثم اكتب أهم المصطلحات: ">📝 تلخيص</button>
+<button type="button" data-prompt="ساعدني أعمل خطة مذاكرة واقعية لليوم. المواد والوقت المتاح: ">⏳ تنظيم يومي</button>
+<button type="button" data-prompt="اشرح لي المسألة دي خطوة بخطوة، ووضح سبب كل خطوة: ">🧠 حل مسألة</button>
+<button type="button" data-prompt="اسألني أسئلة تساعدني أحدد هدفي وأقسمه لخطوات صغيرة: ">🎯 تحقيق هدف</button>
+</div>
+<a class="upgrade" style="margin-top:13px" href="subscriptions.html">اكتشف باقات مِداد ←</a>
+<div class="privacy">✦ محادثتك لا تظهر للآخرين. لا تشارك كلمات المرور أو أكواد التحقق أو بياناتك الخاصة.</div>
+<div class="status" id="status" role="status"></div>
+</aside>
+</div>
+<footer>مِداد — كل خطوة فهم بتقرّبك من هدفك <span>✦</span></footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
+<script>
+(()=> {
+"use strict";
+const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",ENDPOINT=URL+"/functions/v1/midad-ai";
+const $=id=>document.getElementById(id),sb=window.supabase.createClient(URL,KEY);
+let session=null,history=[],busy=false,quota=null;
+const planNames={free:"مجاني",plus:"Plus",pro:"Pro"};
+function status(t){$("status").textContent=t||"";}
+function addBubble(role,text){const welcome=$("welcome");if(welcome)welcome.remove();const b=document.createElement("div");b.className="bubble "+role;const who=document.createElement("span");who.className="who";who.textContent=role==="user"?"أنت":"مِداد AI";const body=document.createElement("div");body.textContent=text;b.append(who,body);$("messages").append(b);$("messages").scrollTop=$("messages").scrollHeight;return b;}
+function renderQuota(q){if(!q)return;quota=q;$("loginBox").classList.add("hidden");$("planLabel").textContent=planNames[q.plan]||"مجاني";$("quotaNumber").textContent=new Intl.NumberFormat("ar-EG").format(q.remaining)+" / "+new Intl.NumberFormat("ar-EG").format(q.limit)+" رسالة";const pct=q.limit?Math.min(100,q.used/q.limit*100):0;$("quotaMeter").style.width=pct+"%";$("quotaNote").textContent=q.remaining>0?"متبقي لك "+new Intl.NumberFormat("ar-EG").format(q.remaining)+" رسالة هذا الشهر.":"وصلت للحد الشهري. تقدر تتابع استخدامك مع بداية الشهر أو تشوف الباقات.";
+}
+async function call(body){if(!session?.access_token)throw new Error("سجّل الدخول من صفحة حسابي أولًا.");const res=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify(body)});const data=await res.json().catch(()=>({}));if(!res.ok){if(data.quota)renderQuota(data.quota);throw new Error(data.error||"حصلت مشكلة مؤقتة. جرّب تاني.");}return data;}
+async function loadQuota(){if(!session){$("loginBox").classList.remove("hidden");$("quotaNote").textContent="سجّل الدخول لعرض رصيدك.";return;}$("loginBox").classList.add("hidden");try{const d=await call({action:"quota"});renderQuota(d.quota);status("رصيدك اتحدّث");}catch(e){status(e.message);}}
+function transcript(next){const rows=history.slice(-8).map(m=>(m.role==="user"?"الطالب: ":"مِداد: ")+m.text);rows.push("الطالب: "+next);return "هذه محادثة مستمرة داخل مِداد. حافظ على سياق الحوار وأجب عن آخر رسالة للطالب.\n"+rows.join("\n");}
+async function send(text){const message=String(text||"").trim();if(!message||busy)return;if(!session){status("سجّل الدخول لاستخدام مِداد AI.");return;}if(quota&&quota.remaining<=0){status("انتهى رصيدك الشهري. راجع باقات مِداد.");return;}busy=true;$("sendBtn").disabled=true;$("messageInput").disabled=true;addBubble("user",message);history.push({role:"user",text:message});const typing=document.createElement("div");typing.className="typing";typing.textContent="مِداد بيفكر في سؤالك…";$("messages").append(typing);$("messages").scrollTop=$("messages").scrollHeight;status("جارٍ تجهيز رد مِداد…");try{const d=await call({message:transcript(message)});typing.remove();const answer=String(d.answer||"مفيش رد وصل المرة دي. جرّب تسأل بطريقة تانية.");addBubble("assistant",answer);history.push({role:"assistant",text:answer});if(history.length>16)history=history.slice(-16);if(d.quota)renderQuota(d.quota);status("تم الرد من مِداد AI");}catch(e){typing.remove();status(e.message);if(e.message.includes("الحد الشهري"))$("quotaNote").textContent=e.message;}finally{busy=false;$("sendBtn").disabled=false;$("messageInput").disabled=false;$("messageInput").focus();}}
+$("chatForm").addEventListener("submit",e=>{e.preventDefault();const value=$("messageInput").value.trim();if(!value)return;$("messageInput").value="";send(value);});
+$("messageInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("chatForm").requestSubmit();}});
+document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>{$("messageInput").value=b.dataset.prompt;$("messageInput").focus();}));
+$("clearChat").addEventListener("click",()=>{if(busy)return;history=[];$("messages").replaceChildren();const w=document.createElement("div");w.className="welcome";w.id="welcome";w.innerHTML='<div class="welcome-mark">مِداد</div><h2>نبدأ من جديد؟</h2><p>اكتب سؤالك الجديد، وأنا معاك خطوة بخطوة.</p>';$("messages").append(w);status("بدأت محادثة جديدة.");});
+$("themeBtn").addEventListener("click",()=>{const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;try{localStorage.setItem("midad-ai-theme",next)}catch{}});
+try{const t=localStorage.getItem("midad-ai-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;}catch{}
+(async()=>{const {data}=await sb.auth.getSession();session=data.session;if(!session){$("loginBox").classList.remove("hidden");$("messageInput").disabled=true;$("sendBtn").disabled=true;$("quotaNote").textContent="سجّل الدخول لعرض رصيدك واستخدام المساعد.";}else{await loadQuota();}})();
+})();
+</script>
+</body>
+</html>
