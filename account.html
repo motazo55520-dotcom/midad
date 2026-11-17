@@ -14,7 +14,28 @@ main{max-width:760px;margin:auto;padding:25px 16px 50px}header{display:flex;just
 a{color:var(--red)}.back,.btn{display:inline-block;font:inherit;text-decoration:none;border:1px solid var(--ink);border-radius:7px;padding:8px 15px;color:var(--ink);background:transparent;cursor:pointer}.btn.primary{background:var(--ink);color:var(--card);box-shadow:2px 2px 0 var(--red)}button:disabled{opacity:.5;cursor:not-allowed}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:4px}.full{grid-column:1/-1}label{font-size:16px;color:var(--muted)}input{font:18px 'Amiri',serif;background:rgba(255,255,255,.2);border:1px solid var(--muted);border-radius:6px;padding:8px 10px;color:var(--ink);width:100%}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.msg{border:1px dashed var(--muted);padding:10px 12px;margin-top:12px;white-space:pre-wrap;line-height:1.7}.msg.good{border-color:var(--green);color:var(--green)}.msg.error{border-color:var(--red);color:var(--red)}.device{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding:10px 0}.device small{display:block;color:var(--muted)}.stats{display:flex;gap:10px;flex-wrap:wrap}.stats span{background:rgba(120,90,45,.12);padding:6px 10px;border-radius:6px}
 @media(max-width:600px){.fields{grid-template-columns:1fr}.full{grid-column:auto}h1{font-size:40px}}
-</style></head>
+</style><style id="midad-mobile-normalization">
+/* Midad mobile layout normalization */
+html{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+*,*::before,*::after{box-sizing:border-box}
+img,svg,video,canvas,iframe{max-width:100%}
+button,input,select,textarea{max-width:100%;min-width:0}
+main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:0}
+@media(max-width:700px){
+  .wrap,.shell,main{width:100%;max-width:100%;margin-left:auto;margin-right:auto;padding-left:14px;padding-right:14px}
+  header{max-width:100%;gap:10px}
+  h1{overflow-wrap:anywhere;line-height:1.25}
+  p,small,label,a,button{overflow-wrap:anywhere}
+  .row,.actions,.nav,.site-nav{max-width:100%;min-width:0;flex-wrap:wrap}
+  .grid,.fields,.form-grid,.cards{grid-template-columns:minmax(0,1fr)!important}
+  .panel,.card,.plan{width:100%;max-width:100%;min-width:0}
+  input,select,textarea{width:100%;font-size:16px}
+  button,.btn,.link{min-height:42px}
+}
+
+@media(max-width:600px){h1{font-size:34px}.panel{padding:15px}.device{align-items:flex-start;flex-wrap:wrap}.stats{gap:7px}.stats span{min-width:0}}</style>
+</head>
 <body><main>
 <header><div><h1>حساب مِداد</h1><div class="muted">بياناتك معاك على أجهزتك</div></div><a class="back" href="/">العودة للرئيسية ←</a></header>
 <section class="panel" id="authPanel">
