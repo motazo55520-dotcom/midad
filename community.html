@@ -205,9 +205,57 @@ footer{color:#9da7ca}
 }
 @media(prefers-reduced-motion:reduce){.wrap,.community-hero,.energy-panel{animation:none!important}}
 
+
+/* دخول احتفالي: باب يفتح على ساحة التحديات */
+.entry-gate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(95,68,190,.34),transparent 36%),linear-gradient(135deg,#07091a,#160d30 55%,#071d2b);transition:opacity .75s ease,visibility .75s ease}
+.entry-gate.leaving{opacity:0;visibility:hidden;pointer-events:none}
+.gate-lights{position:absolute;inset:-25%;background:conic-gradient(from 0deg at 50% 48%,transparent 0 8deg,rgba(255,75,164,.22) 10deg 13deg,transparent 17deg 34deg,rgba(75,239,224,.2) 37deg 40deg,transparent 44deg 60deg);filter:blur(14px);animation:gateLightSpin 8s linear infinite}
+.gate-stage{position:relative;z-index:2;width:min(520px,88vw);text-align:center}
+.gate-eyebrow{color:#70f4df;letter-spacing:3px;font:700 12px Arial,sans-serif}
+.gate-title{margin:12px 0 5px;color:white;font:700 clamp(34px,7vw,58px) 'Aref Ruqaa',serif;text-shadow:0 0 28px rgba(255,75,164,.5)}
+.gate-sub{color:#c6c9e8;margin-bottom:24px}
+.gate-frame{height:clamp(240px,48vh,360px);max-width:330px;margin:auto;position:relative;perspective:1000px;border:3px solid rgba(255,255,255,.55);border-radius:18px 18px 8px 8px;box-shadow:0 0 0 8px rgba(111,82,255,.12),0 0 55px rgba(255,74,166,.28),0 0 100px rgba(54,225,214,.16);background:radial-gradient(circle at 50% 45%,#ffcc70 0,#f45c9c 22%,#7655ee 48%,#09142d 75%);overflow:hidden}
+.gate-frame:before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.3) 0 1deg,transparent 2deg 13deg);animation:gateLightSpin 12s linear infinite}
+.gate-door{position:absolute;inset:0 50% 0 0;transform-origin:right center;background:linear-gradient(120deg,#24234f,#4d3487 48%,#211b47);border:2px solid rgba(255,255,255,.45);box-shadow:inset -10px 0 24px rgba(0,0,0,.35);transition:transform 1.25s cubic-bezier(.2,.75,.15,1)}
+.gate-door.right{inset:0 0 0 50%;transform-origin:left center;background:linear-gradient(240deg,#24234f,#4d3487 48%,#211b47)}
+.gate-door:after{content:"✦";position:absolute;top:45%;font-size:44px;color:#ffd36d;text-shadow:0 0 20px #ff73b2}
+.gate-door.left:after{right:18px}.gate-door.right:after{left:18px}
+.gate-knob{position:absolute;top:53%;width:9px;height:9px;border-radius:50%;background:#ffd36d;box-shadow:0 0 12px #ffd36d}
+.gate-door.left .gate-knob{right:12px}.gate-door.right .gate-knob{left:12px}
+.gate-frame.open .gate-door.left{transform:rotateY(112deg)}.gate-frame.open .gate-door.right{transform:rotateY(-112deg)}
+.gate-enter{margin-top:24px;border:0;border-radius:30px;padding:13px 28px;color:#fff;font-weight:700;font-size:18px;background:linear-gradient(100deg,#ff4f9a,#8058ff,#16bba9);box-shadow:0 8px 28px rgba(255,79,154,.32);cursor:pointer;transition:transform .2s,filter .2s}
+.gate-enter:hover{transform:translateY(-3px) scale(1.03);filter:brightness(1.12)}
+.gate-hint{display:block;margin-top:10px;color:#aeb6d8;font-size:12px}
+.gate-spark{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 16px 4px #ff69b4;animation:sparkRise 2.8s ease-in-out infinite}
+.gate-spark:nth-of-type(2){left:12%;top:72%;animation-delay:-.8s}.gate-spark:nth-of-type(3){right:14%;top:25%;animation-delay:-1.4s}.gate-spark:nth-of-type(4){right:24%;bottom:10%;animation-delay:-.3s}
+.entry-gate.opening .gate-frame{box-shadow:0 0 0 12px rgba(111,82,255,.18),0 0 90px rgba(255,74,166,.7),0 0 150px rgba(54,225,214,.42)}
+.entry-gate.opening .gate-title{animation:gateTitlePop .7s ease}
+@keyframes gateLightSpin{to{transform:rotate(360deg)}}
+@keyframes sparkRise{0%,100%{transform:translateY(0) scale(.6);opacity:.25}50%{transform:translateY(-35px) scale(1.5);opacity:1}}
+@keyframes gateTitlePop{50%{transform:scale(1.08);text-shadow:0 0 36px #ff4f9a,0 0 60px #35e0c1}}
+/* ترتيب أقسام المجتمع في عمودين متجاورين */
+#app>.grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+#app>.grid>.panel{grid-column:auto;min-width:0}
+#app>.grid>.panel.half{grid-column:auto}
+@media(max-width:700px){#app>.grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.gate-lights,.gate-spark,.gate-frame:before{animation:none!important}.gate-door{transition:none!important}}
+
 </style>
 </head>
 <body>
+<div class="entry-gate" id="entryGate" role="dialog" aria-modal="true" aria-label="بوابة دخول مجتمع مِداد">
+ <div class="gate-lights"></div><span class="gate-spark"></span><span class="gate-spark"></span><span class="gate-spark"></span><span class="gate-spark"></span>
+ <div class="gate-stage">
+  <div class="gate-eyebrow">MIDAAD COMMUNITY · GET READY</div>
+  <h2 class="gate-title">مستعد للتحدّي؟</h2>
+  <p class="gate-sub">الباب هيتفتح… وساحتك مستنياك!</p>
+  <div class="gate-frame" id="gateFrame" aria-hidden="true">
+   <div class="gate-door left"><i class="gate-knob"></i></div><div class="gate-door right"><i class="gate-knob"></i></div>
+  </div>
+  <button class="gate-enter" id="gateEnter" type="button">افتح الباب وادخل ✨</button>
+  <span class="gate-hint">اضغط للدخول وتشغيل المؤثرات الصوتية</span>
+ </div>
+</div>
 <div class="wrap">
 <header><div><h1>مجتمع مِداد</h1><div class="muted">نافس، شارك، واجمع إنجازاتك</div></div><div class="nav"><a class="link" href="/">الرئيسية</a><a class="link" href="account.html">حسابي</a><a class="link" href="subscriptions.html">الباقات</a></div></header>
 
@@ -346,6 +394,24 @@ async function startCommunity(){
   notice(e.message||"تعذر بدء صفحة المجتمع.",true);
  }
 }
+
+// مؤثر موسيقي احتفالي قصير يُنشأ محليًا؛ يبدأ بعد ضغط المستخدم احترامًا لسياسة تشغيل الصوت بالمتصفح.
+function playGateMusic(){
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
+  const ctx=new AudioCtx(),master=ctx.createGain();master.gain.setValueAtTime(.0001,ctx.currentTime);master.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.12);master.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+4.2);master.connect(ctx.destination);
+  const notes=[523.25,659.25,783.99,1046.5,783.99,987.77,1174.66,1567.98];
+  notes.forEach((hz,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain(),t=ctx.currentTime+i*.23;osc.type=i%2?"triangle":"sine";osc.frequency.setValueAtTime(hz,t);gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.55,t+.025);gain.gain.exponentialRampToValueAtTime(.0001,t+.32);osc.connect(gain);gain.connect(master);osc.start(t);osc.stop(t+.34);});
+  const bass=ctx.createOscillator(),bg=ctx.createGain();bass.type="sine";bass.frequency.setValueAtTime(130.81,ctx.currentTime);bg.gain.setValueAtTime(.0001,ctx.currentTime);bg.gain.exponentialRampToValueAtTime(.22,ctx.currentTime+.08);bg.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+1.4);bass.connect(bg);bg.connect(master);bass.start();bass.stop(ctx.currentTime+1.45);
+  setTimeout(()=>ctx.close().catch(()=>{}),4800);
+ }catch(e){/* الصوت اختياري ولا يعطل الدخول */}
+}
+const gateEnter=$("gateEnter");
+gateEnter?.addEventListener("click",()=>{
+ const gate=$("entryGate"),frame=$("gateFrame");if(!gate||gate.classList.contains("opening"))return;
+ gate.classList.add("opening");frame?.classList.add("open");gateEnter.disabled=true;gateEnter.textContent="يلا بينا! 🎉";playGateMusic();
+ setTimeout(()=>gate.classList.add("leaving"),1250);setTimeout(()=>gate.remove(),2050);
+});
 startCommunity();
 </script>
 </body></html>
