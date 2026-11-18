@@ -271,6 +271,16 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
 #pmStrictOverlay small{color:#d2bd98;font-size:15px}
 body:has(#pmStrictOverlay.active){overflow:hidden}
 </style>
+<script>
+(function(){
+  try{
+    const firstPage=location.pathname==='/'||location.pathname==='/index.html';
+    if(firstPage&&localStorage.getItem('midad-landing-seen-v1')!=='1'){
+      location.replace('/welcome.html');
+    }
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <noscript><p style="padding:20px;text-align:center">مِداد يحتاج تفعيل JavaScript في المتصفح ليعمل.</p></noscript>
