@@ -157,7 +157,7 @@ textarea{width:100%;font:13px/1.5 monospace;color:var(--ink);background:rgba(255
 .sbj h3 small{color:var(--muted);font-size:15px;font-family:'Amiri',serif}
 .sbj .add{margin:6px 0 0}
 .row.today .name{color:var(--red);font-weight:700}
-.pomo{text-align:center}
+.pomo{text-align:center} .pm-sound-box{margin:16px auto 12px;padding:13px 12px;border:1.5px dashed var(--muted);border-radius:12px;background:rgba(255,255,255,.12);text-align:right;max-width:520px}.pm-sound-box h3{margin:0 0 2px;font-size:23px}.pm-sound-box>select,#pmQuranControls select{width:100%;margin:5px 0;padding:7px 10px;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1.5px solid var(--muted);border-radius:8px}.pm-volume-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:15px}.pm-volume-row input{flex:1;min-width:90px;accent-color:var(--red)}#pmQuranControls{display:grid;grid-template-columns:1fr 1fr;gap:6px}#pmQuranControls[hidden]{display:none}@media(max-width:420px){#pmQuranControls{grid-template-columns:1fr}}
 .pomo b{display:block;font-family:'Aref Ruqaa',serif;font-size:64px;color:var(--red);line-height:1.1}
 .pomo .tabs,.pomo .ctl{justify-content:center}
 .sg{display:grid;grid-template-columns:minmax(0,250px) 1fr;gap:28px;align-items:start}
@@ -324,7 +324,7 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
 <div class="grid g2">
 <section class="card wide c1" aria-labelledby="sh"><div class="sheet plain">
 <h2 id="sh" data-admin-key="study_heading">المذاكرة</h2>
-<div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><div class="pm-add-time"><span>زود وقت المؤقت</span><button class="tab" type="button" data-pm-add="5">+٥ دقائق</button><button class="tab" type="button" data-pm-add="10">+١٠ دقائق</button></div><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
+<div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><div class="pm-sound-box"><h3>🎧 أجواء جلسة المذاكرة</h3><p class="sub">اختار الصوت اللي يساعدك تركز — الصوت يبدأ مع المؤقت</p><select id="pmSoundType" aria-label="نوع الصوت"><option value="off">بدون صوت</option><option value="rain">مطر هادئ</option><option value="fire">حطب نار</option><option value="ocean">أمواج البحر</option><option value="wind">هواء الغابة</option><option value="birds">غابة وطيور</option><option value="quran">القرآن الكريم</option></select><div id="pmQuranControls" hidden><select id="pmReciter" aria-label="القارئ"><option value="">جاري تحميل القراء...</option></select><select id="pmSurah" aria-label="السورة"><option value="1">الفاتحة</option></select></div><div class="pm-volume-row"><label for="pmVolume">مستوى الصوت</label><input id="pmVolume" type="range" min="0" max="100" value="35"><button type="button" class="tab" id="pmSoundPreview">تجربة الصوت</button></div><small id="pmSoundStatus" class="sub" aria-live="polite">اختار صوتًا ثم ابدأ جلسة التركيز</small></div><div class="pm-add-time"><span>زود وقت المؤقت</span><button class="tab" type="button" data-pm-add="5">+٥ دقائق</button><button class="tab" type="button" data-pm-add="10">+١٠ دقائق</button></div><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
 <div id="sj"></div></div>
 </div></section>
 <section class="card wide c2" aria-labelledby="hh"><div class="sheet plain">
@@ -947,6 +947,78 @@ function sjRender(){
     box.appendChild(f);c.appendChild(box)
   });
 }
+/* Session ambience: locally synthesized nature sounds + Quran audio from MP3Quran API */
+const pmSoundType=$('#pmSoundType'),pmReciter=$('#pmReciter'),pmSurah=$('#pmSurah'),pmQuranControls=$('#pmQuranControls'),pmVolume=$('#pmVolume'),pmSoundStatus=$('#pmSoundStatus');
+const pmQuranAudio=new Audio();pmQuranAudio.preload='none';pmQuranAudio.crossOrigin='anonymous';
+let pmReciters=[],pmSurahs=[],pmAudioCtx=null,pmSoundNodes=[],pmSoundMaster=null,pmSoundMode='off';
+const pmSaved=load('pomo-sound',{type:'off',reciter:'',surah:'1',volume:35});
+pmSoundType.value=pmSaved.type||'off';pmVolume.value=pmSaved.volume??35;
+function pmSaveSound(){save('pomo-sound',{type:pmSoundType.value,reciter:pmReciter.value,surah:pmSurah.value,volume:Number(pmVolume.value)})}
+function pmSetStatus(t){if(pmSoundStatus)pmSoundStatus.textContent=t}
+async function pmLoadQuranLists(){
+ try{
+  const [rr,ss]=await Promise.all([fetch('https://mp3quran.net/api/v3/reciters?language=ar'),fetch('https://mp3quran.net/api/v3/suwar?language=ar')]);
+  if(!rr.ok||!ss.ok)throw new Error('تعذر تحميل بيانات القرآن');
+  const rd=await rr.json(),sd=await ss.json();pmReciters=(rd.reciters||[]).filter(x=>x.moshaf?.some(m=>m.server));
+  pmSurahs=sd.suwar||sd.surahs||[];
+  const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبدالباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي'];
+  pmReciters.sort((a,b)=>{const ai=preferred.findIndex(n=>a.name?.includes(n)),bi=preferred.findIndex(n=>b.name?.includes(n));return (ai<0?99:ai)-(bi<0?99:bi)});
+  pmReciter.replaceChildren();pmReciters.forEach((r,i)=>{const o=document.createElement('option');o.value=String(r.id);o.textContent=r.name;pmReciter.appendChild(o)});
+  pmSurah.replaceChildren();pmSurahs.forEach((q,i)=>{const o=document.createElement('option');o.value=String(q.id||i+1);o.textContent=q.name||q.name_ar||('سورة '+(i+1));pmSurah.appendChild(o)});
+  const rec=pmReciters.find(x=>String(x.id)===String(pmSaved.reciter))||pmReciters[0];if(rec)pmReciter.value=String(rec.id);
+  if(pmSaved.surah&&[...pmSurah.options].some(o=>o.value===String(pmSaved.surah)))pmSurah.value=String(pmSaved.surah);
+  if(!pmReciters.length)throw new Error('لا توجد قراءات متاحة حاليًا');
+  pmSaveSound();if(pmSoundType.value==='quran')pmSetStatus('اختار القارئ والسورة ثم اضغط تجربة الصوت أو ابدأ المؤقت');
+ }catch(e){pmSetStatus('تعذر تحميل قائمة القراء الآن — جرّب لاحقًا أو اختر صوتًا طبيعيًا');}
+}
+function pmStopSound(){
+ try{pmQuranAudio.pause();pmQuranAudio.currentTime=0}catch(e){}
+ pmSoundNodes.forEach(n=>{try{n.stop?.()}catch(e){}try{n.disconnect?.()}catch(e){}});
+ pmSoundNodes=[];if(pmSoundMaster){try{pmSoundMaster.disconnect()}catch(e){}pmSoundMaster=null}
+ pmSoundMode='off';
+}
+function pmNoiseBuffer(ctx){
+ const b=ctx.createBuffer(1,ctx.sampleRate*3,ctx.sampleRate),d=b.getChannelData(0);
+ for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+ return b;
+}
+function pmStartNature(kind,preview=false){
+ pmStopSound();const C=window.AudioContext||window.webkitAudioContext;if(!C){pmSetStatus('المتصفح لا يدعم تشغيل الأصوات');return}
+ try{
+  pmAudioCtx=pmAudioCtx||new C();pmAudioCtx.resume();const c=pmAudioCtx;
+  const master=c.createGain();master.gain.value=Number(pmVolume.value)/100*.22;master.connect(c.destination);pmSoundMaster=master;
+  const noise=c.createBufferSource();noise.buffer=pmNoiseBuffer(c);noise.loop=true;
+  const filter=c.createBiquadFilter(),gain=c.createGain();noise.connect(filter);filter.connect(gain);gain.connect(master);
+  if(kind==='rain'){filter.type='bandpass';filter.frequency.value=1800;filter.Q.value=.55;gain.gain.value=.48}
+  if(kind==='fire'){filter.type='lowpass';filter.frequency.value=650;gain.gain.value=.38;const crack=c.createBiquadFilter();crack.type='highpass';crack.frequency.value=2600;const cg=c.createGain();cg.gain.value=.10;noise.connect(crack);crack.connect(cg);cg.connect(master);pmSoundNodes.push(crack,cg)}
+  if(kind==='ocean'){filter.type='lowpass';filter.frequency.value=520;gain.gain.value=.75;const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.075;lg.gain.value=.22;lfo.connect(lg);lg.connect(gain.gain);lfo.start();pmSoundNodes.push(lfo,lg)}
+  if(kind==='wind'||kind==='birds'){filter.type='lowpass';filter.frequency.value=kind==='birds'?900:430;gain.gain.value=kind==='birds'?.22:.42;const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.035;lg.gain.value=.13;lfo.connect(lg);lg.connect(gain.gain);lfo.start();pmSoundNodes.push(lfo,lg);
+   if(kind==='birds'){for(let i=0;i<3;i++){const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=1700+i*430;g.gain.value=.012;o.connect(g);g.connect(master);o.start();pmSoundNodes.push(o,g)}}
+  }
+  noise.start();pmSoundNodes.push(noise,filter,gain);pmSoundMode=kind;pmSetStatus(preview?'تجربة الصوت شغالة':'الصوت شغال مع جلسة التركيز');
+ }catch(e){pmSetStatus('تعذر تشغيل الصوت — جرّب مرة تانية')}
+}
+async function pmStartQuran(preview=false){
+ const r=pmReciters.find(x=>String(x.id)===String(pmReciter.value));const m=r?.moshaf?.find(x=>x.server);
+ if(!m){pmSetStatus('اختار قارئًا متاحًا');return}
+ const n=String(pmSurah.value||1).padStart(3,'0');pmStopSound();pmQuranAudio.src=m.server+n+'.mp3';pmQuranAudio.volume=Number(pmVolume.value)/100;
+ try{await pmQuranAudio.play();pmSoundMode='quran';pmSetStatus((preview?'تجربة الاستماع':'القرآن يعمل مع المؤقت')+' — '+r.name)}catch(e){pmSetStatus('اضغط تشغيل مرة أخرى للسماح بتشغيل القرآن')}
+}
+function pmStartSelectedSound(preview=false){
+ const t=pmSoundType.value;pmSaveSound();
+ if(t==='off'){pmStopSound();pmSetStatus('الصوت مغلق');return}
+ if(t==='quran'){pmStartQuran(preview);return}
+ pmStartNature(t,preview);
+}
+pmSoundType.addEventListener('change',()=>{pmQuranControls.hidden=pmSoundType.value!=='quran';pmSaveSound();if(pm.run)pmStartSelectedSound();else{pmStopSound();pmSetStatus('سيبدأ الصوت عند تشغيل المؤقت') }});
+pmReciter.addEventListener('change',()=>{pmSaveSound();if(pm.run&&pmSoundType.value==='quran')pmStartQuran()});
+pmSurah.addEventListener('change',()=>{pmSaveSound();if(pm.run&&pmSoundType.value==='quran')pmStartQuran()});
+pmVolume.addEventListener('input',()=>{if(pmSoundMaster)pmSoundMaster.gain.value=Number(pmVolume.value)/100*.22;pmQuranAudio.volume=Number(pmVolume.value)/100;pmSaveSound()});
+$('#pmSoundPreview').addEventListener('click',()=>pmStartSelectedSound(true));
+pmQuranAudio.addEventListener('ended',()=>{pmSoundMode='off';pmSetStatus('انتهت السورة — اختار سورة أخرى للاستماع')});
+pmQuranAudio.addEventListener('error',()=>pmSetStatus('تعذر تشغيل هذا التسجيل حاليًا — جرّب قارئًا آخر'));
+pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
+
 /* pomodoro + optional strict focus lock */
 const pm={mode:'f',left:1500,run:0,end:0,locked:false},PMD={f:1500,b:300};
 let strictEnabled=localStorage.getItem('midad-pomo-strict')==='1';
@@ -984,7 +1056,7 @@ function pmUi(){
 strictToggle.addEventListener('change',()=>{strictEnabled=strictToggle.checked;localStorage.setItem('midad-pomo-strict',strictEnabled?'1':'0')});
 setInterval(()=>{
   if(!pm.run)return;if(pmUi()>0)return;
-  pm.run=0;
+  pm.run=0;pmStopSound();pmSetStatus('انتهت الجلسة — أحسنت!');
   if(pm.locked)strictUnlock();
   if(pm.mode==='f'){const k='pomo:'+dayKey(),d=load(k,{n:0,m:0});d.n++;d.m+=25;save(k,d);wkRender()}
   try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();a.close()},500)}catch(e){}
@@ -992,8 +1064,8 @@ setInterval(()=>{
 },500);
 $('#pms').addEventListener('click',()=>{
   if(pm.locked)return;
-  if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0}
-  else{pm.end=Date.now()+pm.left*1000;pm.run=1;if(strictEnabled){strictLock();if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}}
+  if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0;pmStopSound();pmSetStatus('الصوت متوقف مؤقتًا')}
+  else{pm.end=Date.now()+pm.left*1000;pm.run=1;pmStartSelectedSound();if(strictEnabled){strictLock();if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}}
   pmUi()
 });
 document.addEventListener('click',e=>{
@@ -1002,8 +1074,8 @@ document.addEventListener('click',e=>{
   if(pm.run)pm.end+=mins*60000;else pm.left+=mins*60;
   pmUi();
 });
-$('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
-$('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pm.left=PMD[pm.mode];pmUi()});
+$('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pmStopSound();pm.left=PMD[pm.mode];pmSetStatus('تمت إعادة المؤقت');pmUi()});
+$('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pmStopSound();pmSetStatus('اختار صوتًا ثم ابدأ المؤقت');pm.left=PMD[pm.mode];pmUi()});
 document.addEventListener('visibilitychange',()=>{if(pm.locked&&document.hidden){try{if(navigator.vibrate)navigator.vibrate([120,60,120])}catch{}}});
 /* weekly summary */
 function wkRender(){
