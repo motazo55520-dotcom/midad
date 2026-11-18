@@ -1076,21 +1076,23 @@ dates();render();
  const KEY='midad-install-welcome-v1';
  let installPrompt=null;
  const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
- const close=()=>{modal.classList.remove('show');try{localStorage.setItem(KEY,'1')}catch(e){}};
+ const close=()=>{modal.classList.remove('show')};
+ const markInstalled=()=>{try{localStorage.setItem(KEY,'1')}catch(e){};close()};
  if(isStandalone())return;
- let dismissed=false;try{dismissed=localStorage.getItem(KEY)==='1'}catch(e){}
- if(dismissed)return;
+ let installed=false;try{installed=localStorage.getItem(KEY)==='1'}catch(e){}
+ if(installed)return;
  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
  const show=()=>modal.classList.add('show');
  if(ios){help.textContent='على iPhone: اضغط مشاركة في Safari ثم «إضافة إلى الشاشة الرئيسية».';installBtn.textContent='طريقة التثبيت';installBtn.addEventListener('click',()=>{help.textContent='افتح قائمة المشاركة في Safari ثم اختر «إضافة إلى الشاشة الرئيسية» واضغط إضافة.';});}
  else {installBtn.addEventListener('click',async()=>{
    if(!installPrompt){help.textContent='لو زر التثبيت مش ظاهر، افتح قائمة المتصفح واختر «تثبيت مِداد» أو «إضافة إلى الشاشة الرئيسية».';return;}
    installPrompt.prompt();
-   await installPrompt.userChoice.catch(()=>null);
-   installPrompt=null;close();
+   const choice=await installPrompt.userChoice.catch(()=>null);
+   installPrompt=null;
+   if(choice&&choice.outcome==='accepted')markInstalled();else close();
   });
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;installBtn.textContent='تثبيت مِداد';show();});
-  window.addEventListener('appinstalled',close);
+  window.addEventListener('appinstalled',markInstalled);
   installBtn.addEventListener('click',()=>{if(!installPrompt)help.textContent='افتح قائمة المتصفح واختر «تثبيت مِداد» أو «إضافة إلى الشاشة الرئيسية».';});
  }
  laterBtn.addEventListener('click',close);
