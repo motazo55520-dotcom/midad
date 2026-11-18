@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#17213b"><title>مواجهات مِداد | العب وتحدَّ أصدقاءك</title>
-<meta name="description" content="واجه طالبًا آخر في أسئلة اللغة الإنجليزية للصف الثاني من البكالوريا المصرية داخل مِداد.">
+<meta name="description" content="واجه طالبًا آخر في أسئلة اللغة العربية أو الإنجليزية للصف الثاني من البكالوريا المصرية داخل مِداد.">
 <link rel="icon" href="/icon-192.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
@@ -48,10 +48,10 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 <body>
 <div class="wrap">
 <header><div class="brand"><div class="logo">م</div><div><h1>مواجهات مِداد</h1><p class="sub">ذاكر، نافس، واكسب الجولة</p></div></div><nav class="nav"><a href="/">الرئيسية</a><a href="/community.html">العب وتحدّى</a><a href="/account.html">حسابي</a></nav></header>
-<section class="hero"><div class="hero-main"><span class="kicker"><i class="dot"></i> تحديات مباشرة 1 ضد 1</span><h2>مين فيكم بطل الإنجليزي؟</h2><p>اختار عدد الأسئلة، ادخل مواجهة مع طالب أونلاين أو ابعت كود لصاحبك. كل إجابة صحيحة بنقطة، وفي النهاية هتشوف النتيجة والتصحيح.</p></div><div class="hero-side"><div><div class="versus"><div class="avatar">🧑‍🎓</div><div class="vs">VS</div><div class="avatar">🏆</div></div><strong>مواجهة على القمة</strong><small>تانية بكالوريا · English</small></div></div></section>
+<section class="hero"><div class="hero-main"><span class="kicker"><i class="dot"></i> تحديات مباشرة 1 ضد 1</span><h2>مين فيكم بطل التحدي؟</h2><p>اختار عدد الأسئلة، ادخل مواجهة مع طالب أونلاين أو ابعت كود لصاحبك. اختار المادة، وكل مواجهة هتبدأ بنموذج امتحان تلقائي مختلف. كل إجابة صحيحة بنقطة، وفي النهاية هتشوف النتيجة والتصحيح.</p></div><div class="hero-side"><div><div class="versus"><div class="avatar">🧑‍🎓</div><div class="vs">VS</div><div class="avatar">🏆</div></div><strong>مواجهة على القمة</strong><small>تانية بكالوريا · عربي وإنجليزي</small></div></div></section>
 <section class="setup-toolbar">
  <div><span class="kicker"><i class="dot"></i> اختار طريقة اللعب</span><h2>جاهز للمواجهة؟</h2><p class="muted">اختار جولة سريعة أو العب مع صاحبك بكود دعوة.</p></div>
- <label class="question-count">عدد الأسئلة<select id="questionCount" class="select"><option value="5">5 أسئلة · جولة سريعة</option><option value="10">10 أسئلة · تحدي كامل</option></select></label>
+ <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:min(100%,440px)"><label class="question-count">المادة<select id="subjectSelect" class="select"><option value="arabic">اللغة العربية · 30 نموذجًا</option><option value="english">اللغة الإنجليزية · 30 نموذجًا</option></select></label><label class="question-count">عدد الأسئلة<select id="questionCount" class="select"><option value="5">5 أسئلة · جولة سريعة</option><option value="10">10 أسئلة · تحدي كامل</option></select></label></div>
 </section>
 <div id="setup" class="grid">
  <section class="panel"><div class="mode-icon">⚡</div><h2>العب الآن</h2><p class="muted">هنوصلك بأول طالب اختار نفس إعدادات المواجهة.</p>
@@ -93,7 +93,7 @@ async function renderState(){
    return;
   }
   lastIndex=d.question_index;lastStatus=d.status;root.dataset.rendered="yes";root.replaceChildren();
-  const top=document.createElement("div");top.className="game-top";safe(top,"span","السؤال "+(d.question_index+1)+" من "+d.question_count,"tag");safe(top,"span",d.question?.unit||"English","tag");root.append(top);
+  const top=document.createElement("div");top.className="game-top";safe(top,"span","السؤال "+(d.question_index+1)+" من "+d.question_count,"tag");safe(top,"span",(d.question?.subject==="arabic"?"عربي":"English")+" · نموذج "+(d.question?.model_no||"—")+" · "+(d.question?.unit||""),"tag");root.append(top);
   const board=document.createElement("div");board.className="scoreboard";
   const me=document.createElement("div");me.className="player";safe(me,"b",d.me.display_name);safe(me,"strong",String(d.me.score));const mineScore=me.querySelector("strong");mineScore.dataset.score=d.me.user_id;safe(me,"small","أنت");
   const vs=safe(board,"div","VS","dash");
@@ -108,7 +108,7 @@ async function renderState(){
 function renderResult(d){
  const root=$("game");root.replaceChildren();root.dataset.rendered="done";
  const winner=d.winner;const top=document.createElement("div");top.className="result";safe(top,"div",winner?"🏆":"🤝","trophy");safe(top,"h2",winner?"الفائز: "+winner.display_name:"تعادل!");safe(top,"p","النتيجة النهائية");safe(top,"p",d.players.map(p=>p.display_name+" "+p.score+" / "+d.question_count).join("   —   "));root.append(top);if(winner&&winner.user_id===d.me.user_id)addConfetti();
- const review=document.createElement("div");review.className="review";safe(review,"h2","مراجعة إجابات المواجهة");
+ const review=document.createElement("div");review.className="review";safe(review,"h2","مراجعة نموذج "+(d.review?.[0]?.model_no||"")+" · إجابات المواجهة");
  d.review.forEach((q,i)=>{const item=document.createElement("div");item.className="review-item";safe(item,"b",(i+1)+". "+q.question);const correct=q.options[q.correct_option];safe(item,"div","الإجابة الصحيحة: "+String.fromCharCode(65+q.correct_option)+". "+correct,"good");q.answers.forEach(a=>{const p=d.players.find(x=>x.user_id===a.user_id);safe(item,"small",(p?.display_name||"اللاعب")+": "+(q.options[a.selected_option]||"لم يجب")+" — "+(a.is_correct?"صحيح ✓":"خطأ ✕"),a.is_correct?"good":"bad");});safe(item,"small","الشرح: "+q.explanation);review.append(item);});root.append(review);
  const again=document.createElement("button");again.className="btn primary full";again.textContent="العودة واختيار مواجهة جديدة";again.addEventListener("click",showSetup);root.append(again);
 }
@@ -116,14 +116,14 @@ async function startQuick(){
  const btn=$("quickBtn");btn.disabled=true;note("quickMsg","بندور على منافس…");$("cancelQueue").classList.remove("hidden");
  try{
   const count=Number($("questionCount").value);let first=true;
-  const search=async()=>{const d=await api("match",{question_count:count});if(d.matched){note("quickMsg","لقينا منافس! المواجهة هتبدأ دلوقتي.");$("cancelQueue").classList.add("hidden");beginRoom(d.room_id);return true;}note("quickMsg","لسه بندور على لاعب مناسب… خليك فاتح الصفحة.");return false;};
+  const search=async()=>{const d=await api("match",{question_count:count,subject:$("subjectSelect").value});if(d.matched){note("quickMsg","لقينا منافس! المواجهة هتبدأ دلوقتي.");$("cancelQueue").classList.add("hidden");beginRoom(d.room_id);return true;}note("quickMsg","لسه بندور على لاعب مناسب… خليك فاتح الصفحة.");return false;};
   if(await search())return;
   queueTimer=setInterval(async()=>{try{if(await search()){clearInterval(queueTimer);queueTimer=null;}}catch(e){note("quickMsg",e.message,true);}},2500);
  }catch(e){btn.disabled=false;$("cancelQueue").classList.add("hidden");note("quickMsg",e.message,true);}
 }
 async function cancelQueue(){try{await api("cancel_queue");}catch{}stopTimers();$("quickBtn").disabled=false;$("cancelQueue").classList.add("hidden");note("quickMsg","تم إلغاء البحث.");}
 $("quickBtn").addEventListener("click",startQuick);$("cancelQueue").addEventListener("click",cancelQueue);
-$("createBtn").addEventListener("click",async()=>{const b=$("createBtn");b.disabled=true;note("createdCode","بنجهز المواجهة…");try{const d=await api("create",{question_count:Number($("questionCount").value)});roomId=d.room_id;inviteCodeCurrent=d.invite_code;const box=$("createdCode");box.textContent="كود صاحبك: "+d.invite_code+" — اضغط لنسخه";box.style.cursor="pointer";box.onclick=()=>navigator.clipboard?.writeText(d.invite_code);beginRoom(d.room_id);}catch(e){note("createdCode",e.message,true);}finally{b.disabled=false;}});
+$("createBtn").addEventListener("click",async()=>{const b=$("createBtn");b.disabled=true;note("createdCode","بنجهز المواجهة…");try{const d=await api("create",{question_count:Number($("questionCount").value),subject:$("subjectSelect").value});roomId=d.room_id;inviteCodeCurrent=d.invite_code;const box=$("createdCode");box.textContent="كود صاحبك: "+d.invite_code+" — اضغط لنسخه";box.style.cursor="pointer";box.onclick=()=>navigator.clipboard?.writeText(d.invite_code);beginRoom(d.room_id);}catch(e){note("createdCode",e.message,true);}finally{b.disabled=false;}});
 $("joinBtn").addEventListener("click",async()=>{const b=$("joinBtn");b.disabled=true;note("friendMsg","بنتحقق من الكود…");try{const d=await api("join",{invite_code:$("inviteCode").value});inviteCodeCurrent=null;note("friendMsg","دخلت المواجهة! بالتوفيق.");beginRoom(d.room_id);}catch(e){note("friendMsg",e.message,true);}finally{b.disabled=false;}});
 async function boot(){
  if(!window.supabase?.createClient)throw new Error("تعذر تحميل خدمة تسجيل الدخول.");
