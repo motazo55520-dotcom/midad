@@ -178,7 +178,7 @@ textarea{width:100%;font:13px/1.5 monospace;color:var(--ink);background:rgba(255
 .listen-mossad-card img{width:58px;height:58px;object-fit:cover;object-position:center 20%;border-radius:50%;mix-blend-mode:multiply;background:var(--paper,#e9dfcc);border:2px solid rgba(130,85,55,.32)}
 .listen-mossad-card a{color:var(--red);font-weight:700;text-decoration:underline}
 @media(max-width:480px){.listen-reciter-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.listen-reciter-card{padding:7px;gap:7px;font-size:14px}.listen-reciter-avatar{width:48px;height:48px}.listen-mossad-card img{width:48px;height:48px}}
-.radio-cairo{margin-top:16px;padding:0;border:0;border-radius:0;background:transparent;text-align:center}.radio-cairo h3{margin:0 0 4px;color:var(--red);font-size:23px}.radio-cairo .radio-cairo-art{display:block!important;width:min(100%,460px)!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important;background:rgba(45,30,20,.06);border:2px solid rgba(130,85,55,.38);border-radius:14px;padding:5px;margin:0 auto 14px!important;box-shadow:0 5px 16px rgba(45,30,20,.16)}.listen-mossad-reciter{font:inherit;text-align:right}.listen-player #mossadInlinePlayer{max-width:100%}.listen-player [hidden]{display:none!important}.listen-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
+.radio-cairo{margin-top:16px;padding:0;border:0;border-radius:0;background:transparent;text-align:center}.radio-cairo h3{margin:0 0 4px;color:var(--red);font-size:23px}.radio-cairo .radio-cairo-art{display:block!important;width:min(100%,460px)!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important;background:rgba(45,30,20,.06);border:2px solid rgba(130,85,55,.38);border-radius:14px;padding:5px;margin:0 auto 14px!important;box-shadow:0 5px 16px rgba(45,30,20,.16)}.listen-player #mossadInlinePlayer{max-width:100%}.listen-player [hidden]{display:none!important}.listen-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
 .listen-progress,.listen-volume{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--muted)}
 .listen-progress input,.listen-volume input{flex:1;min-width:70px;accent-color:var(--red)}
 .listen-volume{margin-top:10px}
@@ -1093,10 +1093,6 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبد الباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي','محمد صديق المنشاوي'];
  const aliases=[['مشاري','العفاسي'],['ماهر','المعيقلي'],['السديس'],['عبدالباسط','عبد الباسط'],['الحصري'],['سعد الغامدي','الغامدي'],['محمد صديق المنشاوي','محمد صديق المنشاوى','المنشاوي','المنشاوى']];
  let reciters=[],surahs=[],availableSurahs=[],current=0,activeReciter=null,activeMoshaf=null,dragging=false;
- const mossadTracks=[
-  {name:'سورة البقرة',id:7320},{name:'أروع تلاوات القرآن الكريم',id:7321},{name:'سورة العاديات',id:7322},{name:'سورة الأعلى',id:7323},{name:'سورة السجدة',id:7324},{name:'سورة المزمل',id:7325},{name:'سورة مريم (الآيات 61–68)',id:7334},{name:'سورة مريم (الآيات 65–98)',id:7335},{name:'سورة الماعون',id:7336},{name:'سورة الغاشية',id:7337},{name:'سورة النور (الآيات 36–38)',id:7338},{name:'سورة النحل (الآيات 52–64)',id:7339},{name:'سورة النحل (الآيات 97–99)',id:7340},{name:'سورة المؤمنون (الآيات 51–92)',id:7341}
- ];
- let mossadMode=false;
  const saved=load('quran-listener',{reciter:'',surah:1,volume:75});
  const say=t=>status.textContent=t;
  const fmt=n=>{if(!Number.isFinite(n))return'00:00';return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')};
@@ -1121,34 +1117,15 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
    const nm=document.createElement('span');nm.textContent=r.name;b.append(av,nm);
    b.addEventListener('click',()=>{reciterSelect.value=String(r.id);chooseReciter();renderReciterCards()});reciterCards.appendChild(b);
   });
-  const mossad=document.createElement('button');mossad.type='button';mossad.className='listen-reciter-card listen-mossad-reciter';mossad.setAttribute('aria-pressed','false');
-  const av=document.createElement('span');av.className='listen-reciter-avatar';const im=document.createElement('img');im.src='https://media.way2quran.com/imgs/abdul-rahman-musaad.jpg';im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onerror=()=>{im.remove();av.textContent='۞'};av.appendChild(im);
-  const nm=document.createElement('span');nm.textContent='عبد الرحمن مسعد';mossad.append(av,nm);
-  mossad.addEventListener('click',()=>{
-   mossadMode=true;activeReciter=null;activeMoshaf=null;current=0;
-   audio.pause();audio.removeAttribute('src');audio.load();playBtn.textContent='▶ تشغيل';
-   document.querySelectorAll('.listen-reciter-card').forEach(c=>{c.classList.remove('active');c.setAttribute('aria-pressed','false')});
-   mossad.classList.add('active');mossad.setAttribute('aria-pressed','true');
-   $('#listenNowTitle').textContent='اختار التلاوة للبدء';$('#listenNowReciter').textContent='عبد الرحمن مسعد';
-   search.value='';renderSurahs();say('اختار سورة أو تلاوة من القائمة — التشغيل هيكون داخل مِداد');
-  });
-  reciterCards.appendChild(mossad);
  }
  function renderSurahs(){
   const q=(search.value||'').trim().toLowerCase();grid.replaceChildren();
-  if(mossadMode){
-   const filtered=mossadTracks.filter((x,i)=>x.name.toLowerCase().includes(q)||String(i+1).includes(q));
-   if(!filtered.length){grid.appendChild(mk('p','sub','مفيش تسجيل بالاسم ده'));return}
-   filtered.forEach(x=>{const idx=mossadTracks.indexOf(x),b=mk('button','listen-surah');b.type='button';b.classList.toggle('active',idx===current);b.append(mk('span','listen-num',arn(idx+1)),mk('span','listen-surah-name',x.name));b.addEventListener('click',()=>playSurah(idx));grid.appendChild(b)});
-   return;
-  }
   const filtered=availableSurahs.filter((x,i)=>(x.name||'').toLowerCase().includes(q)||String(x.id||i+1).includes(q));
   if(!filtered.length){grid.appendChild(mk('p','sub','القارئ ده مفيش له تسجيلات متاحة حاليًا'));return}
   filtered.forEach(x=>{const idx=availableSurahs.indexOf(x),b=mk('button','listen-surah');b.type='button';b.classList.toggle('active',idx===current);b.append(mk('span','listen-num',arn(x.id||idx+1)),mk('span','listen-surah-name',x.name||('سورة '+(x.id||idx+1))));b.addEventListener('click',()=>playSurah(idx));grid.appendChild(b)});
  }
- function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:mossadMode?current+1:(availableSurahs[current]?.id||1),volume:Number($('#listenVolume').value)})}
+ function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:availableSurahs[current]?.id||1,volume:Number($('#listenVolume').value)})}
  function chooseReciter(){
-  mossadMode=false;
   const id=reciterSelect.value;activeReciter=reciters.find(r=>String(r.id)===id);
   activeMoshaf=activeReciter?.moshaf?.find(m=>m.server)||activeReciter?.moshaf?.[0];
   const ids=String(activeMoshaf?.surah_list||'').split(',').map(x=>Number(x.trim())).filter(n=>Number.isInteger(n)&&n>0);
@@ -1159,10 +1136,9 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  }
  function playSurah(index){
   let title,source;
-  if(mossadMode){current=Math.max(0,Math.min(index,mossadTracks.length-1));const track=mossadTracks[current];title=track.name;source='https://www.nourelquran.com/force_download.php?id='+track.id}
-  else{if(!activeMoshaf?.server){say('اختار قارئًا متاحًا أولًا');return}current=Math.max(0,Math.min(index,availableSurahs.length-1));const surah=availableSurahs[current];if(!surah){say('التسجيل غير متاح للقارئ ده');return}title=surah.name||('سورة '+(surah.id||current+1));source=activeMoshaf.server+String(surah.id||current+1).padStart(3,'0')+'.mp3'}
+  if(!activeMoshaf?.server){say('اختار قارئًا متاحًا أولًا');return}current=Math.max(0,Math.min(index,availableSurahs.length-1));const surah=availableSurahs[current];if(!surah){say('التسجيل غير متاح للقارئ ده');return}title=surah.name||('سورة '+(surah.id||current+1));source=activeMoshaf.server+String(surah.id||current+1).padStart(3,'0')+'.mp3'
   audio.src=source;audio.volume=Number($('#listenVolume').value)/100;
-  $('#listenNowTitle').textContent=title;$('#listenNowReciter').textContent=activeReciter?.name||'عبد الرحمن مسعد';
+  $('#listenNowTitle').textContent=title;$('#listenNowReciter').textContent=activeReciter?.name||'القارئ الحالي';
   saveChoice();renderSurahs();audio.play().then(()=>{playBtn.textContent='⏸ إيقاف مؤقت';say('جاري الاستماع إلى '+title)}).catch(()=>say('تعذر تشغيل التسجيل حاليًا — جرّب مرة أخرى'));
  }
  async function init(){
@@ -1186,7 +1162,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  reciterSelect.addEventListener('change',chooseReciter);
  playBtn.addEventListener('click',()=>{if(audio.paused){if(!audio.src)playSurah(current);else audio.play().then(()=>playBtn.textContent='⏸ إيقاف مؤقت').catch(()=>say('تعذر تشغيل التلاوة'))}else{audio.pause();playBtn.textContent='▶ تشغيل'}});
  $('#listenPrev').addEventListener('click',()=>playSurah(Math.max(0,current-1)));
- $('#listenNext').addEventListener('click',()=>playSurah(Math.min((mossadMode?mossadTracks:availableSurahs).length-1,current+1)));
+ $('#listenNext').addEventListener('click',()=>playSurah(Math.min(availableSurahs.length-1,current+1)));
  $('#listenVolume').addEventListener('input',e=>{audio.volume=Number(e.target.value)/100;saveChoice()});
  search.addEventListener('input',renderSurahs);
  seek.addEventListener('input',()=>{dragging=true;if(audio.duration)audio.currentTime=Number(seek.value)/1000*audio.duration});
@@ -1194,7 +1170,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  audio.addEventListener('timeupdate',()=>{if(!dragging&&audio.duration){seek.value=String(Math.round(audio.currentTime/audio.duration*1000));$('#listenCurrentTime').textContent=fmt(audio.currentTime);$('#listenDuration').textContent=fmt(audio.duration)}});
  audio.addEventListener('play',()=>playBtn.textContent='⏸ إيقاف مؤقت');
  audio.addEventListener('pause',()=>playBtn.textContent='▶ تشغيل');
- audio.addEventListener('ended',()=>{const total=(mossadMode?mossadTracks:availableSurahs).length;if(current<total-1)playSurah(current+1);else{playBtn.textContent='▶ تشغيل';say('انتهت آخر تلاوة متاحة للقارئ')}});
+ audio.addEventListener('ended',()=>{if(current<availableSurahs.length-1)playSurah(current+1);else{playBtn.textContent='▶ تشغيل';say('انتهت آخر تلاوة متاحة للقارئ')}});
  audio.addEventListener('error',()=>say('تعذر تشغيل هذا التسجيل — جرّب قارئًا آخر'));
  init();
 })();
