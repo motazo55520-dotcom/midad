@@ -299,6 +299,16 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
       <p class="ayah">﴿حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ﴾</p>
       <div class="add" style="margin:0 0 8px"><select id="gv" aria-label="المحافظة"></select><select id="cty" aria-label="المدينة"></select></div>
 <div class="tip" id="np" style="font-size:16px;margin:0 0 8px"></div>
+<div class="tip" style="margin:0 0 10px">
+ <strong>تنبيه الأذان</strong>
+ <p class="sub" id="adhanStatus" style="margin:5px 0">الأذان غير مفعّل</p>
+ <div class="add" style="margin:6px 0 0">
+  <button class="btn" id="adhanToggle" type="button">تفعيل الأذان</button>
+  <button class="tab" id="adhanTest" type="button">تجربة الأذان</button>
+  <label style="display:flex;align-items:center;gap:6px">الصوت <input id="adhanVolume" type="range" min="0" max="100" value="80" style="max-width:120px"></label>
+ </div>
+ <audio id="adhanAudio" preload="auto"></audio>
+</div>
 <div id="prayers"></div>
 <details class="adj"><summary>ضبط الدقائق حسب تقويمك (اختياري)</summary><p class="sub">الأوقات محسوبة لإحداثيات مدينتك بطريقة الهيئة المصرية. لو تقويم مسجدك مختلف بدقيقة أو اتنين، عدّل هنا.</p><div id="adjb"></div></details>
       <div class="bar"><i id="pbar"></i></div>
@@ -941,6 +951,45 @@ function npRender(){
   const h=Math.floor(mins/60);
   $('#np').textContent=curLoc()[0]+' — الصلاة الجاية: '+name+' ('+t12(tm)+') — بعد '+(h?arn(h)+' ساعة و':'')+arn(mins%60)+' دقيقة · الشروق '+t12(PT.sunrise);
 }
+/* Prayer adhan alerts */
+function adhanInit(){
+ const audio=$('#adhanAudio'),toggle=$('#adhanToggle'),test=$('#adhanTest'),status=$('#adhanStatus'),volume=$('#adhanVolume');
+ if(!audio||!toggle||!test||!status||!volume)return;
+ const files={
+  fajr:'https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_01_Fajr_Adhan.mp3',
+  dhuhr:'https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_02_Dhuhr_Adhan.mp3',
+  asr:'https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_03_Asr_Adhan.mp3',
+  maghrib:'https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_04_Maghrib_Adhan.mp3',
+  isha:'https://archive.org/download/adhan.recordings.from.doha.qatar/Adhan_Doha_Qatar_05_Isha_Adhan.mp3'
+ };
+ let enabled=load('adhan-enabled',false),vol=load('adhan-volume',80);
+ volume.value=String(Math.max(0,Math.min(100,Number(vol)||0)));audio.volume=Number(volume.value)/100;
+ const paint=()=>{toggle.textContent=enabled?'إيقاف الأذان':'تفعيل الأذان';status.textContent=enabled?'الأذان مفعّل — سيعمل عند دخول وقت الصلاة ما دام مِداد مفتوحًا':'الأذان غير مفعّل'};
+ paint();
+ toggle.addEventListener('click',()=>{
+  enabled=!enabled;save('adhan-enabled',enabled);paint();
+  if(enabled){status.textContent='تم التفعيل — اضغط «تجربة الأذان» للتأكد من الصوت والسماح بالتشغيل';}
+ });
+ volume.addEventListener('input',()=>{audio.volume=Number(volume.value)/100;save('adhan-volume',Number(volume.value))});
+ async function playAdhan(id,name){
+  audio.pause();audio.src=files[id]||files.dhuhr;audio.currentTime=0;audio.volume=Number(volume.value)/100;
+  try{await audio.play();status.textContent='يُرفع الآن أذان '+name}
+  catch(e){status.textContent='المتصفح منع التشغيل التلقائي — افتح مِداد واضغط «تجربة الأذان» مرة واحدة ثم اترك الصفحة مفتوحة'}
+ }
+ test.addEventListener('click',()=>playAdhan('dhuhr','الظهر (تجربة)'));
+ function check(){
+  if(!enabled)return;
+  const now=new Date(),key=dayKey(),hhmm=p2(now.getHours())+':'+p2(now.getMinutes());
+  if(PT._k!==key){PT=ptCalc(now);PT._k=key}
+  const prayer=PR.find(p=>PT[p[0]]===hhmm);
+  if(!prayer)return;
+  const stamp='adhan-played:'+key+':'+prayer[0];
+  if(load(stamp,false))return;
+  save(stamp,true);playAdhan(prayer[0],prayer[1]);
+ }
+ setInterval(check,10000);
+ check();
+}
 /* habits */
 let hb=load('hb:'+dayKey(),{w:0,s:0,x:0}),hbDay=dayKey();
 const hbFrac=()=>(Math.min(hb.w,8)/8+(hb.s?1:0)+(hb.x?1:0))/3;
@@ -1280,7 +1329,7 @@ $('#ctm').addEventListener('click',()=>{
 (()=>{const r=document.documentElement,t=load('theme',null);if(t)r.setAttribute('data-theme',t);
  $('#thm').addEventListener('click',()=>{const a=r.getAttribute('data-theme'),dk=a?a==='dark':matchMedia('(prefers-color-scheme: dark)').matches,n=dk?'light':'dark';r.setAttribute('data-theme',n);save('theme',n)})})();
 
-locUi();PT=ptCalc(new Date());PT._k=dayKey();rolloverTasks();
+locUi();PT=ptCalc(new Date());PT._k=dayKey();adhanInit();rolloverTasks();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(PT._k!==dayKey()){PT=ptCalc(new Date());PT._k=dayKey();render()}npRender()}});
 exRender();calRender();azRender();qRender();hRender();cRender(0);
 npRender();habRender();sjRender();wRender();tbRender();pmUi();
