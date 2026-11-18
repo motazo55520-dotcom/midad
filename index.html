@@ -1146,7 +1146,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
   if(!filtered.length){grid.appendChild(mk('p','sub','القارئ ده مفيش له تسجيلات متاحة حاليًا'));return}
   filtered.forEach(x=>{const idx=availableSurahs.indexOf(x),b=mk('button','listen-surah');b.type='button';b.classList.toggle('active',idx===current);b.append(mk('span','listen-num',arn(x.id||idx+1)),mk('span','listen-surah-name',x.name||('سورة '+(x.id||idx+1))));b.addEventListener('click',()=>playSurah(idx));grid.appendChild(b)});
  }
- function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:current+1,volume:Number($('#listenVolume').value)})}
+ function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:mossadMode?current+1:(availableSurahs[current]?.id||1),volume:Number($('#listenVolume').value)})}
  function chooseReciter(){
   mossadMode=false;
   const id=reciterSelect.value;activeReciter=reciters.find(r=>String(r.id)===id);
@@ -1194,7 +1194,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  audio.addEventListener('timeupdate',()=>{if(!dragging&&audio.duration){seek.value=String(Math.round(audio.currentTime/audio.duration*1000));$('#listenCurrentTime').textContent=fmt(audio.currentTime);$('#listenDuration').textContent=fmt(audio.duration)}});
  audio.addEventListener('play',()=>playBtn.textContent='⏸ إيقاف مؤقت');
  audio.addEventListener('pause',()=>playBtn.textContent='▶ تشغيل');
- audio.addEventListener('ended',()=>{if(current<surahs.length-1)playSurah(current+1);else{playBtn.textContent='▶ تشغيل';say('انتهت آخر سورة في المصحف الشريف')}});
+ audio.addEventListener('ended',()=>{const total=(mossadMode?mossadTracks:availableSurahs).length;if(current<total-1)playSurah(current+1);else{playBtn.textContent='▶ تشغيل';say('انتهت آخر تلاوة متاحة للقارئ')}});
  audio.addEventListener('error',()=>say('تعذر تشغيل هذا التسجيل — جرّب قارئًا آخر'));
  init();
 })();
