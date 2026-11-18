@@ -470,8 +470,23 @@ async function loadCommunity() {
       top.append(tr);
     });
     message("communityMsg", "تم تحديث إحصائيات المجتمع.", true);
+    await loadCoinPurchaseRequests();
   } catch (e) {
     message("communityMsg", "تعذر تحميل المجتمع: " + e.message);
   }
 }
+
+async function loadCoinPurchaseRequests(){
+ const body=$("coinRequestRows");if(!body)return;body.replaceChildren();
+ try{
+  const {data:requests,error}=await supabase.from("coin_purchase_requests").select("id,user_id,package_code,coins,amount_piasters,transfer_reference,status,created_at").order("created_at",{ascending:false}).limit(100);
+  if(error)throw error;
+  if(!requests?.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=7;td.textContent="لا توجد طلبات شراء كوينز";tr.append(td);body.append(tr);return;}
+  for(const req of requests){const tr=document.createElement("tr");addCell(tr,req.user_id.slice(0,8));addCell(tr,req.package_code);addCell(tr,req.coins);addCell(tr,(req.amount_piasters/100)+" جنيه");addCell(tr,req.transfer_reference);addCell(tr,req.status==="pending"?"قيد المراجعة":req.status==="approved"?"مقبول":"مرفوض");const td=document.createElement("td");
+   if(req.status==="pending"){for(const [label,decision] of [["اعتماد","approve"],["رفض","reject"]]){const b=document.createElement("button");b.textContent=label;b.className=decision==="reject"?"danger":"";b.addEventListener("click",async()=>{if(!confirm(decision==="approve"?"تأكدت من وصول التحويل فعلًا؟ سيتم إضافة الكوينز فورًا.":"رفض طلب شراء الكوينز؟"))return;b.disabled=true;try{const {error}=await supabase.rpc("midad_review_coin_purchase",{p_request_id:req.id,p_decision:decision});if(error)throw error;await loadCoinPurchaseRequests();}catch(e){alert(e.message);b.disabled=false;}});td.append(b);}}
+   else td.textContent="تمت المراجعة";tr.append(td);body.append(tr);
+  }
+ }catch(e){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=7;td.textContent="تعذر تحميل طلبات الكوينز: "+e.message;tr.append(td);body.append(tr);}
+}
+
 $("refreshCommunity").addEventListener("click", loadCommunity);
