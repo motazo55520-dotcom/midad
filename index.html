@@ -1124,7 +1124,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
   if(!filtered.length){grid.appendChild(mk('p','sub','القارئ ده مفيش له تسجيلات متاحة حاليًا'));return}
   filtered.forEach(x=>{const idx=availableSurahs.indexOf(x),b=mk('button','listen-surah');b.type='button';b.classList.toggle('active',idx===current);b.append(mk('span','listen-num',arn(x.id||idx+1)),mk('span','listen-surah-name',x.name||('سورة '+(x.id||idx+1))));b.addEventListener('click',()=>playSurah(idx));grid.appendChild(b)});
  }
-  function setListenVolume(value){const v=Math.max(0,Math.min(100,Number(value)||0));audio.volume=v/100;audio.muted=false;$('#listenVolume').value=String(v);const out=$('#listenVolumeValue');if(out)out.textContent=v+'%';return v}
+  function setListenVolume(value){const v=Math.max(0,Math.min(100,Number(value)||0));try{audio.muted=false;audio.volume=v/100}catch(e){}$('#listenVolume').value=String(v);const out=$('#listenVolumeValue');if(out)out.textContent=v+'%';return v}
   function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:availableSurahs[current]?.id||1,volume:setListenVolume($('#listenVolume').value)})}
  function chooseReciter(){
   const id=reciterSelect.value;activeReciter=reciters.find(r=>String(r.id)===id);
@@ -1173,7 +1173,22 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  search.addEventListener('input',renderSurahs);
  seek.addEventListener('input',()=>{dragging=true;if(audio.duration)audio.currentTime=Number(seek.value)/1000*audio.duration});
  seek.addEventListener('change',()=>{dragging=false});
- audio.addEventListener('timeupdate',()=>{if(!dragging&&audio.duration){seek.value=String(Math.round(audio.currentTime/audio.duration*1000));$('#listenCurrentTime').textContent=fmt(audio.currentTime);$('#listenDuration').textContent=fmt(audio.duration)}});
+ audio.preload='metadata';
+ function updateListenProgress(){
+  const duration=Number.isFinite(audio.duration)&&audio.duration>0?audio.duration:0;
+  const currentTime=Number.isFinite(audio.currentTime)&&audio.currentTime>0?audio.currentTime:0;
+  $('#listenCurrentTime').textContent=fmt(currentTime);
+  $('#listenDuration').textContent=fmt(duration);
+  if(!dragging&&duration>0)seek.value=String(Math.round(currentTime/duration*1000));
+  seek.disabled=duration<=0;
+ }
+ audio.addEventListener('loadedmetadata',updateListenProgress);
+ audio.addEventListener('durationchange',updateListenProgress);
+ audio.addEventListener('loadeddata',updateListenProgress);
+ audio.addEventListener('timeupdate',updateListenProgress);
+ audio.addEventListener('seeked',updateListenProgress);
+ audio.addEventListener('volumechange',()=>{const out=$('#listenVolumeValue');if(out)out.textContent=Math.round((audio.muted?0:audio.volume*100))+'%'});
+
  audio.addEventListener('play',()=>playBtn.textContent='⏸ إيقاف مؤقت');
  audio.addEventListener('pause',()=>playBtn.textContent='▶ تشغيل');
  audio.addEventListener('ended',()=>{if(current<availableSurahs.length-1)playSurah(current+1);else{playBtn.textContent='▶ تشغيل';say('انتهت آخر تلاوة متاحة للقارئ')}});
