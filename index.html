@@ -361,7 +361,7 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
  <label for="listenReciter">اختار القارئ</label><div id="listenReciterCards" class="listen-reciter-cards" aria-label="اختيار القارئ"></div><select id="listenReciter" class="listen-reciter-native" aria-label="القارئ"><option value="">جاري تحميل القراء...</option></select>
  <div class="listen-controls"><button class="tab" id="listenPrev" type="button" aria-label="السورة السابقة">⏮ السابقة</button><button class="btn" id="listenPlay" type="button">▶ تشغيل</button><button class="tab" id="listenNext" type="button">التالية ⏭</button></div>
  <div class="listen-progress"><span id="listenCurrentTime">00:00</span><input id="listenSeek" type="range" min="0" max="1000" value="0" aria-label="تقدم الاستماع"><span id="listenDuration">00:00</span></div>
- <div class="listen-volume"><label for="listenVolume">مستوى الصوت</label><input id="listenVolume" type="range" min="0" max="100" value="75"></div>
+  <div class="listen-volume"><label for="listenVolume">مستوى الصوت</label><input id="listenVolume" type="range" min="0" max="100" step="1" value="75" aria-label="تحكم في مستوى صوت التلاوة"><output id="listenVolumeValue" for="listenVolume">75%</output></div>
  <p id="listenStatus" class="sub" aria-live="polite">جاري تجهيز مكتبة القراء والسور</p>
  <div class="radio-cairo"><img class="radio-cairo-art" src="https://media.gemini.media/img/large/2017/3/26/2017_3_26_15_39_35_189.jpg" alt="راديو قديم بجواره مصحف مفتوح وفنجان قهوة، صورة إذاعة القرآن الكريم من القاهرة" loading="lazy"><h3>📻 إذاعة القرآن الكريم من القاهرة</h3><p class="sub">بث مباشر — شغّل الإذاعة وقت ما تحب</p><div class="listen-controls"><button class="btn" id="cairoRadioPlay" type="button">▶ تشغيل الإذاعة</button><button class="tab" id="cairoRadioStop" type="button">إيقاف</button></div><p class="sub" id="cairoRadioStatus" aria-live="polite">البث لا يبدأ إلا بعد الضغط على تشغيل</p><audio id="cairoRadioAudio" preload="none"></audio></div>
 </div>
@@ -1124,7 +1124,8 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
   if(!filtered.length){grid.appendChild(mk('p','sub','القارئ ده مفيش له تسجيلات متاحة حاليًا'));return}
   filtered.forEach(x=>{const idx=availableSurahs.indexOf(x),b=mk('button','listen-surah');b.type='button';b.classList.toggle('active',idx===current);b.append(mk('span','listen-num',arn(x.id||idx+1)),mk('span','listen-surah-name',x.name||('سورة '+(x.id||idx+1))));b.addEventListener('click',()=>playSurah(idx));grid.appendChild(b)});
  }
- function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:availableSurahs[current]?.id||1,volume:Number($('#listenVolume').value)})}
+  function setListenVolume(value){const v=Math.max(0,Math.min(100,Number(value)||0));audio.volume=v/100;audio.muted=false;$('#listenVolume').value=String(v);const out=$('#listenVolumeValue');if(out)out.textContent=v+'%';return v}
+  function saveChoice(){save('quran-listener',{reciter:reciterSelect.value,surah:availableSurahs[current]?.id||1,volume:setListenVolume($('#listenVolume').value)})}
  function chooseReciter(){
   const id=reciterSelect.value;activeReciter=reciters.find(r=>String(r.id)===id);
   activeMoshaf=activeReciter?.moshaf?.find(m=>m.server)||activeReciter?.moshaf?.[0];
@@ -1141,7 +1142,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
   const surahId=Number(surah.id||current+1),total=Number(activeMoshaf?.surah_total)||0;
   if((availableIds.length&&!availableIds.includes(surahId))||(!availableIds.length&&total>0&&surahId>total)){say('السورة دي مش متاحة بصوت القارئ المختار — اختار سورة تانية');return}
   title=surah.name||('سورة '+surahId);source=activeMoshaf.server+String(surahId).padStart(3,'0')+'.mp3'
-  audio.src=source;audio.volume=Number($('#listenVolume').value)/100;
+   audio.pause();audio.src=source;setListenVolume($('#listenVolume').value);
   $('#listenNowTitle').textContent=title;$('#listenNowReciter').textContent=activeReciter?.name||'القارئ الحالي';
   saveChoice();renderSurahs();audio.play().then(()=>{playBtn.textContent='⏸ إيقاف مؤقت';say('جاري الاستماع إلى '+title)}).catch(()=>say('تعذر تشغيل التسجيل حاليًا — جرّب مرة أخرى'));
  }
@@ -1158,7 +1159,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
    if(!reciters.length)throw new Error('no reciters');
    const chosen=reciters.find(r=>String(r.id)===String(saved.reciter))||reciters[0];reciterSelect.value=String(chosen.id);chooseReciter();
    const savedIndex=availableSurahs.findIndex(q=>Number(q.id)===Number(saved.surah||1));current=savedIndex>=0?savedIndex:0;
-   $('#listenVolume').value=saved.volume??75;audio.volume=Number($('#listenVolume').value)/100;
+    setListenVolume(saved.volume??75);
    $('#listenNowTitle').textContent='اختر سورة للبدء';$('#listenNowReciter').textContent=chosen.name;
    renderSurahs();say('قائمة القرآن كاملة — اختار سورة ثم استمع للقارئ المتاح له تسجيلها');
   }catch(e){say('تعذر تحميل مكتبة القرآن الآن — تأكد من اتصال الإنترنت وحاول مرة أخرى');grid.textContent='تعذر تحميل قائمة السور والقراء حاليًا'}
@@ -1167,7 +1168,8 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  playBtn.addEventListener('click',()=>{if(audio.paused){if(!audio.src)playSurah(current);else audio.play().then(()=>playBtn.textContent='⏸ إيقاف مؤقت').catch(()=>say('تعذر تشغيل التلاوة'))}else{audio.pause();playBtn.textContent='▶ تشغيل'}});
  $('#listenPrev').addEventListener('click',()=>playSurah(Math.max(0,current-1)));
  $('#listenNext').addEventListener('click',()=>playSurah(Math.min(availableSurahs.length-1,current+1)));
- $('#listenVolume').addEventListener('input',e=>{audio.volume=Number(e.target.value)/100;saveChoice()});
+  $('#listenVolume').addEventListener('input',e=>{setListenVolume(e.target.value);saveChoice()});
+  $('#listenVolume').addEventListener('change',e=>{setListenVolume(e.target.value);saveChoice()});
  search.addEventListener('input',renderSurahs);
  seek.addEventListener('input',()=>{dragging=true;if(audio.duration)audio.currentTime=Number(seek.value)/1000*audio.duration});
  seek.addEventListener('change',()=>{dragging=false});
