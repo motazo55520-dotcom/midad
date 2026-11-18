@@ -317,6 +317,27 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
 @media(max-width:700px){.social-inline,.social-comment-form{display:grid;grid-template-columns:1fr}.social-inline>*{min-width:0}.social-post{padding:12px}}
 </style>
 
+
+<style>
+.history-panel{background:linear-gradient(145deg,rgba(35,39,82,.96),rgba(18,31,62,.94))!important}
+.history-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.history-count{width:86px;height:86px;border-radius:24px;display:grid;place-content:center;text-align:center;background:linear-gradient(145deg,#ffca62,#ff6b9c);color:#20152f;box-shadow:0 8px 25px #0004}
+.history-count b{font:700 35px 'Aref Ruqaa',serif;line-height:1}.history-count span{font-size:13px}
+.history-models{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:18px 0}
+.history-model{border:1px solid rgba(160,180,255,.25);border-radius:15px;padding:13px;text-align:right;background:linear-gradient(135deg,rgba(255,91,158,.13),rgba(65,190,207,.12));color:var(--ink);cursor:pointer;transition:.2s}
+.history-model:hover{transform:translateY(-3px);border-color:#58e7df;box-shadow:0 8px 22px #0003}
+.history-model b,.history-model span{display:block}.history-model span{font-size:13px;color:var(--muted);margin-top:4px}
+.history-run-top,.history-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}
+.history-question,.history-review{border:1px solid rgba(160,180,255,.2);border-radius:15px;padding:15px;margin:12px 0;background:rgba(6,12,32,.32)}
+.history-question h3{font-size:20px;line-height:1.6}
+.history-option{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;margin:5px 0;border-radius:10px;background:rgba(255,255,255,.045);cursor:pointer}
+.history-option:hover{background:rgba(74,220,204,.1)}.history-option input{margin-top:7px;accent-color:#39d9c1}
+.history-submit{margin:12px 0;min-width:180px}
+.history-score-msg{padding:12px;border-radius:12px;background:rgba(54,218,190,.12);color:#9cf4df}
+.history-review.is-correct{border-color:rgba(54,218,190,.45)}.history-review.is-wrong{border-color:rgba(255,91,139,.45)}
+.history-review p{margin:7px 0}.history-history{margin-top:20px}.history-result{padding:9px 12px;margin:6px 0;border:1px solid rgba(160,180,255,.16);border-radius:10px;background:rgba(255,255,255,.04)}
+@media(max-width:600px){.history-models{grid-template-columns:repeat(2,minmax(0,1fr))}.history-count{width:70px;height:70px}.history-question,.history-review{padding:12px}}
+</style>
 </head>
 <body>
 <div class="entry-gate" id="entryGate" role="dialog" aria-modal="true" aria-label="افتتاح مسرح مِداد">
@@ -390,7 +411,12 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
   </div>
  </section>
  <section class="panel"><h2>تحدياتي الحالية</h2><p class="muted">تابع تقدمك وسجّل إنجازك اليومي في كل تحدٍ.</p><div id="challengeList"><p class="muted">جارٍ تحميل التحديات…</p></div></section>
- <section class="panel"><h2>تحدي الإنجليزي</h2><p class="muted">اختبر نفسك في 12 سؤالًا من الوحدة الأولى، ثم راجع إجاباتك واحفظ نتيجتك.</p><div id="englishQuiz"><button class="btn primary" id="startEnglishQuiz" type="button">ابدأ التحدي</button></div></section>
+ <section class="panel"><h2>تحدي الإنجليزي</h2><p class="muted">اختبر نفسك في 12 سؤالًا من الوحدة الأولى، ثم راجع إجاباتك واحفظ نتيجتك.</p><div id="englishQuiz"><button class="btn primary" id="startEnglishQuiz" type="button">ابدأ التحدي</button></div>
+ <section class="panel history-panel">
+  <div class="history-head"><div><span class="tab-kicker">اختبر فهمك للتاريخ الوطني</span><h2>🏛️ تحدي التاريخ</h2><p class="muted">40 نموذجًا — 10 أسئلة اختيار من متعدد في كل نموذج، مع تصحيح فوري وشرح للإجابات.</p></div><div class="history-count"><b>40</b><span>نموذج</span></div></div>
+  <div id="historyQuiz"><div id="historyModels" class="history-models"></div><div id="historyRun" class="history-run" hidden></div><div id="historyHistory" class="history-history"></div></div>
+ </section>
+</section>
 </section>
 
 <section class="community-tab" id="roomsTab" role="tabpanel" hidden>
@@ -568,4 +594,87 @@ document.querySelectorAll(".play-tab").forEach(tab=>{
 startCommunity();
 </script>
 <script src="social.js"></script>
+
+<script>
+(()=>{
+"use strict";
+const BANK=[
+{q:"أي مما يأتي لا يُعد ركنًا أساسيًا من أركان الدولة؟",o:["الشعب","الحيز الجغرافي","السيادة","الهوية القومية"],a:3,e:"أركان الدولة تشمل الشعب والحيز الجغرافي والسلطة والسيادة أما الهوية القومية فهي من مقومات تماسكها."},
+{q:"ما الدور الذي يتجاوز مجرد الوجود العددي للشعب؟",o:["المشاركة في بناء الدولة وتنميتها وحمايتها","إصدار الأحكام القضائية","تحديد الحدود الدولية منفردًا","إدارة العلاقات الدبلوماسية"],a:0,e:"يسهم الشعب بالمشاركة الإيجابية والعمل والحفاظ على الهوية والدفاع عن الوطن."},
+{q:"أي موقف يعبّر عن سيادة الدولة على مجالها الجوي؟",o:["دخول الطائرات دون إذن","تنظيم دخول الطائرات بتصريح رسمي","السماح لأي جهة بإدارة المجال الجوي","إلغاء الرقابة على الحدود"],a:1,e:"للدولة سلطة تنظيم المجال الجوي التابع لحيزها الجغرافي."},
+{q:"يشمل الحيز الجغرافي للدولة:",o:["اليابس فقط","اليابس والمياه الإقليمية والمجال الجوي","العاصمة فقط","المناطق الزراعية فقط"],a:1,e:"لا تقتصر سيادة الدولة على اليابس بل تمتد إلى المياه الإقليمية والمجال الجوي."},
+{q:"ما أثر ضعف السيادة الداخلية؟",o:["زيادة قدرة الدولة على فرض القانون","تهديد الأمن والاستقرار","تعزيز استقلال القرار","زيادة التماسك تلقائيًا"],a:1,e:"السيادة الداخلية تمكّن الدولة من إدارة شؤونها وتطبيق القانون وحفظ الأمن."},
+{q:"كيف أسهم نهر النيل في نشأة الدولة المصرية القديمة؟",o:["ألغى الحاجة إلى التعاون","جعل تنظيم الري وتوزيع المياه ضرورة فظهرت سلطة مركزية","منع الاستقرار الزراعي","عزل مصر عن العالم"],a:1,e:"الحاجة إلى تنظيم مياه النيل والري شجعت على التعاون وقيام سلطة مركزية."},
+{q:"ما أهمية موقع مصر الجغرافي قديمًا؟",o:["عزلها عن طرق التجارة","جعلها مركزًا للتواصل الحضاري بين أجزاء العالم القديم","منع الاتصال بالشعوب","إلغاء أهمية البحرين الأحمر والمتوسط"],a:1,e:"وقوع مصر في قلب العالم القديم دعم التواصل الحضاري والنشاط التجاري."},
+{q:"أي مما يأتي يُعد من الموارد الطبيعية التي دعمت الدولة المصرية؟",o:["نهر النيل والثروات المعدنية","الحدود الإدارية الحديثة فقط","المؤسسات التشريعية","المعاهدات الدولية"],a:0,e:"أسهمت الموارد الطبيعية في دعم النشاط الاقتصادي واستمرار الدولة."},
+{q:"ما أثر الحدود الطبيعية لمصر عبر التاريخ؟",o:["زيادة سهولة الغزو دائمًا","الإسهام في حماية الوادي والدلتا","إلغاء الحاجة إلى الجيش","منع التجارة تمامًا"],a:1,e:"وفرت الحدود الطبيعية قدرًا من الحماية للبلاد."},
+{q:"ما العلاقة بين التجانس البشري والوحدة الوطنية؟",o:["علاقة تعارض دائم","يساعد التجانس على تقوية الوحدة والتماسك","لا توجد علاقة","يؤدي التجانس إلى اختفاء الهوية"],a:1,e:"التجانس الثقافي والاجتماعي يدعم الانتماء والوحدة الوطنية."},
+{q:"أي إجراء يساعد على الحفاظ على الهوية المصرية؟",o:["إهمال التراث","تعريف الأجيال بتاريخ مصر وحضارتها","التخلي عن المناسبات الوطنية","منع دعم المؤسسات الثقافية"],a:1,e:"التعريف بالتاريخ والتراث ودعم الثقافة والفنون من وسائل حماية الهوية."},
+{q:"لماذا يُعد الجيش من مقومات استمرار الدولة؟",o:["لأنه يحل محل جميع مؤسسات الدولة","لأنه يحمي الوطن وسيادته وأمنه","لأنه يصدر القوانين","لأنه يدير المحاكم"],a:1,e:"الجيش يحمي الدولة من الأخطار الخارجية ويحافظ على استقلالها."},
+{q:"ما العامل الذي ساعد الهكسوس على السيطرة على أجزاء من مصر؟",o:["قوة السلطة المركزية المصرية","ضعف الدولة وتفكك السلطة المركزية مع التفوق العسكري للهكسوس","اتحاد الأقاليم المصرية","غياب أي أسلحة لدى الهكسوس"],a:1,e:"اجتمع ضعف الدولة المصرية مع امتلاك الهكسوس وسائل قتالية متفوقة."},
+{q:"ما الهدف من حروب التحرير ضد الهكسوس؟",o:["توسيع النفوذ الفارسي","إنهاء الاحتلال واستعادة استقلال مصر","إقامة حكم روماني","تقسيم مصر إلى دويلات"],a:1,e:"قامت المقاومة المصرية لاستعادة الأرض والسيادة وإنهاء حكم الهكسوس."},
+{q:"ما الدلالة التاريخية لدور أحمس في مقاومة الهكسوس؟",o:["قيادة جهود التحرير وإنهاء حكمهم","تأسيس الحكم البطلمي","قيادة الغزو الروماني","إلغاء الدولة الحديثة"],a:0,e:"ارتبط أحمس باستكمال حرب التحرير وطرد الهكسوس من مصر."},
+{q:"ما الذي يوضحه دور إياح حتب في حرب التحرير؟",o:["أهمية الجبهة الداخلية ومساندة المقاومة","ضعف دور المجتمع","انتهاء الحكم المصري","بداية الاحتلال الفرنسي"],a:0,e:"يعكس دورها أهمية دعم الجبهة الداخلية في مواجهة الاحتلال."},
+{q:"ما النتيجة الأساسية لمعركة أكتيوم البحرية؟",o:["استقلال مصر عن روما","انتقال مصر إلى سيادة الإمبراطورية الرومانية","قيام الدولة القديمة","طرد الهكسوس"],a:1,e:"كانت أكتيوم نقطة تحول أنهت العصر البطلمي ومهدت للحكم الروماني."},
+{q:"ارتبط غزو الإسكندر الأكبر لمصر تاريخيًا بـ:",o:["إنهاء الحكم الفارسي في مصر","بداية الاحتلال البريطاني","قيام الدولة الفاطمية","ثورة 1919"],a:0,e:"دخل الإسكندر مصر في سياق الصراع مع الفرس وإنهاء سيطرتهم."},
+{q:"أي وصف يعبر عن سياسة الحكم الروماني في مصر وفق التقييمات؟",o:["تحقيق رخاء شامل للمصريين","استغلال موارد مصر وتدهور أوضاعها الاقتصادية والاجتماعية","منح مصر استقلالًا كاملًا","إلغاء الضرائب"],a:1,e:"تشير المادة إلى آثار الاستغلال الروماني وما ترتب عليه من تدهور."},
+{q:"ما الذي يفسر مقاومة المصريين للاحتلال عبر العصور؟",o:["التخلي عن الهوية","التمسك بالهوية والرغبة في استعادة الاستقلال","رفض الوحدة الوطنية","غياب الانتماء"],a:1,e:"التمسك بالهوية الوطنية كان دافعًا مهمًا لمقاومة السيطرة الأجنبية."},
+{q:"ما المقصود بسياسات الاحتلال؟",o:["إجراءات تهدف إلى إحكام السيطرة على البلاد واستغلالها","خطط لتحقيق استقلال البلاد","مبادرات لتعزيز الحكم الوطني","سياسات لتوسيع المشاركة الشعبية"],a:0,e:"تتناول الوحدة الثانية أساليب السيطرة والاستغلال التي اتبعتها قوى الاحتلال."},
+{q:"أي نتيجة ترتبط بالسيطرة الأجنبية على الاقتصاد؟",o:["توجيه الموارد لخدمة مصالح الدولة المحتلة","زيادة استقلال القرار الوطني","تحقيق توزيع عادل للثروة بالضرورة","إلغاء التبعية"],a:0,e:"من آثار الاحتلال توجيه الموارد والمصالح الاقتصادية لخدمة القوة المسيطرة."},
+{q:"ما الدور الذي أدته الحركة الوطنية في مواجهة الاحتلال؟",o:["تثبيت الاحتلال","تنظيم المقاومة والمطالبة بالاستقلال","إلغاء الهوية المصرية","منع المشاركة السياسية"],a:1,e:"الحركة الوطنية عبّرت عن رفض الاحتلال وسعت إلى التحرر والاستقلال."},
+{q:"ما الذي ميّز ثورة 1919 وفق موضوعات الكتاب؟",o:["تأكيد الوحدة الوطنية بين أبناء الشعب","قيام الحكم الروماني","بداية الغزو الفارسي","إلغاء المشاركة الشعبية"],a:0,e:"جسدت ثورة 1919 معاني الوحدة الوطنية ومشاركة فئات المجتمع."},
+{q:"أي عامل دعم اتساع المشاركة في ثورة 1919؟",o:["وحدة المصريين بمختلف فئاتهم","انقسام المجتمع على أساس ديني","غياب المطالب الوطنية","تأييد الاحتلال"],a:0,e:"برزت مشاركة أبناء الشعب وتكاتفهم في مواجهة الاحتلال."},
+{q:"ما الهدف من المقاومة الشعبية للاحتلال؟",o:["إضعاف الهوية الوطنية","تحقيق التحرر واستعادة القرار الوطني","دعم الاستغلال الاقتصادي","إلغاء المؤسسات الوطنية"],a:1,e:"المقاومة الشعبية سعت إلى إنهاء السيطرة الأجنبية وتحقيق الاستقلال."},
+{q:"ما المقصود بالهوية الوطنية؟",o:["مجموعة السمات المشتركة التي تعبر عن انتماء المجتمع","الحدود الجغرافية فقط","النظام الاقتصادي وحده","القوة العسكرية فقط"],a:0,e:"تتكون الهوية من عناصر تاريخية وثقافية وحضارية مشتركة."},
+{q:"أي موقف يعزز الهوية الوطنية في مواجهة الاستعمار الجديد؟",o:["إضعاف الوعي بالتاريخ","دعم الثقافة واللغة والوعي بالتراث","التخلي عن المؤسسات الوطنية","العزلة عن التعليم"],a:1,e:"الوعي بالتراث والثقافة يقوي الانتماء ويحمي المجتمع من محاولات طمس هويته."},
+{q:"ما إحدى وسائل الاستعمار الجديد؟",o:["التأثير الثقافي والفكري والاقتصادي دون احتلال عسكري مباشر","الانسحاب الكامل من التأثير","منح استقلال اقتصادي مطلق","إلغاء المصالح الخارجية"],a:0,e:"قد يمارس الاستعمار الجديد نفوذه بوسائل غير عسكرية مثل التأثير الثقافي والاقتصادي."},
+{q:"ما المقصود بحركات التحرر الوطني؟",o:["حركات تسعى لإنهاء الاحتلال وتحقيق الاستقلال","حركات لتوسيع سيطرة المحتل","تحالفات لفرض الضرائب","إدارات استعمارية محلية"],a:0,e:"تسعى حركات التحرر إلى التخلص من السيطرة الأجنبية واستعادة السيادة."},
+{q:"ارتبطت حركات التحرر ضد الاحتلال الفرنسي والإيطالي في الوطن العربي بـ:",o:["مقاومة السيطرة الأجنبية واستعادة الاستقلال","دعم التوسع الاستعماري","إنهاء الهوية العربية","تثبيت الحكم الأجنبي"],a:0,e:"تتناول الوحدة الثالثة مقاومة الشعوب العربية للاحتلال الفرنسي والإيطالي."},
+{q:"ما أهمية الوعي الوطني في حركات التحرر؟",o:["إضعاف المقاومة","توحيد جهود الشعب ورفع الاستعداد لمقاومة الاحتلال","منع المشاركة","تأييد السيطرة الأجنبية"],a:1,e:"يساعد الوعي الوطني على توحيد المجتمع وإدراك أهداف التحرر."},
+{q:"أي مما يأتي يمثل مقاومة سياسية للاحتلال؟",o:["تنظيم المطالب الوطنية والاحتجاجات","التخلي عن الحقوق","تأييد قرارات المحتل","إهمال المؤسسات الوطنية"],a:0,e:"المقاومة السياسية تشمل التعبير المنظم عن المطالب الوطنية ورفض الاحتلال."},
+{q:"تناولت الوحدة الثالثة حركات التحرر ضد الاحتلال البريطاني والإسباني في:",o:["العالم العربي","أمريكا الجنوبية فقط","شرق آسيا فقط","أوروبا الغربية"],a:0,e:"من موضوعات الوحدة حركات التحرر ضد الاحتلال البريطاني والإسباني في العالم العربي."},
+{q:"ما المقصود بالدور المصري إقليميًا ودوليًا؟",o:["مساهمة مصر في قضايا محيطها العربي والإفريقي والعالم","الانعزال عن القضايا الخارجية","الاهتمام بالشأن المحلي فقط","التخلي عن التعاون الدولي"],a:0,e:"تتناول المادة مرتكزات الدور المصري وعلاقاته الإقليمية والدولية."},
+{q:"ما الهدف من اتفاقيات الدفاع المشترك؟",o:["تعزيز التعاون والتنسيق لحماية الدول المشاركة","إلغاء السيادة الوطنية","زيادة النزاعات بين الدول","منع التعاون العربي"],a:0,e:"تدعم اتفاقيات الدفاع المشترك التنسيق والتعاون في مواجهة التهديدات."},
+{q:"كيف تسهم مصر في دعم الوحدة العربية؟",o:["تعزيز التعاون والتنسيق بين الدول العربية","قطع العلاقات مع الدول العربية","رفض القضايا المشتركة","إضعاف الروابط الثقافية"],a:0,e:"التعاون والتنسيق من مرتكزات دعم الوحدة العربية."},
+{q:"أي قيمة تاريخية تعكسها مقاومة الشعوب العربية للاستعمار؟",o:["التمسك بالاستقلال والكرامة الوطنية","قبول التبعية","التخلي عن الهوية","رفض التضامن"],a:0,e:"حركات التحرر أكدت حق الشعوب في تقرير مصيرها واستعادة استقلالها."},
+{q:"ما العلاقة بين التنمية وحماية الدولة؟",o:["التنمية تدعم قوة المجتمع وتعد خط دفاع أساسيًا","التنمية تضعف الدولة دائمًا","لا علاقة بينهما","التنمية تلغي الحاجة إلى المؤسسات"],a:0,e:"توظيف الموارد البشرية والطبيعية في التنمية يعزز قوة الدولة واستقرارها."}
+];
+const STORE="midad-history-quiz-attempts-v1";
+const $=id=>document.getElementById(id);
+const models=$("historyModels"),run=$("historyRun"),history=$("historyHistory");
+let current=0,questions=[],answers={},started=0;
+const esc=s=>String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+function modelQuestions(n){const start=(n*7)%BANK.length,step=3;return Array.from({length:10},(_,i)=>BANK[(start+i*step)%BANK.length]);}
+function saved(){try{return JSON.parse(localStorage.getItem(STORE)||"[]")}catch{return[]}}
+function renderModels(){
+ models.replaceChildren();
+ for(let n=0;n<40;n++){const b=document.createElement("button");b.type="button";b.className="history-model";b.innerHTML='<b>نموذج '+(n+1)+'</b><span>10 أسئلة · اختيار من متعدد</span>';b.addEventListener("click",()=>startModel(n));models.append(b);}
+ renderHistory();
+}
+function renderHistory(){
+ history.replaceChildren();const rows=saved();
+ const h=document.createElement("h3");h.textContent="سجل نتائجك";history.append(h);
+ if(!rows.length){const p=document.createElement("p");p.className="tiny";p.textContent="لم تسجل أي محاولة بعد";history.append(p);return;}
+ rows.slice(0,8).forEach(r=>{const el=document.createElement("div");el.className="history-result";el.textContent="نموذج "+(r.model+1)+" — "+r.score+"/10 — "+new Date(r.date).toLocaleDateString("ar-EG");history.append(el);});
+}
+function startModel(n){
+ current=n;questions=modelQuestions(n);answers={};started=Date.now();models.hidden=true;history.hidden=true;run.hidden=false;run.replaceChildren();
+ const top=document.createElement("div");top.className="history-run-top";const h=document.createElement("h3");h.textContent="نموذج "+(n+1);const back=document.createElement("button");back.className="btn";back.type="button";back.textContent="رجوع للنماذج";back.addEventListener("click",()=>{run.hidden=true;models.hidden=false;history.hidden=false;});top.append(h,back);run.append(top);
+ const progress=document.createElement("p");progress.className="tiny";progress.textContent="تمت الإجابة عن 0 من 10";run.append(progress);
+ questions.forEach((q,i)=>{const card=document.createElement("article");card.className="history-question";const title=document.createElement("h3");title.textContent=(i+1)+". "+q.q;card.append(title);q.o.forEach((opt,j)=>{const label=document.createElement("label");label.className="history-option";const input=document.createElement("input");input.type="radio";input.name="history_"+i;input.value=j;input.addEventListener("change",()=>{answers[i]=j;progress.textContent="تمت الإجابة عن "+Object.keys(answers).length+" من 10";submit.disabled=Object.keys(answers).length!==10;});const span=document.createElement("span");span.textContent=String.fromCharCode(65+j)+". "+opt;label.append(input,span);card.append(label);});run.append(card);});
+ const submit=document.createElement("button");submit.className="btn green history-submit";submit.type="button";submit.textContent="صحّح إجاباتي";submit.disabled=true;submit.addEventListener("click",()=>finishModel(submit));run.append(submit);
+}
+function finishModel(btn){
+ btn.disabled=true;const score=questions.reduce((s,q,i)=>s+(answers[i]===q.a?1:0),0);
+ const record={model:current,score,total:10,date:new Date().toISOString(),duration:Math.round((Date.now()-started)/1000)};
+ const rows=saved();rows.unshift(record);try{localStorage.setItem(STORE,JSON.stringify(rows.slice(0,100)));}catch{}
+ run.replaceChildren();const title=document.createElement("h2");title.textContent="نتيجتك: "+score+" / 10";run.append(title);
+ const msg=document.createElement("p");msg.className="history-score-msg";msg.textContent=score===10?"ممتاز! إجاباتك كلها صحيحة":score>=7?"أداء جيد جدًا، راجع الأخطاء وثبّت معلوماتك":score>=5?"نتيجة جيدة، راجع الشرح وحاول مرة أخرى":"راجع الدرس وحاول من جديد";run.append(msg);
+ questions.forEach((q,i)=>{const card=document.createElement("article");card.className="history-review "+(answers[i]===q.a?"is-correct":"is-wrong");const head=document.createElement("b");head.textContent=(i+1)+". "+q.q;const chosen=document.createElement("p");chosen.textContent="إجابتك: "+q.o[answers[i]];const correct=document.createElement("p");correct.textContent="الإجابة الصحيحة: "+q.o[q.a];const exp=document.createElement("p");exp.className="tiny";exp.textContent=q.e;card.append(head,chosen,correct,exp);run.append(card);});
+ const actions=document.createElement("div");actions.className="history-actions";const retry=document.createElement("button");retry.className="btn primary";retry.textContent="إعادة النموذج";retry.addEventListener("click",()=>startModel(current));const list=document.createElement("button");list.className="btn";list.textContent="كل النماذج";list.addEventListener("click",()=>{run.hidden=true;models.hidden=false;history.hidden=false;renderHistory();});actions.append(retry,list);run.append(actions);renderHistory();
+}
+renderModels();
+})();
+</script>
+
 </body></html>
