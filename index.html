@@ -349,7 +349,9 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
  <div class="listen-progress"><span id="listenCurrentTime">00:00</span><input id="listenSeek" type="range" min="0" max="1000" value="0" aria-label="تقدم الاستماع"><span id="listenDuration">00:00</span></div>
  <div class="listen-volume"><label for="listenVolume">مستوى الصوت</label><input id="listenVolume" type="range" min="0" max="100" value="75"></div>
  <p id="listenStatus" class="sub" aria-live="polite">جاري تجهيز مكتبة القراء والسور</p>
+ <div class="radio-cairo"><h3>📻 إذاعة القرآن الكريم من القاهرة</h3><p class="sub">بث مباشر — شغّل الإذاعة وقت ما تحب</p><div class="listen-controls"><button class="btn" id="cairoRadioPlay" type="button">▶ تشغيل الإذاعة</button><button class="tab" id="cairoRadioStop" type="button">إيقاف</button></div><p class="sub" id="cairoRadioStatus" aria-live="polite">البث لا يبدأ إلا بعد الضغط على تشغيل</p><audio id="cairoRadioAudio" preload="none"></audio></div>
 </div>
+<div class="mossad-card"><strong>🎙️ تلاوات عبد الرحمن مسعد</strong><p class="sub">افتح صفحة تسجيلاته للاستماع إلى تلاواته المتاحة</p><a href="https://www.nourelquran.com/swars-143.html" target="_blank" rel="noopener">استمع إلى تلاوات عبد الرحمن مسعد ↗</a></div>
 <div class="listen-library-head"><h3>سور القرآن الكريم</h3><input id="listenSearch" type="search" placeholder="ابحث عن سورة..." aria-label="ابحث عن سورة"></div>
 <div id="listenSurahGrid" class="listen-surah-grid"><p class="sub">جاري تحميل السور...</p></div>
 <audio id="listenAudio" preload="none"></audio>
@@ -995,7 +997,7 @@ async function pmLoadQuranLists(){
   if(!rr.ok||!ss.ok)throw new Error('تعذر تحميل بيانات القرآن');
   const rd=await rr.json(),sd=await ss.json();pmReciters=(rd.reciters||[]).filter(x=>x.moshaf?.some(m=>m.server));
   pmSurahs=sd.suwar||sd.surahs||[];
-  const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبدالباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي'];
+  const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبدالباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي','محمد صديق المنشاوي'];
   pmReciters.sort((a,b)=>{const ai=preferred.findIndex(n=>a.name?.includes(n)),bi=preferred.findIndex(n=>b.name?.includes(n));return (ai<0?99:ai)-(bi<0?99:bi)});
   pmReciter.replaceChildren();pmReciters.forEach((r,i)=>{const o=document.createElement('option');o.value=String(r.id);o.textContent=r.name;pmReciter.appendChild(o)});
   pmSurah.replaceChildren();pmSurahs.forEach((q,i)=>{const o=document.createElement('option');o.value=String(q.id||i+1);o.textContent=q.name||q.name_ar||('سورة '+(i+1));pmSurah.appendChild(o)});
@@ -1054,12 +1056,28 @@ pmQuranAudio.addEventListener('error',()=>pmSetStatus('تعذر تشغيل هذ�
 pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
 
 
+/* Cairo Quran Radio live stream */
+(()=>{
+ const a=$('#cairoRadioAudio'),play=$('#cairoRadioPlay'),stop=$('#cairoRadioStop'),status=$('#cairoRadioStatus');
+ if(!a||!play||!stop)return;
+ const stream='https://stream.radiojar.com/8s5u5tpdtwzuv';
+ const say=t=>status.textContent=t;
+ play.addEventListener('click',async()=>{
+  say('جاري الاتصال بإذاعة القرآن الكريم من القاهرة...');
+  a.src=stream;
+  try{await a.play();say('إذاعة القرآن الكريم من القاهرة تعمل الآن');play.disabled=true}
+  catch(e){say('تعذر بدء البث — اضغط تشغيل مرة أخرى أو جرّب لاحقًا');play.disabled=false}
+ });
+ stop.addEventListener('click',()=>{a.pause();a.removeAttribute('src');a.load();play.disabled=false;say('تم إيقاف الإذاعة')});
+ a.addEventListener('error',()=>{play.disabled=false;say('البث غير متاح مؤقتًا — جرّب لاحقًا')});
+})();
+
 /* Standalone Quran listening tab */
 (()=>{
  const audio=$('#listenAudio'),reciterSelect=$('#listenReciter'),grid=$('#listenSurahGrid'),playBtn=$('#listenPlay'),search=$('#listenSearch'),status=$('#listenStatus'),seek=$('#listenSeek');
  if(!audio||!grid)return;
- const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبد الباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي'];
- const aliases=[['مشاري','العفاسي'],['ماهر','المعيقلي'],['السديس'],['عبدالباسط','عبد الباسط'],['الحصري'],['سعد الغامدي','الغامدي']];
+ const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبد الباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي','محمد صديق المنشاوي'];
+ const aliases=[['مشاري','العفاسي'],['ماهر','المعيقلي'],['السديس'],['عبدالباسط','عبد الباسط'],['الحصري'],['سعد الغامدي','الغامدي'],['محمد صديق المنشاوي','محمد صديق المنشاوى','المنشاوي','المنشاوى']];
  let reciters=[],surahs=[],current=0,activeReciter=null,activeMoshaf=null,dragging=false;
  const saved=load('quran-listener',{reciter:'',surah:1,volume:75});
  const say=t=>status.textContent=t;
