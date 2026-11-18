@@ -54,6 +54,7 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:min(100%,440px)"><label class="question-count">المادة<select id="subjectSelect" class="select"><option value="arabic">اللغة العربية</option><option value="english">اللغة الإنجليزية</option></select></label><label class="question-count">عدد الأسئلة<select id="questionCount" class="select"><option value="5">5 أسئلة · جولة سريعة</option><option value="10">10 أسئلة · تحدي كامل</option></select></label></div>
 </section>
 <div id="setup" class="grid">
+ <section class="panel"><div class="mode-icon">🎯</div><h2>العب مع نفسك</h2><p class="muted">اختبر مستواك لوحدك، جاوب على الأسئلة وشوف نتيجتك والتصحيح في النهاية.</p><button id="soloBtn" class="btn primary full">ابدأ اختبار فردي</button></section>
  <section class="panel"><div class="mode-icon">⚡</div><h2>العب الآن</h2><p class="muted">هنوصلك بأول طالب اختار نفس إعدادات المواجهة.</p>
   <button id="quickBtn" class="btn primary full">ابحث عن منافس</button><div id="quickMsg" class="note" aria-live="polite"></div><button id="cancelQueue" class="btn ghost full hidden">إلغاء البحث</button>
  </section>
@@ -68,7 +69,7 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <script>
 const SUPABASE_URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=SUPABASE_URL+"/functions/v1/midad-duels";
-let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="";
+let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="",soloQuestions=[],soloIndex=0,soloScore=0,soloAnswers=[];
 const $=id=>document.getElementById(id);
 function note(id,msg,error=false){$(id).textContent=msg;$(id).className="note"+(error?" error":"");}
 async function api(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول من صفحة حسابي الأول.");const res=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||"حصلت مشكلة، جرّب تاني.");return data;}
@@ -112,6 +113,46 @@ function renderResult(d){
  d.review.forEach((q,i)=>{const item=document.createElement("div");item.className="review-item";safe(item,"b",(i+1)+". "+q.question);const correct=q.options[q.correct_option];safe(item,"div","الإجابة الصحيحة: "+String.fromCharCode(65+q.correct_option)+". "+correct,"good");q.answers.forEach(a=>{const p=d.players.find(x=>x.user_id===a.user_id);safe(item,"small",(p?.display_name||"اللاعب")+": "+(q.options[a.selected_option]||"لم يجب")+" — "+(a.is_correct?"صحيح ✓":"خطأ ✕"),a.is_correct?"good":"bad");});safe(item,"small","الشرح: "+q.explanation);review.append(item);});root.append(review);
  const again=document.createElement("button");again.className="btn primary full";again.textContent="العودة واختيار مواجهة جديدة";again.addEventListener("click",showSetup);root.append(again);
 }
+async function startSolo(){
+ const btn=$("soloBtn");btn.disabled=true;btn.textContent="بنجهز الاختبار…";
+ try{
+  const d=await api("solo_start",{question_count:Number($("questionCount").value),subject:$("subjectSelect").value});
+  soloQuestions=d.questions||[];soloIndex=0;soloScore=0;soloAnswers=[];
+  if(!soloQuestions.length)throw new Error("مفيش أسئلة متاحة حاليًا.");
+  showGame();renderSoloQuestion();
+ }catch(e){note("quickMsg",e.message,true);}
+ finally{btn.disabled=false;btn.textContent="ابدأ اختبار فردي";}
+}
+function renderSoloQuestion(){
+ const root=$("game");root.replaceChildren();root.dataset.rendered="solo";
+ const q=soloQuestions[soloIndex];
+ const top=document.createElement("div");top.className="game-top";
+ safe(top,"span","السؤال "+(soloIndex+1)+" من "+soloQuestions.length,"tag");
+ safe(top,"span",(q.subject==="arabic"?"عربي":"English")+" · نموذج "+q.model_no+" · "+(q.unit||"اختبار فردي"),"tag");root.append(top);
+ const board=document.createElement("div");board.className="scoreboard";
+ const me=document.createElement("div");me.className="player";safe(me,"b","أنت");safe(me,"strong",String(soloScore));safe(me,"small","درجتك");board.append(me);root.append(board);
+ const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("i");fill.style.width=(soloIndex/soloQuestions.length*100)+"%";bar.append(fill);root.append(bar);
+ safe(root,"div",q.q,"question");
+ const opts=document.createElement("div");opts.className="options";
+ q.options.forEach((option,i)=>{const b=document.createElement("button");b.type="button";b.className="option";b.textContent=String.fromCharCode(65+i)+". "+option;b.addEventListener("click",()=>{
+  opts.querySelectorAll("button").forEach(x=>x.disabled=true);
+  const correct=i===q.answer;if(correct)soloScore++;
+  b.classList.add("chosen");
+  const right=opts.children[q.answer];if(right)right.classList.add("chosen");
+  soloAnswers.push({question:q.q,options:q.options,answer:q.answer,selected:i,correct,explanation:q.explanation,unit:q.unit});
+  const feedback=safe(root,"div",correct?"إجابة صحيحة! أحسنت ✓":"إجابة غير صحيحة — راجع الإجابة الصحيحة","wait");
+  feedback.style.background=correct?"#e2f3e9":"#fae6e4";feedback.style.color=correct?"#286247":"#8c3d3d";
+  safe(root,"p","الشرح: "+q.explanation,"muted");
+  const next=document.createElement("button");next.className="btn primary full";next.textContent=soloIndex===soloQuestions.length-1?"عرض النتيجة":"السؤال التالي";next.addEventListener("click",()=>{soloIndex++;if(soloIndex<soloQuestions.length)renderSoloQuestion();else renderSoloResult();});root.append(next);
+ });opts.append(b);});root.append(opts);
+}
+function renderSoloResult(){
+ const root=$("game");root.replaceChildren();root.dataset.rendered="solo-done";
+ const top=document.createElement("div");top.className="result";safe(top,"div",soloScore>=soloQuestions.length*.8?"🏆":"🎯","trophy");safe(top,"h2","خلصت الاختبار!");safe(top,"p","نتيجتك");safe(top,"p",soloScore+" من "+soloQuestions.length+" إجابة صحيحة");const pct=Math.round(soloScore/soloQuestions.length*100);safe(top,"p",pct+"%");root.append(top);
+ const review=document.createElement("div");review.className="review";safe(review,"h2","مراجعة الإجابات");
+ soloAnswers.forEach((a,i)=>{const item=document.createElement("div");item.className="review-item";safe(item,"b",(i+1)+". "+a.question);safe(item,"div","إجابتك: "+a.options[a.selected],a.correct?"good":"bad");safe(item,"div","الإجابة الصحيحة: "+a.options[a.answer],"good");safe(item,"small","الشرح: "+a.explanation);review.append(item);});root.append(review);
+ const again=document.createElement("button");again.className="btn primary full";again.textContent="العب اختبارًا جديدًا";again.addEventListener("click",showSetup);root.append(again);
+}
 async function startQuick(){
  const btn=$("quickBtn");btn.disabled=true;note("quickMsg","بندور على منافس…");$("cancelQueue").classList.remove("hidden");
  try{
@@ -122,7 +163,7 @@ async function startQuick(){
  }catch(e){btn.disabled=false;$("cancelQueue").classList.add("hidden");note("quickMsg",e.message,true);}
 }
 async function cancelQueue(){try{await api("cancel_queue");}catch{}stopTimers();$("quickBtn").disabled=false;$("cancelQueue").classList.add("hidden");note("quickMsg","تم إلغاء البحث.");}
-$("quickBtn").addEventListener("click",startQuick);$("cancelQueue").addEventListener("click",cancelQueue);
+$("soloBtn").addEventListener("click",startSolo);$("quickBtn").addEventListener("click",startQuick);$("cancelQueue").addEventListener("click",cancelQueue);
 $("createBtn").addEventListener("click",async()=>{const b=$("createBtn");b.disabled=true;note("createdCode","بنجهز المواجهة…");try{const d=await api("create",{question_count:Number($("questionCount").value),subject:$("subjectSelect").value});roomId=d.room_id;inviteCodeCurrent=d.invite_code;const box=$("createdCode");box.textContent="كود صاحبك: "+d.invite_code+" — اضغط لنسخه";box.style.cursor="pointer";box.onclick=()=>navigator.clipboard?.writeText(d.invite_code);beginRoom(d.room_id);}catch(e){note("createdCode",e.message,true);}finally{b.disabled=false;}});
 $("joinBtn").addEventListener("click",async()=>{const b=$("joinBtn");b.disabled=true;note("friendMsg","بنتحقق من الكود…");try{const d=await api("join",{invite_code:$("inviteCode").value});inviteCodeCurrent=null;note("friendMsg","دخلت المواجهة! بالتوفيق.");beginRoom(d.room_id);}catch(e){note("friendMsg",e.message,true);}finally{b.disabled=false;}});
 async function boot(){
