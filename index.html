@@ -178,7 +178,7 @@ textarea{width:100%;font:13px/1.5 monospace;color:var(--ink);background:rgba(255
 .listen-mossad-card img{width:58px;height:58px;object-fit:cover;object-position:center 20%;border-radius:50%;mix-blend-mode:multiply;background:var(--paper,#e9dfcc);border:2px solid rgba(130,85,55,.32)}
 .listen-mossad-card a{color:var(--red);font-weight:700;text-decoration:underline}
 @media(max-width:480px){.listen-reciter-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.listen-reciter-card{padding:7px;gap:7px;font-size:14px}.listen-reciter-avatar{width:48px;height:48px}.listen-mossad-card img{width:48px;height:48px}}
-.radio-cairo{margin-top:16px;padding:0;border:0;border-radius:0;background:transparent;text-align:center}.radio-cairo h3{margin:0 0 4px;color:var(--red);font-size:23px}.radio-cairo .radio-cairo-art{display:block!important;width:min(100%,460px)!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important;background:rgba(45,30,20,.06);border:2px solid rgba(130,85,55,.38);border-radius:14px;padding:5px;margin:0 auto 14px!important;box-shadow:0 5px 16px rgba(45,30,20,.16)}.listen-mossad-reciter{text-decoration:none}.listen-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
+.radio-cairo{margin-top:16px;padding:0;border:0;border-radius:0;background:transparent;text-align:center}.radio-cairo h3{margin:0 0 4px;color:var(--red);font-size:23px}.radio-cairo .radio-cairo-art{display:block!important;width:min(100%,460px)!important;height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center!important;background:rgba(45,30,20,.06);border:2px solid rgba(130,85,55,.38);border-radius:14px;padding:5px;margin:0 auto 14px!important;box-shadow:0 5px 16px rgba(45,30,20,.16)}.listen-mossad-reciter{font:inherit;text-align:right}.listen-player #mossadInlinePlayer{max-width:100%}.listen-player [hidden]{display:none!important}.listen-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
 .listen-progress,.listen-volume{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--muted)}
 .listen-progress input,.listen-volume input{flex:1;min-width:70px;accent-color:var(--red)}
 .listen-volume{margin-top:10px}
@@ -1117,9 +1117,24 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
    const nm=document.createElement('span');nm.textContent=r.name;b.append(av,nm);
    b.addEventListener('click',()=>{reciterSelect.value=String(r.id);chooseReciter();renderReciterCards()});reciterCards.appendChild(b);
   });
-  const mossad=document.createElement('a');mossad.className='listen-reciter-card listen-mossad-reciter';mossad.href='https://www.nourelquran.com/swars-143.html';mossad.target='_blank';mossad.rel='noopener';
+  const mossad=document.createElement('button');mossad.type='button';mossad.className='listen-reciter-card listen-mossad-reciter';mossad.setAttribute('aria-label','الاستماع إلى عبد الرحمن مسعد داخل مِداد');
   const av=document.createElement('span');av.className='listen-reciter-avatar';const im=document.createElement('img');im.src='https://media.way2quran.com/imgs/abdul-rahman-musaad.jpg';im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onerror=()=>{im.remove();av.textContent='۞'};av.appendChild(im);
-  const nm=document.createElement('span');nm.textContent='عبد الرحمن مسعد';mossad.append(av,nm);reciterCards.appendChild(mossad);
+  const nm=document.createElement('span');nm.textContent='عبد الرحمن مسعد';mossad.append(av,nm);
+  mossad.addEventListener('click',()=>{
+   audio.pause();audio.removeAttribute('src');audio.load();playBtn.textContent='▶ تشغيل';
+   document.querySelectorAll('.listen-reciter-card').forEach(c=>{c.classList.remove('active');c.setAttribute('aria-pressed','false')});
+   mossad.classList.add('active');mossad.setAttribute('aria-pressed','true');
+   activeReciter=null;activeMoshaf=null;
+   $('#listenNowTitle').textContent='تلاوات عبد الرحمن مسعد';
+   $('#listenNowReciter').textContent='مشغل مدمج داخل مِداد';
+   let frame=document.getElementById('mossadInlinePlayer');
+   if(!frame){frame=document.createElement('iframe');frame.id='mossadInlinePlayer';frame.title='مشغل تلاوات عبد الرحمن مسعد';frame.loading='lazy';frame.allow='autoplay';frame.referrerPolicy='strict-origin-when-cross-origin';frame.style.cssText='display:block;width:100%;height:520px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin:12px 0';document.querySelector('.listen-player').appendChild(frame)}
+   frame.src='https://www.nourelquran.com/swars-143.html';
+   frame.hidden=false;
+   document.querySelectorAll('.listen-player>.listen-controls,.listen-player>.listen-progress,.listen-player>.listen-volume').forEach(el=>el.hidden=true);
+   say('تقدر تستمع لتلاوات الشيخ من المشغل الموجود هنا داخل مِداد');
+  });
+  reciterCards.appendChild(mossad);
  }
  function renderSurahs(){
   const q=(search.value||'').trim().toLowerCase();grid.replaceChildren();
