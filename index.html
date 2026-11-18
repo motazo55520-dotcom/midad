@@ -164,6 +164,20 @@ textarea{width:100%;font:13px/1.5 monospace;color:var(--ink);background:rgba(255
 .listen-now strong{display:block;color:var(--red);font:700 28px 'Aref Ruqaa',serif}
 .listen-player>label{display:block;color:var(--muted);font-size:16px}
 .listen-player select{width:100%;margin:5px 0 12px;padding:8px;background:var(--card);color:var(--ink);border:1.5px solid var(--muted);border-radius:8px}
+
+.listen-reciter-native{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.listen-reciter-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px;margin:9px 0 14px}
+.listen-reciter-card{display:flex;align-items:center;gap:10px;text-align:right;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.16);color:var(--ink);font:inherit;cursor:pointer;min-width:0;transition:border-color .18s,background .18s,transform .18s}
+.listen-reciter-card:hover{transform:translateY(-2px);border-color:var(--red)}
+.listen-reciter-card.active{border:1.8px solid var(--red);background:rgba(154,47,34,.10);color:var(--red)}
+.listen-reciter-avatar{width:58px;height:58px;flex:none;overflow:hidden;border-radius:50%;display:grid;place-items:center;background:var(--paper,#e9dfcc);border:2px solid rgba(130,85,55,.32);box-shadow:0 2px 7px rgba(45,30,20,.12)}
+.listen-reciter-avatar img{width:100%;height:100%;object-fit:cover;object-position:center 24%;mix-blend-mode:multiply;filter:grayscale(.12) contrast(1.06)}
+.listen-reciter-card span:last-child{font-weight:700;line-height:1.35}
+.listen-reciter-card:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.listen-mossad-card{display:flex;align-items:center;gap:10px;margin:10px 0 14px;padding:9px 11px;border:1px dashed var(--muted);border-radius:12px;background:rgba(255,255,255,.10)}
+.listen-mossad-card img{width:58px;height:58px;object-fit:cover;object-position:center 20%;border-radius:50%;mix-blend-mode:multiply;background:var(--paper,#e9dfcc);border:2px solid rgba(130,85,55,.32)}
+.listen-mossad-card a{color:var(--red);font-weight:700;text-decoration:underline}
+@media(max-width:480px){.listen-reciter-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.listen-reciter-card{padding:7px;gap:7px;font-size:14px}.listen-reciter-avatar{width:48px;height:48px}.listen-mossad-card img{width:48px;height:48px}}
 .listen-controls{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
 .listen-progress,.listen-volume{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--muted)}
 .listen-progress input,.listen-volume input{flex:1;min-width:70px;accent-color:var(--red)}
@@ -344,14 +358,14 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
 <p class="sub">اختر القارئ والسورة واستمتع بالاستماع — جميع سور القرآن الكريم متاحة</p>
 <div class="listen-player">
  <div class="listen-now"><span>يُشغّل الآن</span><strong id="listenNowTitle">اختر سورة للبدء</strong><small id="listenNowReciter">اختر القارئ المفضل لديك</small></div>
- <label for="listenReciter">القارئ</label><select id="listenReciter"><option value="">جاري تحميل القراء...</option></select>
+ <label for="listenReciter">اختار القارئ</label><div id="listenReciterCards" class="listen-reciter-cards" aria-label="اختيار القارئ"></div><select id="listenReciter" class="listen-reciter-native" aria-label="القارئ"><option value="">جاري تحميل القراء...</option></select>
  <div class="listen-controls"><button class="tab" id="listenPrev" type="button" aria-label="السورة السابقة">⏮ السابقة</button><button class="btn" id="listenPlay" type="button">▶ تشغيل</button><button class="tab" id="listenNext" type="button">التالية ⏭</button></div>
  <div class="listen-progress"><span id="listenCurrentTime">00:00</span><input id="listenSeek" type="range" min="0" max="1000" value="0" aria-label="تقدم الاستماع"><span id="listenDuration">00:00</span></div>
  <div class="listen-volume"><label for="listenVolume">مستوى الصوت</label><input id="listenVolume" type="range" min="0" max="100" value="75"></div>
  <p id="listenStatus" class="sub" aria-live="polite">جاري تجهيز مكتبة القراء والسور</p>
  <div class="radio-cairo"><h3>📻 إذاعة القرآن الكريم من القاهرة</h3><p class="sub">بث مباشر — شغّل الإذاعة وقت ما تحب</p><div class="listen-controls"><button class="btn" id="cairoRadioPlay" type="button">▶ تشغيل الإذاعة</button><button class="tab" id="cairoRadioStop" type="button">إيقاف</button></div><p class="sub" id="cairoRadioStatus" aria-live="polite">البث لا يبدأ إلا بعد الضغط على تشغيل</p><audio id="cairoRadioAudio" preload="none"></audio></div>
 </div>
-<div class="mossad-card"><strong>🎙️ تلاوات عبد الرحمن مسعد</strong><p class="sub">افتح صفحة تسجيلاته للاستماع إلى تلاواته المتاحة</p><a href="https://www.nourelquran.com/swars-143.html" target="_blank" rel="noopener">استمع إلى تلاوات عبد الرحمن مسعد ↗</a></div>
+<div class="listen-mossad-card"><img src="https://way2quran.com/_next/image?q=70&url=https%3A%2F%2Fmedia.way2quran.com%2Fimgs%2Fabdul-rahman-musaad.jpg%3Fv%3D1778582464796&w=3840" alt="" loading="lazy" referrerpolicy="no-referrer"><div><strong>🎙️ عبد الرحمن مسعد</strong><p class="sub">تلاوات القارئ</p><a href="https://www.nourelquran.com/swars-143.html" target="_blank" rel="noopener">استمع إلى تسجيلاته ↗</a></div></div>
 <div class="listen-library-head"><h3>سور القرآن الكريم</h3><input id="listenSearch" type="search" placeholder="ابحث عن سورة..." aria-label="ابحث عن سورة"></div>
 <div id="listenSurahGrid" class="listen-surah-grid"><p class="sub">جاري تحميل السور...</p></div>
 <audio id="listenAudio" preload="none"></audio>
@@ -1075,6 +1089,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
 /* Standalone Quran listening tab */
 (()=>{
  const audio=$('#listenAudio'),reciterSelect=$('#listenReciter'),grid=$('#listenSurahGrid'),playBtn=$('#listenPlay'),search=$('#listenSearch'),status=$('#listenStatus'),seek=$('#listenSeek');
+ const reciterCards=$('#listenReciterCards');
  if(!audio||!grid)return;
  const preferred=['مشاري العفاسي','ماهر المعيقلي','عبدالرحمن السديس','عبد الباسط عبدالصمد','محمود خليل الحصري','سعد الغامدي','محمد صديق المنشاوي'];
  const aliases=[['مشاري','العفاسي'],['ماهر','المعيقلي'],['السديس'],['عبدالباسط','عبد الباسط'],['الحصري'],['سعد الغامدي','الغامدي'],['محمد صديق المنشاوي','محمد صديق المنشاوى','المنشاوي','المنشاوى']];
@@ -1083,6 +1098,27 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  const say=t=>status.textContent=t;
  const fmt=n=>{if(!Number.isFinite(n))return'00:00';return String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0')};
  function matchReciter(name,terms){return terms.some(t=>name.includes(t))}
+
+ const portraits=[
+  {terms:['مشاري','العفاسي'],src:'https://imgproxy-images.merchbar.com/insecure/rs%3Afill%3A1400%3A1400%3A1/g%3Asm/f%3Awebp/Z3M6Ly9tZXJjaGJhci1pbWFnZXMtZ2NzL2JyYW5kL3NxdWFyZS8xNDE2MTIwLmpwZw'},
+  {terms:['ماهر','المعيقلي'],src:'https://i.scdn.co/image/ab6761610000e5eb67b609f991ef3e4756f2a15c'},
+  {terms:['السديس'],src:'https://www.pep.gov.sa/sites/default/files/2023-09/rwVPlIjYAbDFR3muieUKkf9CzPS5qKtn8odp7RY0.jpg'},
+  {terms:['عبدالباسط','عبد الباسط'],src:'https://cdn.islam-online.net/data/full/abdel-baset-abdel-samad/profile.jpg'},
+  {terms:['الحصري'],src:'https://i1.sndcdn.com/artworks-000177024673-xg3a5y-t500x500.jpg'},
+  {terms:['سعد الغامدي','الغامدي'],src:'https://i1.sndcdn.com/artworks-brw7g4DD3pW6gxzq-XBkNAA-t500x500.jpg'},
+  {terms:['المنشاوي','المنشاوى'],src:'https://www.aljazeera.net/wp-content/uploads/2022/04/2_auto_x2.jpg?resize=1800%2C1800'}
+ ];
+ function renderReciterCards(){
+  if(!reciterCards)return;reciterCards.replaceChildren();
+  reciters.forEach(r=>{
+   const p=portraits.find(x=>x.terms.some(t=>(r.name||'').includes(t)));
+   const b=document.createElement('button');b.type='button';b.className='listen-reciter-card'+(String(r.id)===reciterSelect.value?' active':'');b.setAttribute('aria-pressed',String(String(r.id)===reciterSelect.value));
+   const av=document.createElement('span');av.className='listen-reciter-avatar';
+   if(p){const im=document.createElement('img');im.src=p.src;im.alt='';im.loading='lazy';im.referrerPolicy='no-referrer';im.onerror=()=>{im.remove();av.textContent='۞'};av.appendChild(im)}else av.textContent='۞';
+   const nm=document.createElement('span');nm.textContent=r.name;b.append(av,nm);
+   b.addEventListener('click',()=>{reciterSelect.value=String(r.id);chooseReciter();renderReciterCards()});reciterCards.appendChild(b);
+  });
+ }
  function renderSurahs(){
   const q=(search.value||'').trim().toLowerCase();grid.replaceChildren();
   const filtered=surahs.filter((x,i)=>(x.name||'').toLowerCase().includes(q)||String(i+1).includes(q));
@@ -1097,7 +1133,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  function chooseReciter(){
   const id=reciterSelect.value;activeReciter=reciters.find(r=>String(r.id)===id);
   activeMoshaf=activeReciter?.moshaf?.find(m=>m.server)||activeReciter?.moshaf?.[0];
-  saveChoice();
+  saveChoice();renderReciterCards();
   if(audio.src){const wasPlaying=!audio.paused;audio.pause();audio.src='';if(wasPlaying)playSurah(current)}
  }
  function playSurah(index){
@@ -1118,6 +1154,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
    reciters=preferred.map((label,i)=>all.find(r=>matchReciter(r.name||'',aliases[i]))).filter(Boolean);
    reciterSelect.replaceChildren();
    reciters.forEach(r=>{const o=document.createElement('option');o.value=String(r.id);o.textContent=r.name;reciterSelect.appendChild(o)});
+   renderReciterCards();
    if(!reciters.length)throw new Error('no reciters');
    const chosen=reciters.find(r=>String(r.id)===String(saved.reciter))||reciters[0];reciterSelect.value=String(chosen.id);chooseReciter();
    const wanted=Math.max(0,Math.min(surahs.length-1,Number(saved.surah||1)-1));current=wanted;
