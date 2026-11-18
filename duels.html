@@ -70,7 +70,8 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 <script>
 const SUPABASE_URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=SUPABASE_URL+"/functions/v1/midad-duels";
 let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="",soloQuestions=[],soloIndex=0,soloScore=0,soloAnswers=[],soloSessionId=null;
-const $=id=>document.getElementById(id);\nfunction subjectLabel(subject){return subject==="arabic"?"اللغة العربية":subject==="history"?"التاريخ":"اللغة الإنجليزية";}
+const $=id=>document.getElementById(id);
+function subjectLabel(subject){return subject==="arabic"?"اللغة العربية":subject==="history"?"التاريخ":"اللغة الإنجليزية";}
 function note(id,msg,error=false){$(id).textContent=msg;$(id).className="note"+(error?" error":"");}
 async function api(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول من صفحة حسابي الأول.");const res=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||"حصلت مشكلة، جرّب تاني.");return data;}
 function stopTimers(){if(polling)clearInterval(polling);if(queueTimer)clearInterval(queueTimer);polling=null;queueTimer=null;}
