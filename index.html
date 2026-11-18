@@ -1128,15 +1128,19 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
  function chooseReciter(){
   const id=reciterSelect.value;activeReciter=reciters.find(r=>String(r.id)===id);
   activeMoshaf=activeReciter?.moshaf?.find(m=>m.server)||activeReciter?.moshaf?.[0];
-  const ids=String(activeMoshaf?.surah_list||'').split(',').map(x=>Number(x.trim())).filter(n=>Number.isInteger(n)&&n>0);
-  availableSurahs=ids.length?surahs.filter(q=>ids.includes(Number(q.id))):surahs.slice(0,Math.min(Number(activeMoshaf?.surah_total)||surahs.length,surahs.length));
+  // اعرض فهرس القرآن كاملًا أسفل القراء، مع التحقق من توفر التسجيل عند التشغيل
+  availableSurahs=surahs.slice();
   current=Math.min(current,Math.max(0,availableSurahs.length-1));
   saveChoice();renderReciterCards();renderSurahs();
   if(audio.src){const wasPlaying=!audio.paused;audio.pause();audio.src='';if(wasPlaying&&availableSurahs.length)playSurah(current)}
  }
  function playSurah(index){
   let title,source;
-  if(!activeMoshaf?.server){say('اختار قارئًا متاحًا أولًا');return}current=Math.max(0,Math.min(index,availableSurahs.length-1));const surah=availableSurahs[current];if(!surah){say('التسجيل غير متاح للقارئ ده');return}title=surah.name||('سورة '+(surah.id||current+1));source=activeMoshaf.server+String(surah.id||current+1).padStart(3,'0')+'.mp3'
+  if(!activeMoshaf?.server){say('اختار قارئًا متاحًا أولًا');return}current=Math.max(0,Math.min(index,availableSurahs.length-1));const surah=availableSurahs[current];if(!surah){say('التسجيل غير متاح للقارئ ده');return}
+  const availableIds=String(activeMoshaf?.surah_list||'').split(',').map(x=>Number(x.trim())).filter(n=>Number.isInteger(n)&&n>0);
+  const surahId=Number(surah.id||current+1),total=Number(activeMoshaf?.surah_total)||0;
+  if((availableIds.length&&!availableIds.includes(surahId))||(!availableIds.length&&total>0&&surahId>total)){say('السورة دي مش متاحة بصوت القارئ المختار — اختار سورة تانية');return}
+  title=surah.name||('سورة '+surahId);source=activeMoshaf.server+String(surahId).padStart(3,'0')+'.mp3'
   audio.src=source;audio.volume=Number($('#listenVolume').value)/100;
   $('#listenNowTitle').textContent=title;$('#listenNowReciter').textContent=activeReciter?.name||'القارئ الحالي';
   saveChoice();renderSurahs();audio.play().then(()=>{playBtn.textContent='⏸ إيقاف مؤقت';say('جاري الاستماع إلى '+title)}).catch(()=>say('تعذر تشغيل التسجيل حاليًا — جرّب مرة أخرى'));
@@ -1156,7 +1160,7 @@ pmQuranControls.hidden=pmSoundType.value!=='quran';pmLoadQuranLists();
    const savedIndex=availableSurahs.findIndex(q=>Number(q.id)===Number(saved.surah||1));current=savedIndex>=0?savedIndex:0;
    $('#listenVolume').value=saved.volume??75;audio.volume=Number($('#listenVolume').value)/100;
    $('#listenNowTitle').textContent='اختر سورة للبدء';$('#listenNowReciter').textContent=chosen.name;
-   renderSurahs();say('متاح للقارئ '+arn(availableSurahs.length)+' سورة — اختار اللي تحب تسمعها');
+   renderSurahs();say('قائمة القرآن كاملة — اختار سورة ثم استمع للقارئ المتاح له تسجيلها');
   }catch(e){say('تعذر تحميل مكتبة القرآن الآن — تأكد من اتصال الإنترنت وحاول مرة أخرى');grid.textContent='تعذر تحميل قائمة السور والقراء حاليًا'}
  }
  reciterSelect.addEventListener('change',chooseReciter);
