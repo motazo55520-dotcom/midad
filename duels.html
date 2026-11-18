@@ -48,10 +48,10 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 <body>
 <div class="wrap">
 <header><div class="brand"><div class="logo">م</div><div><h1>مواجهات مِداد</h1><p class="sub">ذاكر، نافس، واكسب الجولة</p></div></div><nav class="nav"><a href="/">الرئيسية</a><a href="/community.html">العب وتحدّى</a><a href="/account.html">حسابي</a></nav></header>
-<section class="hero"><div class="hero-main"><span class="kicker"><i class="dot"></i> تحديات مباشرة 1 ضد 1</span><h2>مين فيكم بطل التحدي؟</h2><p>اختار عدد الأسئلة، ادخل مواجهة مع طالب أونلاين أو ابعت كود لصاحبك. اختار المادة، وكل مواجهة هتبدأ بنموذج امتحان تلقائي مختلف. كل إجابة صحيحة بنقطة، وفي النهاية هتشوف النتيجة والتصحيح.</p></div><div class="hero-side"><div><div class="versus"><div class="avatar">🧑‍🎓</div><div class="vs">VS</div><div class="avatar">🏆</div></div><strong>مواجهة على القمة</strong><small>تانية بكالوريا · عربي وإنجليزي</small></div></div></section>
+<section class="hero"><div class="hero-main"><span class="kicker"><i class="dot"></i> تحديات مباشرة 1 ضد 1</span><h2>مين فيكم بطل التحدي؟</h2><p>اختار عدد الأسئلة، ادخل مواجهة مع طالب أونلاين أو ابعت كود لصاحبك. اختار المادة، وكل مواجهة هتبدأ بنموذج امتحان تلقائي مختلف. كل إجابة صحيحة بنقطة، وفي النهاية هتشوف النتيجة والتصحيح.</p></div><div class="hero-side"><div><div class="versus"><div class="avatar">🧑‍🎓</div><div class="vs">VS</div><div class="avatar">🏆</div></div><strong>مواجهة على القمة</strong><small>تانية بكالوريا · عربي وإنجليزي وتاريخ</small></div></div></section>
 <section class="setup-toolbar">
  <div><span class="kicker"><i class="dot"></i> اختار طريقة اللعب</span><h2>جاهز للمواجهة؟</h2><p class="muted">اختار جولة سريعة أو العب مع صاحبك بكود دعوة.</p></div>
- <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:min(100%,440px)"><label class="question-count">المادة<select id="subjectSelect" class="select"><option value="arabic">اللغة العربية</option><option value="english">اللغة الإنجليزية</option></select></label><label class="question-count">عدد الأسئلة<select id="questionCount" class="select"><option value="5">5 أسئلة · جولة سريعة</option><option value="10">10 أسئلة · تحدي كامل</option></select></label></div>
+ <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:min(100%,440px)"><label class="question-count">المادة<select id="subjectSelect" class="select"><option value="arabic">اللغة العربية</option><option value="english">اللغة الإنجليزية</option><option value="history">التاريخ</option></select></label><label class="question-count">عدد الأسئلة<select id="questionCount" class="select"><option value="5">5 أسئلة · جولة سريعة</option><option value="10">10 أسئلة · تحدي كامل</option></select></label></div>
 </section>
 <div id="setup" class="grid">
  <section class="panel"><div class="mode-icon">🎯</div><h2>العب مع نفسك</h2><p class="muted">اختبر مستواك لوحدك، جاوب على الأسئلة وشوف نتيجتك والتصحيح في النهاية.</p><button id="soloBtn" class="btn primary full">ابدأ اختبار فردي</button></section>
@@ -69,8 +69,8 @@ footer{text-align:center;color:#aeb2c0;margin:22px 0;font-size:14px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/dist/umd/supabase.min.js"></script>
 <script>
 const SUPABASE_URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",EDGE=SUPABASE_URL+"/functions/v1/midad-duels";
-let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="",soloQuestions=[],soloIndex=0,soloScore=0,soloAnswers=[];
-const $=id=>document.getElementById(id);
+let sb=null,roomId=null,inviteCodeCurrent=null,polling=null,queueTimer=null,lastIndex=-1,lastStatus="",soloQuestions=[],soloIndex=0,soloScore=0,soloAnswers=[],soloSessionId=null;
+const $=id=>document.getElementById(id);\nfunction subjectLabel(subject){return subject==="arabic"?"اللغة العربية":subject==="history"?"التاريخ":"اللغة الإنجليزية";}
 function note(id,msg,error=false){$(id).textContent=msg;$(id).className="note"+(error?" error":"");}
 async function api(action,extra={}){const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error("سجّل الدخول من صفحة حسابي الأول.");const res=await fetch(EDGE,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...extra})});const data=await res.json().catch(()=>({}));if(!res.ok)throw new Error(data.error||"حصلت مشكلة، جرّب تاني.");return data;}
 function stopTimers(){if(polling)clearInterval(polling);if(queueTimer)clearInterval(queueTimer);polling=null;queueTimer=null;}
@@ -94,7 +94,7 @@ async function renderState(){
    return;
   }
   lastIndex=d.question_index;lastStatus=d.status;root.dataset.rendered="yes";root.replaceChildren();
-  const top=document.createElement("div");top.className="game-top";safe(top,"span","السؤال "+(d.question_index+1)+" من "+d.question_count,"tag");safe(top,"span",(d.question?.subject==="arabic"?"عربي":"English")+" · نموذج "+(d.question?.model_no||"—")+" · "+(d.question?.unit||""),"tag");root.append(top);
+  const top=document.createElement("div");top.className="game-top";safe(top,"span","السؤال "+(d.question_index+1)+" من "+d.question_count,"tag");safe(top,"span",(d.question?.subject==="arabic"?"عربي":d.question?.subject==="history"?"التاريخ":"English")+" · نموذج "+(d.question?.model_no||"—")+" · "+(d.question?.unit||""),"tag");root.append(top);
   const board=document.createElement("div");board.className="scoreboard";
   const me=document.createElement("div");me.className="player";safe(me,"b",d.me.display_name);safe(me,"strong",String(d.me.score));const mineScore=me.querySelector("strong");mineScore.dataset.score=d.me.user_id;safe(me,"small","أنت");
   const vs=safe(board,"div","VS","dash");
@@ -117,7 +117,7 @@ async function startSolo(){
  const btn=$("soloBtn");btn.disabled=true;btn.textContent="بنجهز الاختبار…";
  try{
   const d=await api("solo_start",{question_count:Number($("questionCount").value),subject:$("subjectSelect").value});
-  soloQuestions=d.questions||[];soloIndex=0;soloScore=0;soloAnswers=[];
+  soloQuestions=d.questions||[];soloSessionId=d.session_id;soloIndex=0;soloScore=0;soloAnswers=[];
   if(!soloQuestions.length)throw new Error("مفيش أسئلة متاحة حاليًا.");
   showGame();renderSoloQuestion();
  }catch(e){note("quickMsg",e.message,true);}
@@ -128,27 +128,34 @@ function renderSoloQuestion(){
  const q=soloQuestions[soloIndex];
  const top=document.createElement("div");top.className="game-top";
  safe(top,"span","السؤال "+(soloIndex+1)+" من "+soloQuestions.length,"tag");
- safe(top,"span",(q.subject==="arabic"?"عربي":"English")+" · نموذج "+q.model_no+" · "+(q.unit||"اختبار فردي"),"tag");root.append(top);
+ safe(top,"span",(q.subject==="arabic"?"عربي":q.subject==="history"?"التاريخ":"English")+" · نموذج "+q.model_no+" · "+(q.unit||"اختبار فردي"),"tag");root.append(top);
  const board=document.createElement("div");board.className="scoreboard";
  const me=document.createElement("div");me.className="player";safe(me,"b","أنت");safe(me,"strong",String(soloScore));safe(me,"small","درجتك");board.append(me);root.append(board);
  const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("i");fill.style.width=(soloIndex/soloQuestions.length*100)+"%";bar.append(fill);root.append(bar);
  safe(root,"div",q.q,"question");
  const opts=document.createElement("div");opts.className="options";
- q.options.forEach((option,i)=>{const b=document.createElement("button");b.type="button";b.className="option";b.textContent=String.fromCharCode(65+i)+". "+option;b.addEventListener("click",()=>{
+ q.options.forEach((option,i)=>{const b=document.createElement("button");b.type="button";b.className="option";b.textContent=String.fromCharCode(65+i)+". "+option;b.addEventListener("click",async()=>{
   opts.querySelectorAll("button").forEach(x=>x.disabled=true);
-  const correct=i===q.answer;if(correct)soloScore++;
-  b.classList.add("chosen");
-  const right=opts.children[q.answer];if(right)right.classList.add("chosen");
-  soloAnswers.push({question:q.q,options:q.options,answer:q.answer,selected:i,correct,explanation:q.explanation,unit:q.unit});
-  const feedback=safe(root,"div",correct?"إجابة صحيحة! أحسنت ✓":"إجابة غير صحيحة — راجع الإجابة الصحيحة","wait");
-  feedback.style.background=correct?"#e2f3e9":"#fae6e4";feedback.style.color=correct?"#286247":"#8c3d3d";
-  safe(root,"p","الشرح: "+q.explanation,"muted");
-  const next=document.createElement("button");next.className="btn primary full";next.textContent=soloIndex===soloQuestions.length-1?"عرض النتيجة":"السؤال التالي";next.addEventListener("click",()=>{soloIndex++;if(soloIndex<soloQuestions.length)renderSoloQuestion();else renderSoloResult();});root.append(next);
+  try{
+   const result=await api("solo_answer",{session_id:soloSessionId,question_index:soloIndex,selected_option:i});
+   const correct=!!result.correct;if(correct)soloScore++;
+   b.classList.add("chosen");const right=opts.children[result.correct_option];if(right)right.classList.add("chosen");
+   soloAnswers.push({question:q.q,options:q.options,answer:result.correct_option,selected:i,correct,explanation:result.explanation});
+   const feedback=safe(root,"div",correct?"إجابة صحيحة! أحسنت ✓":"إجابة غير صحيحة — راجع الإجابة الصحيحة","wait");
+   feedback.style.background=correct?"#e2f3e9":"#fae6e4";feedback.style.color=correct?"#286247":"#8c3d3d";
+   safe(root,"p","الشرح: "+result.explanation,"muted");
+   const next=document.createElement("button");next.className="btn primary full";next.textContent=soloIndex===soloQuestions.length-1?"عرض النتيجة":"السؤال التالي";next.addEventListener("click",()=>{soloIndex++;if(soloIndex<soloQuestions.length)renderSoloQuestion();else renderSoloResult();});root.append(next);
+  }catch(e){note("game",e.message,true);opts.querySelectorAll("button").forEach(x=>x.disabled=false);}
  });opts.append(b);});root.append(opts);
 }
-function renderSoloResult(){
+async function renderSoloResult(){
  const root=$("game");root.replaceChildren();root.dataset.rendered="solo-done";
- const top=document.createElement("div");top.className="result";safe(top,"div",soloScore>=soloQuestions.length*.8?"🏆":"🎯","trophy");safe(top,"h2","خلصت الاختبار!");safe(top,"p","نتيجتك");safe(top,"p",soloScore+" من "+soloQuestions.length+" إجابة صحيحة");const pct=Math.round(soloScore/soloQuestions.length*100);safe(top,"p",pct+"%");root.append(top);
+ let reward={coins_awarded:0};
+ try{reward=await api("solo_finish",{session_id:soloSessionId});}catch(e){note("game",e.message,true);}
+ const top=document.createElement("div");top.className="result";safe(top,"div",soloScore>=soloQuestions.length*.8?"🏆":"🎯","trophy");safe(top,"h2","خلصت الاختبار!");safe(top,"p","نتيجتك");safe(top,"p",soloScore+" من "+soloQuestions.length+" إجابة صحيحة");const pct=Math.round(soloScore/soloQuestions.length*100);safe(top,"p",pct+"%");
+ if(reward.coins_awarded>0)safe(top,"p","مبروك! كسبت "+reward.coins_awarded+" كوين 🪙 · رصيدك "+reward.balance,"good");
+ else if(reward.passed===false)safe(top,"p","اجمع 80% على الأقل لتحصل على 25 كوين في الاختبار القادم","muted");
+ root.append(top);
  const review=document.createElement("div");review.className="review";safe(review,"h2","مراجعة الإجابات");
  soloAnswers.forEach((a,i)=>{const item=document.createElement("div");item.className="review-item";safe(item,"b",(i+1)+". "+a.question);safe(item,"div","إجابتك: "+a.options[a.selected],a.correct?"good":"bad");safe(item,"div","الإجابة الصحيحة: "+a.options[a.answer],"good");safe(item,"small","الشرح: "+a.explanation);review.append(item);});root.append(review);
  const again=document.createElement("button");again.className="btn primary full";again.textContent="العب اختبارًا جديدًا";again.addEventListener("click",showSetup);root.append(again);
