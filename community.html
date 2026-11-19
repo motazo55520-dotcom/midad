@@ -281,6 +281,24 @@ footer{color:#9da7ca}
 .coin-pill{position:fixed!important;top:14px;left:max(3%,calc((100vw - 1120px)/2));z-index:1200;transform:none!important;transition:filter .18s!important;}
 .coin-pill:hover,.coin-pill:active{transform:none!important;}
 @media(max-width:700px){.coin-pill{top:10px;left:10px;padding:7px 11px;gap:6px;}}
+
+/* تثبيت شريط التبويبات أسفل زر الكوينز بدون تداخل */
+.wrap>header{position:relative!important;top:auto!important;z-index:2!important}
+.play-tabs{
+ position:sticky!important;
+ top:76px!important;
+ z-index:1100!important;
+ margin-top:16px;
+ background:rgba(10,15,37,.96)!important;
+ box-shadow:0 12px 30px rgba(0,0,0,.32);
+ scroll-margin-top:90px;
+}
+.coin-pill{top:14px!important;left:max(3%,calc((100vw - 1120px)/2))!important;z-index:1200!important}
+@media(max-width:700px){
+ .play-tabs{top:64px!important;margin-top:12px;gap:6px;padding:6px}
+ .coin-pill{top:10px!important;left:10px!important}
+}
+
 </style>
 <style id="midad-mobile-normalization">
 /* Midad mobile layout normalization */
