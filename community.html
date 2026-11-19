@@ -273,6 +273,9 @@ footer{color:#9da7ca}
 .tier-برونزي{--badge-a:#c77d3c;--badge-b:#673c25;--badge-border:#e9a66b;--badge-glow:#d8874438}.tier-فضي{--badge-a:#d6e0ed;--badge-b:#68768d;--badge-border:#c8d7ee;--badge-glow:#c6d9f13a}.tier-ذهبي{--badge-a:#ffe08a;--badge-b:#99651d;--badge-border:#ffda72;--badge-glow:#ffd15a45}.tier-ماسي{--badge-a:#8af5f2;--badge-b:#326b9d;--badge-border:#8deaff;--badge-glow:#4bd6f64a}.tier-ملحمي{--badge-a:#fa8b6e;--badge-b:#7a315a;--badge-border:#ff9c8c;--badge-glow:#ff7d9a44}.tier-أسطوري{--badge-a:#d0a0ff;--badge-b:#54358f;--badge-border:#d2a5ff;--badge-glow:#ac70ff55}.tier-خرافي{--badge-a:#8ff5e3;--badge-b:#245a82;--badge-border:#83f5e0;--badge-glow:#4fe9d955}.tier-ليجند{--badge-a:#fff2b0;--badge-b:#b94e9c;--badge-border:#ffe08a;--badge-glow:#ff9ce966}.coin-badge-card.tier-ليجند .badge-art{box-shadow:0 0 0 4px #ffd66a22,0 0 28px #ff8acb77,inset 0 1px #fff}.coin-badge-card.tier-ليجند:after{content:"✦";position:absolute;top:9px;right:13px;color:#ffe38a;font-size:22px;text-shadow:0 0 12px #fff}
 @media(max-width:520px){#coinBadgeShop{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.coin-badge-card{min-height:210px;padding:12px 8px}.badge-art{width:70px;height:70px}.badge-art span{font-size:36px}.coin-modal{padding:9px}.coin-modal-card{border-radius:19px}.coin-package{min-height:135px}}
 
+/* خلي زر الكوينز ظاهر أثناء التصفح */
+.wrap>header{position:sticky;top:8px;z-index:40}
+@media(max-width:700px){.wrap>header{top:4px}}
 </style>
 <style id="midad-mobile-normalization">
 /* Midad mobile layout normalization */
@@ -494,59 +497,6 @@ async function api(action,extra={}){const {data:{session}}=await sb.auth.getSess
 function dateLabel(value){return new Date(value).toLocaleDateString("ar-EG",{day:"numeric",month:"short"});}
 function renderChallenges(items){const root=$("challengeList");root.replaceChildren();if(!items.length){safe(root,"p","لسه مفيش تحديات. ابدأ بإنشاء تحدي أو اطلب كود دعوة من صديق.","muted");return;}items.forEach(ch=>{const card=document.createElement("article");card.className="challenge";const top=document.createElement("div");top.className="challenge-top";const info=document.createElement("div");safe(info,"h3",ch.title);safe(info,"p",ch.description||"تحدي جماعي في مِداد","muted");safe(info,"p","من "+dateLabel(ch.starts_at)+" إلى "+dateLabel(ch.ends_at)+" · "+ch.duration_days+" أيام","tiny");top.append(info);const side=document.createElement("div");if(ch.invite_code){safe(side,"span","كود الدعوة","tiny");const code=safe(side,"div",ch.invite_code,"code");code.title="اضغط لنسخ كود الدعوة";code.style.cursor="pointer";code.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(ch.invite_code);notice("تم نسخ كود الدعوة.");}catch{notice("الكود: "+ch.invite_code);}});}top.append(side);card.append(top);const meta=document.createElement("p");meta.className="tiny";meta.textContent="المشتركون: "+ch.participants.length+" / 20";card.append(meta);const people=document.createElement("div");people.className="people";ch.participants.forEach(p=>{const chip=document.createElement("span");chip.className="person";chip.textContent=p.display_name+" · "+p.points_total+" نقطة";people.append(chip);});card.append(people);const mine=ch.my_membership;if(mine){const action=document.createElement("button");action.className="btn primary";const checked=mine.last_checkin_on===new Date().toISOString().slice(0,10);action.textContent=checked?"سجلت إنجاز اليوم ✓":dashboard?.points_earned_today?"سجّل إنجاز اليوم (بدون نقاط إضافية)":"سجّل إنجاز اليوم +5 نقاط";action.disabled=checked||ch.status!=="active"||Date.now()>=new Date(ch.ends_at).getTime();action.addEventListener("click",async()=>{action.disabled=true;try{const r=await api("checkin",{challenge_id:ch.id});notice(r.message||"تم تسجيل الإنجاز.");await load();}catch(e){notice(e.message,true);action.disabled=false;}});card.append(action);safe(card,"span"," إنجازاتك في التحدي: "+mine.checkin_count,"tiny");}root.append(card);});}
 
-const englishQuestions=[
- {q:"A social media account that shows only carefully selected moments is described as:",o:["Balanced","Curated","Private","Unrelated"],e:"Curated تعني أن المحتوى تم اختياره بعناية لإظهار صورة معينة."},
- {q:"Comparing your ordinary life with influencers’ best moments is:",o:["Mindful consumption","Social comparison","Personal agency","Structural support"],e:"Social comparison هي مقارنة الشخص نفسه بالآخرين."},
- {q:"A lifestyle with very little physical movement is:",o:["Active","Energetic","Sedentary","Balanced"],e:"Sedentary تعني قليل الحركة أو يعتمد على الجلوس لفترات طويلة."},
- {q:"Paying careful attention to the present moment is called:",o:["Bias","Mindfulness","Pressure","Agency"],e:"Mindfulness تعني الانتباه الواعي للحظة الحالية."},
- {q:"The ability to make choices and take independent action is:",o:["Agency","Isolation","Nutrition","Comparison"],e:"Agency هي القدرة على اتخاذ القرارات والتصرف بشكل مستقل."},
- {q:"A gentle action that encourages a choice without forcing it is:",o:["A barrier","A nudge","A claim","A bias"],e:"A nudge تشجيع بسيط على اختيار معين دون إجبار."},
- {q:"Belief in your ability to succeed is called:",o:["Resilience","Self-efficacy","Social comparison","Curation"],e:"Self-efficacy تعني الثقة في القدرة على النجاح وتحقيق الأهداف."},
- {q:"The ability to recover and adapt after difficulties is:",o:["Nutrition","Resilience","Bias","Isolation"],e:"Resilience هي القدرة على التعافي والتكيف مع الصعوبات."},
- {q:"Which of these is a structural barrier?",o:["Preferring reading","Lack of safe walking areas","Choosing football","Sleeping early"],e:"غياب الطرق الآمنة عائق في البيئة المحيطة ويحد من الاختيارات."},
- {q:"Which sentence is the most neutral?",o:["Anyone who rests is lazy.","This routine is perfect for everyone.","Some students may find an early routine helpful.","Only unsuccessful people miss a workout."],e:"الجملة لا تستخدم تعميمًا أو حكمًا مطلقًا."},
- {q:"A question asked to influence readers without expecting an answer is:",o:["A relative clause","A rhetorical question","An intensifier","A factual statement"],e:"Rhetorical question سؤال بلاغي هدفه التأثير وليس انتظار إجابة."},
- {q:"A word such as 'extremely' used to make an opinion stronger is:",o:["An intensifier","A structural barrier","A nudge","A claim"],e:"Intensifier كلمة تزيد قوة المعنى أو التأكيد."}
-];
-let englishAnswers={},englishStartedAt=0;
-function renderEnglishQuiz(){
- const root=$("englishQuiz");root.replaceChildren();
- const start=document.createElement("button");start.className="btn primary";start.type="button";start.textContent="ابدأ التحدي";
- start.addEventListener("click",()=>{
-  englishAnswers={};englishStartedAt=Date.now();root.replaceChildren();
-  englishQuestions.forEach((q,i)=>{
-   const card=document.createElement("div");card.className="challenge";
-   safe(card,"h3",(i+1)+". "+q.q);
-   q.o.forEach((option,j)=>{
-    const label=document.createElement("label");label.style.display="block";label.style.padding="6px 2px";label.style.cursor="pointer";
-    const input=document.createElement("input");input.type="radio";input.name="english_"+i;input.value=String(j);input.style.marginLeft="8px";
-    input.addEventListener("change",()=>{englishAnswers[i]=j;submit.disabled=Object.keys(englishAnswers).length!==englishQuestions.length;progress.textContent=Object.keys(englishAnswers).length+" / "+englishQuestions.length+" تمت الإجابة";});
-    label.append(input,document.createTextNode(String.fromCharCode(65+j)+". "+option));card.append(label);
-   });
-   root.append(card);
-  });
-  const progress=safe(root,"p","0 / "+englishQuestions.length+" تمت الإجابة","tiny");
-  const submit=document.createElement("button");submit.className="btn green";submit.type="button";submit.textContent="صحّح إجاباتي واحفظ النتيجة";submit.disabled=true;
-  submit.addEventListener("click",async()=>{
-   submit.disabled=true;submit.textContent="جارٍ التصحيح والحفظ…";
-   try{
-    const result=await api("submit_english_quiz",{answers:englishQuestions.map((_,i)=>englishAnswers[i]),duration_seconds:Math.round((Date.now()-englishStartedAt)/1000)});
-    root.replaceChildren();
-    safe(root,"h2","نتيجتك: "+result.attempt.score+" / "+result.attempt.total_questions);
-    safe(root,"p",result.message,"msg");
-    try{await load();}catch(refreshError){$("points").textContent=result.profile?.points_total??$("points").textContent;$("level").textContent=result.profile?.level??$("level").textContent;}
-    englishQuestions.forEach((q,i)=>{
-     const correct=result.correct_answers[i],selected=englishAnswers[i],box=document.createElement("div");box.className="challenge";
-     safe(box,"b",(i+1)+". "+(selected===correct?"إجابة صحيحة ✓":"الإجابة الصحيحة: "+String.fromCharCode(65+correct)+". "+q.o[correct]));
-     safe(box,"p",q.e,"tiny");root.append(box);
-    });
-    const retry=document.createElement("button");retry.className="btn primary";retry.type="button";retry.textContent="إعادة التحدي";retry.addEventListener("click",renderEnglishQuiz);root.append(retry);
-   }catch(err){notice(err.message,true);submit.disabled=false;submit.textContent="حاول التصحيح مرة أخرى";}
-  });
-  root.append(submit);
- });
- root.append(start);
-}
 function renderBadges(data){const root=$("badgeList");root.replaceChildren();const earned=new Set(data.badges.map(x=>x.badge_code));data.badge_catalog.forEach(b=>{const el=document.createElement("div");el.className="badgeitem"+(earned.has(b.code)?"":" locked");safe(el,"div",b.icon,"emoji");safe(el,"b",b.label);safe(el,"div",b.description,"tiny");if(earned.has(b.code))safe(el,"div","تم الحصول عليها ✓","tiny");root.append(el);});}
 
 const COIN_PACKAGES=[{code:"starter",coins:100,price:30,offer:"السعر الأساسي"},{code:"plus",coins:250,price:70,offer:"خصم 7%"},{code:"pro",coins:500,price:125,offer:"خصم 17%"},{code:"mega",coins:1000,price:230,offer:"خصم 23%"},{code:"legend",coins:2500,price:500,offer:"أفضل عرض · خصم 33%"}];let selectedCoinPackage="starter";
@@ -570,7 +520,7 @@ $("copyCoinNumber").addEventListener("click",async()=>{const number=$("coinVodaf
 $("coinPurchaseSubmit").addEventListener("click",async()=>{const ref=$("coinTransferRef").value.trim(),msg=$("coinPurchaseMsg"),btn=$("coinPurchaseSubmit");if(ref.length<4){msg.textContent="اكتب مرجع التحويل أولًا";return;}btn.disabled=true;try{const {error}=await sb.rpc("midad_create_coin_purchase_request",{p_package_code:selectedCoinPackage,p_transfer_reference:ref});if(error)throw error;msg.textContent="تم إرسال الطلب للمراجعة بعد تأكيد التحويل";$("coinTransferRef").value="";}catch(e){msg.textContent=e.message;}finally{btn.disabled=false;}});
 function renderLeaderboard(rows){const root=$("leaderboard");if(!root)return;root.replaceChildren();if(!rows.length){safe(root,"p","لسه مفيش ترتيب — كن أول من يجمع النقاط!","muted");return;}rows.forEach((p,i)=>{const row=document.createElement("div");row.className="rank";safe(row,"span",String(i+1),"ranknum");const label=document.createElement("div");const name=safe(label,"b",p.display_name);if(p.badges?.length){const badges=document.createElement("span");badges.className="user-badges";p.badges.slice(0,3).forEach(b=>{const mark=document.createElement("span");mark.title=b.label;mark.textContent=b.icon||"✦";badges.append(mark);});name.append(" ",badges);}safe(label,"div","المستوى "+p.level,"tiny");row.append(label);safe(row,"b",p.points_total+" نقطة");root.append(row);});}
 async function load(){const data=await api("dashboard");dashboard=data;const total=Number(data.profile.points_total)||0;const progress=total%100;const fill=$("levelProgressFill");const track=fill?.parentElement;if(fill){fill.style.width=progress+"%";if(track)track.setAttribute("aria-valuenow",String(progress));}$("levelProgressText").textContent=progress+" / 100 نقطة";$("points").textContent=total;$("level").textContent=data.profile.level;$("badgeCount").textContent=data.badges.length;$("displayName").value=data.profile.display_name;renderChallenges(data.challenges);renderBadges(data);renderLeaderboard(data.leaderboard);await loadCoinShop();}
-async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel")?.classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel")?.classList.add("hidden");}$("app").classList.remove("hidden");await load();renderEnglishQuiz();window.dispatchEvent(new Event("midad-community-ready"));$("notice").textContent="";$("notice").className="msg hidden";}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
+async function boot(){try{const {data:{session}}=await sb.auth.getSession();if(!session){$("locked").classList.remove("hidden");$("lockedText").textContent="سجّل الدخول بحساب Plus أو Pro نشط. لو لسه معندكش حساب، افتح صفحة حسابي.";notice("تحتاج حسابًا نشطًا للوصول للمجتمع.",true);return;}const isAdmin=session.user?.app_metadata?.role==="admin";if(isAdmin){currentPlan="plus";$("createPanel")?.classList.add("hidden");}else{const {data:sub,error}=await sb.from("user_subscriptions").select("plan_code,status,current_period_end").eq("user_id",session.user.id).maybeSingle();if(error)throw error;const end=sub?.current_period_end?new Date(sub.current_period_end):null;if(!sub||!["plus","pro"].includes(sub.plan_code)||sub.status!=="active"||(end&&end<=new Date())){$("locked").classList.remove("hidden");$("lockedText").textContent="المجتمع متاح لمشتركي Plus وPro أصحاب الاشتراك النشط فقط.";notice("فعّل اشتراك Plus أو Pro للمشاركة.",true);return;}currentPlan=sub.plan_code;if(currentPlan!=="pro")$("createPanel")?.classList.add("hidden");}$("app").classList.remove("hidden");await load();window.dispatchEvent(new Event("midad-community-ready"));$("notice").textContent="";$("notice").className="msg hidden";}catch(e){$("locked").classList.remove("hidden");$("lockedText").textContent=e.message||"تعذر تحميل المجتمع. حدّث الصفحة وحاول مرة أخرى.";notice(e.message||"تعذر تحميل المجتمع.",true);}}
 async function startCommunity(){
  try{
   if(!window.supabase){
