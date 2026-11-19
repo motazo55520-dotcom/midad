@@ -276,6 +276,11 @@ footer{color:#9da7ca}
 /* خلي زر الكوينز ظاهر أثناء التصفح */
 .wrap>header{position:sticky;top:8px;z-index:40}
 @media(max-width:700px){.wrap>header{top:4px}}
+
+/* زر الكوينز ثابت في مكانه أثناء التمرير */
+.coin-pill{position:fixed!important;top:14px;left:max(3%,calc((100vw - 1120px)/2));z-index:1200;transform:none!important;transition:filter .18s!important;}
+.coin-pill:hover,.coin-pill:active{transform:none!important;}
+@media(max-width:700px){.coin-pill{top:10px;left:10px;padding:7px 11px;gap:6px;}}
 </style>
 <style id="midad-mobile-normalization">
 /* Midad mobile layout normalization */
@@ -437,7 +442,7 @@ main,header,footer,section,article,nav,form,.wrap,.shell,.panel,.card{min-width:
   </div>
  </section>
  <section class="panel"><h2>تحدياتي الحالية</h2><p class="muted">تابع تقدمك وسجّل إنجازك اليومي في كل تحدٍ.</p><div id="challengeList"><p class="muted">جارٍ تحميل التحديات…</p></div></section>
- <section class="panel"><h2>تحدي الإنجليزي</h2><p class="muted">اختبر نفسك في 12 سؤالًا من الوحدة الأولى، ثم راجع إجاباتك واحفظ نتيجتك.</p><div id="englishQuiz"><button class="btn primary" id="startEnglishQuiz" type="button">ابدأ التحدي</button></div></section>
+ 
 
 </section>
 
