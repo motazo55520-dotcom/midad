@@ -277,12 +277,18 @@ footer{color:#9da7ca}
 .wrap>header{position:sticky;top:8px;z-index:40}
 @media(max-width:700px){.wrap>header{top:4px}}
 
-/* زر الكوينز ثابت في مكانه أثناء التمرير */
-.coin-pill{position:fixed!important;top:14px;left:max(3%,calc((100vw - 1120px)/2));z-index:1200;transform:none!important;transition:filter .18s!important;}
-.coin-pill:hover,.coin-pill:active{transform:none!important;}
-@media(max-width:700px){.coin-pill{top:10px;left:10px;padding:7px 11px;gap:6px;}}
-
-/* تثبيت شريط التبويبات أسفل زر الكوينز بدون تداخل */
+/* زر الكوينز في منتصف الشاشة وبمسافة مستقلة عن التابز */
+.coin-pill{
+ position:fixed!important;
+ top:12px!important;
+ left:50%!important;
+ right:auto!important;
+ z-index:1200!important;
+ transform:translateX(-50%)!important;
+ transition:filter .18s!important;
+}
+.coin-pill:hover,.coin-pill:active{transform:translateX(-50%)!important;filter:brightness(1.07)}
+/* التابز تفضل أسفل زر الكوينز بمسافة ثابتة */
 .wrap>header{position:relative!important;top:auto!important;z-index:2!important}
 .play-tabs{
  position:sticky!important;
@@ -293,10 +299,9 @@ footer{color:#9da7ca}
  box-shadow:0 12px 30px rgba(0,0,0,.32);
  scroll-margin-top:90px;
 }
-.coin-pill{top:14px!important;left:max(3%,calc((100vw - 1120px)/2))!important;z-index:1200!important}
 @media(max-width:700px){
+ .coin-pill{top:8px!important;padding:7px 11px;gap:6px}
  .play-tabs{top:64px!important;margin-top:12px;gap:6px;padding:6px}
- .coin-pill{top:10px!important;left:10px!important}
 }
 
 </style>
