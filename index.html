@@ -282,14 +282,16 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
 })();
 </script>
 <style id="midad-garden-style">
-.midad-garden{margin:22px 0 8px;padding:18px;border:1px solid rgba(77,112,58,.28);border-radius:22px;background:linear-gradient(145deg,#f3f8e9,#e1efcf);color:#29452b;box-shadow:0 8px 24px rgba(45,83,36,.12);overflow:hidden}
-.garden-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.garden-heading h3{margin:0;color:#315c35;font-size:25px}.garden-heading p{margin:3px 0 0}.garden-count{min-width:74px;text-align:center;background:#fff;border:1px solid #d3e5c4;border-radius:15px;padding:7px 10px}.garden-count b{display:block;font-size:24px;color:#397b3e}.garden-count small{font-size:11px;color:#668063}
-.garden-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin:16px 0}.garden-controls label{display:flex;flex-direction:column;gap:5px;min-width:130px;flex:1;color:#426545;font-size:14px}.garden-controls .garden-goal{flex:2;min-width:200px}.garden-controls input,.garden-controls select{border:1px solid #bfd3b0;border-radius:11px;background:#fff;color:#29452b;padding:10px 12px;font:inherit}.garden-controls .btn{background:#347b3b;color:white;border:0;border-radius:12px;padding:10px 18px;font-weight:700;box-shadow:0 4px 0 #235b2b}
-.garden-active{min-height:105px;border-radius:16px;background:linear-gradient(180deg,#dff1ff 0 48%,#b8d995 48% 100%);display:grid;place-items:center;padding:12px;text-align:center;position:relative;overflow:hidden}.garden-empty{font-size:18px;color:#3e6940}.garden-growing{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;width:100%}.garden-plant{font-size:52px;line-height:1;filter:drop-shadow(0 5px 2px #476b3844);animation:gardenSway 2.2s ease-in-out infinite;transform-origin:bottom center}.garden-grow-info b{display:block;color:#285b31;font-size:18px}.garden-grow-info small{color:#3e6842}.garden-bar{height:8px;width:min(260px,70vw);background:#ffffffaa;border-radius:20px;overflow:hidden;margin:7px auto}.garden-bar i{display:block;height:100%;width:0;background:#3d913e;border-radius:20px;transition:width .6s}
-.garden-land{margin-top:15px;border-radius:18px;padding:14px;background:linear-gradient(180deg,#a8d2ee 0 17%,#8bc36b 17% 32%,#76503a 32% 100%);border:5px solid #d6e9c7;box-shadow:inset 0 0 0 2px #6a9c50}.garden-land-title{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#fff;text-shadow:0 1px 3px #365b35;font-weight:700;margin-bottom:10px}.garden-land-title small{font-weight:400}.garden-plots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.garden-plot{min-height:92px;border-radius:12px;background:repeating-linear-gradient(0deg,#80553d 0 9px,#916447 9px 13px);border:1px solid #d3ad7e;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 4px;text-align:center;box-shadow:inset 0 3px 7px #432a1c66;animation:plotPop .45s ease both}.garden-plot .crop{font-size:34px;line-height:1.2;filter:drop-shadow(0 3px 2px #38281766)}.garden-plot b{font-size:12px;color:#fff;text-shadow:0 1px 3px #3b261a}.garden-plot small{font-size:10px;color:#f7e8cf}.garden-plot.empty{background:repeating-linear-gradient(0deg,#8b6045 0 9px,#a87854 9px 13px);opacity:.72}.garden-plot.empty .crop{font-size:25px}
-.garden-note{margin:10px 0 0;text-align:center;color:#47734a;font-size:14px}.garden-note.success{font-weight:700;color:#267137}
-@keyframes gardenSway{0%,100%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-5px)}}@keyframes plotPop{from{opacity:0;transform:scale(.65) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-@media(max-width:560px){.midad-garden{padding:13px}.garden-plots{grid-template-columns:repeat(3,minmax(0,1fr))}.garden-controls{align-items:stretch}.garden-controls .btn{width:100%}.garden-heading h3{font-size:21px}}
+.midad-garden{margin:20px 0 8px;padding:18px;border:1px solid #d5ddc9;border-radius:20px;background:linear-gradient(145deg,#f6f5e9,#e8edda);color:#29432d;box-shadow:0 10px 28px #31452b18;overflow:hidden}
+.garden-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.garden-heading h3{margin:0;color:#315b36;font-size:25px}.garden-heading p{margin:4px 0 0}.garden-count{min-width:94px;text-align:center;background:#fff;border:1px solid #d7e2ce;border-radius:14px;padding:7px 10px}.garden-count b{display:block;font-size:27px;color:#397b3e}.garden-count small{font-size:11px;color:#668063}
+.garden-goal{display:flex;flex-direction:column;gap:6px;margin:12px 0;color:#426545;font-size:14px}.garden-goal input{border:1px solid #c7d4bc;border-radius:11px;background:#fff;color:#29452b;padding:10px 12px;font:inherit;max-width:100%}
+.farm-scene{position:relative;overflow:hidden;border-radius:16px;border:1px solid #6e8b5b;background:#6e9c68;box-shadow:0 7px 20px #263d2830}.farm-scene svg{display:block;width:100%;height:auto;min-height:220px;max-height:410px}
+.farm-progress{position:absolute;inset:auto 0 0;padding:30px 14px 12px;background:linear-gradient(transparent,#142b1ddd);color:#fff;display:flex;justify-content:space-between;align-items:end;gap:12px}.farm-progress b,.farm-progress small{display:block;text-shadow:0 1px 3px #172719}.farm-progress b{font-size:16px}.farm-progress small{font-size:11px;opacity:.9;margin-top:3px}.farm-progress-track{width:35%;height:7px;background:#ffffff55;border-radius:9px;overflow:hidden;flex-shrink:0}.farm-progress-track i{display:block;width:0;height:100%;background:#c5e68a;border-radius:9px;transition:width .5s}
+.garden-note{margin:10px 0 0;text-align:center;color:#47734a;font-size:13px}.garden-note.success{font-weight:700;color:#267137}
+.farm-tree{transform-box:fill-box;transform-origin:50% 100%;animation:treeRise .8s cubic-bezier(.2,.8,.2,1) both}.farm-tree .leaves{filter:drop-shadow(0 3px 2px #21391d66)}.farm-tree .trunk{stroke:#573b29;stroke-linecap:round;fill:none}.farm-tree .leaf-a{fill:#426f36}.farm-tree .leaf-b{fill:#5e8b43}.farm-tree .leaf-c{fill:#86a956}
+.farm-seedling{transform-box:fill-box;transform-origin:50% 100%;animation:seedGrow 1.8s ease-in-out infinite alternate}
+@keyframes treeRise{from{opacity:0;transform:translateY(22px) scale(.35)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes seedGrow{from{transform:scale(.82) rotate(-3deg)}to{transform:scale(1.08) rotate(3deg)}}
+@media(max-width:560px){.midad-garden{padding:12px}.garden-heading h3{font-size:21px}.farm-scene svg{min-height:205px}.farm-progress{padding:24px 9px 9px}.farm-progress small{max-width:190px}.farm-progress-track{width:28%}}
 </style></head>
 <body>
 <noscript><p style="padding:20px;text-align:center">مِداد يحتاج تفعيل JavaScript في المتصفح ليعمل.</p></noscript>
@@ -404,18 +406,45 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
 <h2 id="sh" data-admin-key="study_heading">المذاكرة</h2>
 <div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><div class="pm-sound-box"><h3>🎧 أجواء جلسة المذاكرة</h3><p class="sub">اختار الصوت اللي يساعدك تركز — الصوت يبدأ مع المؤقت</p><select id="pmSoundType" aria-label="نوع الصوت"><option value="off">بدون صوت</option><option value="rain">مطر هادئ</option><option value="fire">حطب نار</option><option value="ocean">أمواج البحر</option><option value="wind">هواء الغابة</option><option value="birds">غابة وطيور</option><option value="quran">القرآن الكريم</option></select><div id="pmQuranControls" hidden><select id="pmReciter" aria-label="القارئ"><option value="">جاري تحميل القراء...</option></select><select id="pmSurah" aria-label="السورة"><option value="1">الفاتحة</option></select></div><div class="pm-volume-row"><label for="pmVolume">مستوى الصوت</label><input id="pmVolume" type="range" min="0" max="100" value="35"><button type="button" class="tab" id="pmSoundPreview">تجربة الصوت</button></div><small id="pmSoundStatus" class="sub" aria-live="polite">اختار صوتًا ثم ابدأ جلسة التركيز</small></div><div class="pm-add-time"><span>زود وقت المؤقت</span><button class="tab" type="button" data-pm-add="5">+٥ دقائق</button><button class="tab" type="button" data-pm-add="10">+١٠ دقائق</button></div><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
 <div class="midad-garden" id="midadGarden">
- <div class="garden-heading"><div><h3>🌿 مزرعتي الصغيرة</h3><p class="sub">ذاكر شوية… وازرع خضار وشجر في أرضك!</p></div><div class="garden-count"><b id="gardenCount">٠</b><small>نبتة وشجرة</small></div></div>
- <div class="garden-controls">
-  <label class="garden-goal"><span>هتذاكر إيه؟</span><input id="gardenGoal" maxlength="100" placeholder="مثلاً: حل واجب الرياضيات"></label>
-  <label><span>وقت الزراعة</span><select id="gardenMinutes"><option value="5">٥ دقائق تجربة</option><option value="15">١٥ دقيقة</option><option value="25" selected>٢٥ دقيقة</option><option value="45">٤٥ دقيقة</option><option value="60">ساعة</option></select></label>
-  <button class="btn" id="gardenPlant" type="button">🌱 ازرع وابدأ</button>
+ <div class="garden-heading"><div><h3>مزرعة مِداد</h3><p class="sub">كل جلسة تركيز تكمّلها بتزرع شجرة جديدة في أرضك</p></div><div class="garden-count"><b id="gardenCount">٠</b><small>شجرة نمت بإنجازك</small></div></div>
+ <label class="garden-goal"><span>هدف جلسة المذاكرة الحالية</span><input id="gardenGoal" maxlength="100" placeholder="مثلاً: مذاكرة درس المعادلات"></label>
+ <div class="farm-scene">
+  <svg id="farmSvg" viewBox="0 0 900 390" role="img" aria-label="مزرعة ريفية وقت الغروب، بها حقل أخضر وحظيرة حمراء وأشجار تنمو مع إنجاز جلسات المذاكرة" preserveAspectRatio="xMidYMid slice">
+   <defs>
+    <linearGradient id="farmSky" x2="0" y2="1"><stop stop-color="#91aec1"/><stop offset=".55" stop-color="#f6a17f"/><stop offset="1" stop-color="#f7c18c"/></linearGradient>
+    <linearGradient id="farmHill" x2="0" y2="1"><stop stop-color="#62864c"/><stop offset="1" stop-color="#294e2c"/></linearGradient>
+    <linearGradient id="farmField" x2="0" y2="1"><stop stop-color="#6f9b48"/><stop offset="1" stop-color="#284b2a"/></linearGradient>
+    <linearGradient id="farmBarn" x2="1" y2="1"><stop stop-color="#b94c3f"/><stop offset=".55" stop-color="#7f2e2b"/><stop offset="1" stop-color="#4d2925"/></linearGradient>
+    <linearGradient id="farmRoof" x2="0" y2="1"><stop stop-color="#5a4640"/><stop offset="1" stop-color="#292c2c"/></linearGradient>
+    <radialGradient id="farmSun"><stop stop-color="#fff4c4"/><stop offset=".5" stop-color="#ffd39b" stop-opacity=".8"/><stop offset="1" stop-color="#ffbd8a" stop-opacity="0"/></radialGradient>
+    <filter id="farmBlur"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="treeShadow" x="-50%" y="-30%" width="200%" height="180%"><feGaussianBlur stdDeviation="3"/></filter>
+   </defs>
+   <rect width="900" height="390" fill="url(#farmSky)"/>
+   <circle cx="175" cy="110" r="115" fill="url(#farmSun)"/>
+   <g fill="#f6b19b" opacity=".38" filter="url(#farmBlur)"><path d="M-40 75Q90 15 220 65T460 50T720 75T970 35V120H-40Z"/><path d="M-20 145Q120 80 270 135T560 120T930 105V180H-20Z"/></g>
+   <path d="M0 220Q130 184 260 210T520 204T900 210V390H0Z" fill="#526f3b"/>
+   <path d="M0 250Q170 208 340 244T650 228T900 238V390H0Z" fill="url(#farmHill)"/>
+   <path d="M0 282Q180 240 360 276T680 258T900 270V390H0Z" fill="url(#farmField)"/>
+   <g opacity=".3" stroke="#c3d68a" stroke-width="2" fill="none"><path d="M0 315Q220 274 450 310T900 300"/><path d="M0 344Q230 302 460 338T900 326"/><path d="M0 370Q240 330 470 365T900 354"/></g>
+   <g id="farmTreeLayer"></g>
+   <g transform="translate(650 112)">
+    <path d="M0 82L74 0L170 75V207H0Z" fill="url(#farmBarn)" stroke="#4c2926" stroke-width="4"/>
+    <path d="M-12 82L74 -4L183 78L174 88L74 15L-4 91Z" fill="url(#farmRoof)" stroke="#3a3431" stroke-width="3"/>
+    <path d="M25 83V205M145 83V205" stroke="#e5a08a" stroke-width="4" opacity=".65"/>
+    <path d="M48 118V207H103V118Z" fill="#572d29" stroke="#e7b19a" stroke-width="4"/>
+    <path d="M75 118V207M48 164H103" stroke="#e7b19a" stroke-width="3"/>
+    <rect x="118" y="101" width="23" height="30" fill="#f2cba4" stroke="#63342d" stroke-width="3"/>
+    <path d="M129 101V131M118 116H141" stroke="#754237" stroke-width="2"/>
+    <path d="M73 0V-20H86V-1" fill="#55453c"/>
+    <path d="M-4 207H178" stroke="#332d25" stroke-width="7"/>
+   </g>
+   <g fill="#365c31" opacity=".55"><path d="M0 245Q90 205 180 246T360 242T540 250T720 235T900 240V270H0Z"/></g>
+   <g id="farmGrowingTree"></g>
+  </svg>
+  <div class="farm-progress"><div><b id="farmStatus">أرضك مستنياك</b><small id="farmGoalLabel">ابدأ جلسة التركيز عشان تشوف شجرتك وهي بتكبر</small></div><div class="farm-progress-track"><i id="farmProgressBar"></i></div></div>
  </div>
- <div class="garden-active" id="gardenActive"><div class="garden-empty">🌤️ أرضك مستنياك… ازرع أول بذرة!</div></div>
- <div class="garden-land">
-  <div class="garden-land-title"><span>🏡 أرض مِداد</span><small>كل جلسة مكتملة بتضيف محصول جديد</small></div>
-  <div class="garden-plots" id="gardenPlots"></div>
- </div>
- <p class="garden-note" id="gardenNote" aria-live="polite">اختار هدفك وابدأ أول جلسة زراعة</p>
+ <p class="garden-note" id="gardenNote" aria-live="polite">ابدأ مؤقت التركيز بالأعلى — المزرعة هتتحرك معاه تلقائيًا 🌳</p>
 </div><div id="sj"></div></div>
 </div></section>
 <section class="card wide c2" aria-labelledby="hh"><div class="sheet plain">
@@ -1311,7 +1340,7 @@ function pmUi(){
   const s=Math.max(0,Math.round(pm.run?(pm.end-Date.now())/1000:pm.left));
   const clock=ad(p2(Math.floor(s/60))+':'+p2(s%60));
   $('#pmt').textContent=clock;$('#pms').textContent=pm.run?(pm.locked?'الجلسة جارية':'إيقاف مؤقت'):'ابدأ';
-  const sc=$('#strictClock');if(sc)sc.textContent=clock;
+  const sc=$('#strictClock');if(sc)sc.textContent=clock;if(typeof farmTimerTick==='function')farmTimerTick(s);
   document.querySelectorAll('#pmtabs .tab').forEach(t=>t.setAttribute('aria-pressed',t.dataset.m===pm.mode));
   const d=load('pomo:'+dayKey(),{n:0,m:0});$('#pmi').textContent='جلسات اليوم: '+arn(d.n)+' · دقائق التركيز: '+arn(d.m);return s;
 }
@@ -1320,59 +1349,68 @@ setInterval(()=>{
   if(!pm.run)return;if(pmUi()>0)return;
   pm.run=0;pmStopSound();pmSetStatus('انتهت الجلسة — أحسنت!');
   if(pm.locked)strictUnlock();
-  if(pm.mode==='f'){const k='pomo:'+dayKey(),d=load(k,{n:0,m:0});d.n++;d.m+=25;save(k,d);wkRender()}
+  if(pm.mode==='f'){const k='pomo:'+dayKey(),d=load(k,{n:0,m:0});d.n++;d.m+=25;save(k,d);wkRender();if(typeof farmCompleteFocus==='function')farmCompleteFocus()}else if(typeof farmResetFocus==='function')farmResetFocus();
   try{const a=new AudioContext(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();a.close()},500)}catch(e){}
   pm.mode=pm.mode==='f'?'b':'f';pm.left=PMD[pm.mode];pmUi();
 },500);
 $('#pms').addEventListener('click',()=>{
   if(pm.locked)return;
-  if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0;pmStopSound();pmSetStatus('الصوت متوقف مؤقتًا')}
-  else{pm.end=Date.now()+pm.left*1000;pm.run=1;pmStartSelectedSound();if(strictEnabled){strictLock();if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}}
+  if(pm.run){pm.left=Math.max(0,(pm.end-Date.now())/1000);pm.run=0;pmStopSound();if(pm.mode==='f'&&typeof farmPauseFocus==='function')farmPauseFocus();pmSetStatus('الصوت متوقف مؤقتًا')}
+  else{pm.end=Date.now()+pm.left*1000;pm.run=1;if(pm.mode==='f'&&typeof farmStartFocus==='function')farmStartFocus();pmStartSelectedSound();if(strictEnabled){strictLock();if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}}
   pmUi()
 });
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-pm-add]');if(!b)return;
   const mins=Number(b.dataset.pmAdd);if(![5,10].includes(mins))return;
-  if(pm.run)pm.end+=mins*60000;else pm.left+=mins*60;
+  if(pm.run)pm.end+=mins*60000;else pm.left+=mins*60;if(pm.mode==='f'&&typeof farmAddTime==='function')farmAddTime(mins*60);
   pmUi();
 });
-$('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pmStopSound();pm.left=PMD[pm.mode];pmSetStatus('تمت إعادة المؤقت');pmUi()});
-$('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pmStopSound();pmSetStatus('اختار صوتًا ثم ابدأ المؤقت');pm.left=PMD[pm.mode];pmUi()});
+$('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pmStopSound();pm.left=PMD[pm.mode];if(typeof farmResetFocus==='function')farmResetFocus();pmSetStatus('تمت إعادة المؤقت');pmUi()});
+$('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pmStopSound();if(typeof farmResetFocus==='function')farmResetFocus();pmSetStatus('اختار صوتًا ثم ابدأ المؤقت');pm.left=PMD[pm.mode];pmUi()});
 document.addEventListener('visibilitychange',()=>{if(pm.locked&&document.hidden){try{if(navigator.vibrate)navigator.vibrate([120,60,120])}catch{}}});
-/* Midad study garden — available to every visitor */
-(()=>{
- const KEY='midad-garden-v1',crops=[{emoji:'🌳',name:'شجرة مثمرة'},{emoji:'🥕',name:'جزر'},{emoji:'🍅',name:'طماطم'},{emoji:'🌽',name:'ذرة'},{emoji:'🍓',name:'فراولة'},{emoji:'🌻',name:'زهرة شمس'}];
- const $g=id=>document.getElementById(id),read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{plants:[],active:null}}catch{return{plants:[],active:null}}},write=d=>localStorage.setItem(KEY,JSON.stringify(d));
- let data=read(),ticker=null;
- const digits=n=>String(n).replace(/\d/g,x=>'٠١٢٣٤٥٦٧٨٩'[Number(x)]);
- function stage(p){if(p>=1)return{emoji:'🌿',label:'جاهزة للحصاد'};if(p>=.72)return{emoji:'🪴',label:'بقت نبتة صغيرة'};if(p>=.35)return{emoji:'🌱',label:'بدأت تطلع'};return{emoji:'🌰',label:'بذرة تحت التربة'}}
- function draw(){
-  data=read();$g('gardenCount').textContent=digits(data.plants.length);
-  const plots=$g('gardenPlots');plots.replaceChildren();
-  const recent=data.plants.slice(-11).reverse();
-  recent.forEach((plant,i)=>{const el=document.createElement('div');el.className='garden-plot';el.style.animationDelay=(i*45)+'ms';const crop=document.createElement('span');crop.className='crop';crop.textContent=plant.emoji;const name=document.createElement('b');name.textContent=plant.name;const goal=document.createElement('small');goal.textContent=plant.goal;el.append(crop,name,goal);plots.append(el)});
-  for(let i=recent.length;i<8;i++){const el=document.createElement('div');el.className='garden-plot empty';el.innerHTML='<span class="crop">🌱</span><b>مكان فاضي</b><small>مستني زرعتك</small>';plots.append(el)}
-  tick();
- }
- function tick(){
-  data=read();const root=$g('gardenActive');if(!data.active){root.innerHTML='<div class="garden-empty">🌤️ أرضك مستنياك… ازرع أول بذرة!</div>';root.dataset.goal='';return}
-  const a=data.active,now=Date.now(),total=a.minutes*60000,p=Math.min(1,Math.max(0,(now-a.startedAt)/total)),left=Math.max(0,a.endsAt-now),st=stage(p);
-  if(!root.querySelector('.garden-growing')||root.dataset.goal!==a.goal){root.innerHTML='<div class="garden-growing"><div class="garden-plant" id="gardenPlantEmoji">'+st.emoji+'</div><div class="garden-grow-info"><b></b><small></small><div class="garden-bar"><i></i></div><strong class="garden-clock"></strong></div></div>';root.dataset.goal=a.goal}
-  root.querySelector('#gardenPlantEmoji').textContent=st.emoji;root.querySelector('b').textContent=a.goal;root.querySelector('small').textContent=st.label+' · '+digits(Math.floor(p*100))+'٪';
-  root.querySelector('.garden-bar i').style.width=(p*100)+'%';
-  root.querySelector('.garden-clock').textContent=left?digits(String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor(left%60000/1000)).padStart(2,'0')):'اكتمل وقت الزراعة!';
-  if(left<=0){const crop=crops[Math.floor(Math.random()*crops.length)];data.plants.push({emoji:crop.emoji,name:crop.name,goal:a.goal,at:Date.now()});data.active=null;write(data);$g('gardenNote').textContent='عاش! خلصت هدفك واتزرع '+crop.name+' جديدة في مزرعتك 🎉';$g('gardenNote').classList.add('success');draw();return}
- }
- function start(){
-  data=read();if(data.active){$g('gardenNote').textContent='فيه نبتة بتكبر دلوقتي — كمّل جلستك الأول';return}
-  const goal=$g('gardenGoal').value.trim(),minutes=Number($g('gardenMinutes').value);
-  if(goal.length<2){$g('gardenNote').textContent='اكتب هدف المذاكرة الأول عشان نعرف هنزرع إيه';$g('gardenGoal').focus();return}
-  const now=Date.now();data.active={goal,minutes,startedAt:now,endsAt:now+minutes*60000};write(data);$g('gardenGoal').value='';$g('gardenNote').textContent='بدأت الزراعة! ركّز وسيب النبتة تكبر 🌱';$g('gardenNote').classList.remove('success');draw();
- }
- $g('gardenPlant').addEventListener('click',start);
- draw();ticker=setInterval(()=>{const before=read().active?.endsAt;tick();if(!read().active&&before)draw()},1000);
- window.addEventListener('storage',e=>{if(e.key===KEY)draw()});
-})();
+/* Midad focus farm — grows only with the existing Pomodoro timer */
+const FARM_KEY='midad-garden-v2';
+let farmData=(()=>{try{return JSON.parse(localStorage.getItem(FARM_KEY))||{trees:[]}}catch{return{trees:[]}}})();
+let farmFocusElapsed=0,farmFocusStarted=0,farmFocusTotal=1500,farmLastGoal='';
+const farmDigits=n=>String(n).replace(/\d/g,x=>'٠١٢٣٤٥٦٧٨٩'[Number(x)]);
+function farmSave(){localStorage.setItem(FARM_KEY,JSON.stringify(farmData))}
+function farmTreeMarkup(i){
+ const x=70+(i%8)*108+(i%3)*7,y=278-(Math.floor(i/8)%2)*13,scale=.62+(i%4)*.12,shade=i%3;
+ const foliage=shade===0?'leaf-a':shade===1?'leaf-b':'leaf-c';
+ return '<g class="farm-tree" transform="translate('+x+' '+y+') scale('+scale+')"><ellipse cx="0" cy="2" rx="29" ry="7" fill="#1e3925" opacity=".35" filter="url(#treeShadow)"/><path class="trunk" stroke-width="9" d="M0 0Q-3 -31 0 -66M0 -40L-21 -61M0 -48L22 -73M-1 -27L-19 -42"/><g class="leaves '+foliage+'"><circle cx="0" cy="-84" r="25"/><circle cx="-20" cy="-67" r="21"/><circle cx="21" cy="-67" r="22"/><circle cx="-2" cy="-57" r="22"/><circle cx="-8" cy="-101" r="17"/><circle cx="18" cy="-91" r="17"/><circle cx="-25" cy="-87" r="14"/></g><g fill="#a9c879" opacity=".35"><circle cx="-10" cy="-91" r="7"/><circle cx="15" cy="-72" r="6"/><circle cx="-21" cy="-68" r="5"/></g></g>';
+}
+function farmDraw(progress=0){
+ const layer=document.getElementById('farmTreeLayer');if(!layer)return;
+ document.getElementById('gardenCount').textContent=farmDigits(farmData.trees.length);
+ layer.innerHTML=farmData.trees.slice(-24).map((_,i)=>farmTreeMarkup(i)).join('');
+ const active=document.getElementById('farmGrowingTree');
+ const running=!!(pm.run&&pm.mode==='f');
+ if(running){
+  const x=480,y=287,scale=.55+Math.min(.5,progress*.5);
+  active.innerHTML='<g class="farm-seedling" transform="translate('+x+' '+y+') scale('+scale+')"><path d="M0 0Q-2 -23 0 -42" stroke="#5a3d29" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M0 -25Q-28 -49 -36 -25Q-19 -12 0 -25Q23 -55 38 -32Q29 -12 0 -25" fill="#5e9a45" stroke="#3e7338" stroke-width="2"/><path d="M0 -40Q-12 -60 -22 -49Q-20 -37 0 -40Q12 -64 26 -51Q22 -37 0 -40" fill="#84b95b" stroke="#4b843d" stroke-width="2"/></g>';
+ }else active.innerHTML='';
+ const status=document.getElementById('farmStatus'),goal=document.getElementById('farmGoalLabel'),bar=document.getElementById('farmProgressBar');
+ if(running){status.textContent='شجرتك بتكبر مع تركيزك 🌱';goal.textContent=farmLastGoal||'جلسة تركيز شغالة';bar.style.width=Math.round(progress*100)+'%'}
+ else{status.textContent=farmData.trees.length?'مزرعتك بتكبر بإنجازاتك':'أرضك مستنياك';goal.textContent='كل ما تكمّل جلسة تركيز، شجرة جديدة هتظهر هنا';bar.style.width='0%'}
+}
+function farmStartFocus(){
+ if(!farmFocusStarted){farmFocusStarted=Date.now();farmFocusTotal=Math.max(1,pm.left);farmFocusElapsed=0;farmLastGoal=document.getElementById('gardenGoal').value.trim()||'جلسة تركيز';}
+ else farmFocusStarted=Date.now();
+}
+function farmPauseFocus(){if(farmFocusStarted){farmFocusElapsed+=(Date.now()-farmFocusStarted)/1000;farmFocusStarted=0}}
+function farmResetFocus(){farmFocusElapsed=0;farmFocusStarted=0;farmFocusTotal=pm.mode==='f'?PMD.f:PMD.b;farmDraw(0)}
+function farmAddTime(seconds){if(pm.mode!=='f')return;farmFocusTotal+=seconds}
+function farmCompleteFocus(){
+ farmPauseFocus();farmData.trees.push({at:Date.now(),goal:farmLastGoal||'جلسة تركيز'});farmSave();
+ document.getElementById('gardenNote').textContent='برافو! أنجزت جلسة كاملة واتزرعت شجرة جديدة في مزرعتك 🌳';document.getElementById('gardenNote').classList.add('success');
+ farmResetFocus();farmDraw(0);
+}
+function farmTimerTick(remaining){
+ const elapsed=farmFocusElapsed+(farmFocusStarted?(Date.now()-farmFocusStarted)/1000:0);
+ const progress=Math.max(0,Math.min(1,elapsed/Math.max(1,farmFocusTotal)));
+ farmDraw(progress);
+}
+farmDraw(0);
 /* weekly summary */
 function wkRender(){
   const c=$('#wk');if(!c)return;c.replaceChildren();
