@@ -1355,10 +1355,10 @@ document.addEventListener('visibilitychange',()=>{if(pm.locked&&document.hidden)
   tick();
  }
  function tick(){
-  data=read();const root=$g('gardenActive');if(!data.active){root.innerHTML='<div class="garden-empty">🌤️ أرضك مستنياك… ازرع أول بذرة!</div>';return}
+  data=read();const root=$g('gardenActive');if(!data.active){root.innerHTML='<div class="garden-empty">🌤️ أرضك مستنياك… ازرع أول بذرة!</div>';root.dataset.goal='';return}
   const a=data.active,now=Date.now(),total=a.minutes*60000,p=Math.min(1,Math.max(0,(now-a.startedAt)/total)),left=Math.max(0,a.endsAt-now),st=stage(p);
-  root.innerHTML='<div class="garden-growing"><div class="garden-plant" id="gardenPlantEmoji">'+st.emoji+'</div><div class="garden-grow-info"><b></b><small></small><div class="garden-bar"><i></i></div><strong class="garden-clock"></strong></div></div>';
-  root.querySelector('b').textContent=a.goal;root.querySelector('small').textContent=st.label+' · '+digits(Math.floor(p*100))+'٪';
+  if(!root.querySelector('.garden-growing')||root.dataset.goal!==a.goal){root.innerHTML='<div class="garden-growing"><div class="garden-plant" id="gardenPlantEmoji">'+st.emoji+'</div><div class="garden-grow-info"><b></b><small></small><div class="garden-bar"><i></i></div><strong class="garden-clock"></strong></div></div>';root.dataset.goal=a.goal}
+  root.querySelector('#gardenPlantEmoji').textContent=st.emoji;root.querySelector('b').textContent=a.goal;root.querySelector('small').textContent=st.label+' · '+digits(Math.floor(p*100))+'٪';
   root.querySelector('.garden-bar i').style.width=(p*100)+'%';
   root.querySelector('.garden-clock').textContent=left?digits(String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor(left%60000/1000)).padStart(2,'0')):'اكتمل وقت الزراعة!';
   if(left<=0){const crop=crops[Math.floor(Math.random()*crops.length)];data.plants.push({emoji:crop.emoji,name:crop.name,goal:a.goal,at:Date.now()});data.active=null;write(data);$g('gardenNote').textContent='عاش! خلصت هدفك واتزرع '+crop.name+' جديدة في مزرعتك 🎉';$g('gardenNote').classList.add('success');draw();return}
