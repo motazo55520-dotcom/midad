@@ -281,7 +281,16 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
   }catch(e){}
 })();
 </script>
-</head>
+<style id="midad-garden-style">
+.midad-garden{margin:22px 0 8px;padding:18px;border:1px solid rgba(77,112,58,.28);border-radius:22px;background:linear-gradient(145deg,#f3f8e9,#e1efcf);color:#29452b;box-shadow:0 8px 24px rgba(45,83,36,.12);overflow:hidden}
+.garden-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.garden-heading h3{margin:0;color:#315c35;font-size:25px}.garden-heading p{margin:3px 0 0}.garden-count{min-width:74px;text-align:center;background:#fff;border:1px solid #d3e5c4;border-radius:15px;padding:7px 10px}.garden-count b{display:block;font-size:24px;color:#397b3e}.garden-count small{font-size:11px;color:#668063}
+.garden-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin:16px 0}.garden-controls label{display:flex;flex-direction:column;gap:5px;min-width:130px;flex:1;color:#426545;font-size:14px}.garden-controls .garden-goal{flex:2;min-width:200px}.garden-controls input,.garden-controls select{border:1px solid #bfd3b0;border-radius:11px;background:#fff;color:#29452b;padding:10px 12px;font:inherit}.garden-controls .btn{background:#347b3b;color:white;border:0;border-radius:12px;padding:10px 18px;font-weight:700;box-shadow:0 4px 0 #235b2b}
+.garden-active{min-height:105px;border-radius:16px;background:linear-gradient(180deg,#dff1ff 0 48%,#b8d995 48% 100%);display:grid;place-items:center;padding:12px;text-align:center;position:relative;overflow:hidden}.garden-empty{font-size:18px;color:#3e6940}.garden-growing{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;width:100%}.garden-plant{font-size:52px;line-height:1;filter:drop-shadow(0 5px 2px #476b3844);animation:gardenSway 2.2s ease-in-out infinite;transform-origin:bottom center}.garden-grow-info b{display:block;color:#285b31;font-size:18px}.garden-grow-info small{color:#3e6842}.garden-bar{height:8px;width:min(260px,70vw);background:#ffffffaa;border-radius:20px;overflow:hidden;margin:7px auto}.garden-bar i{display:block;height:100%;width:0;background:#3d913e;border-radius:20px;transition:width .6s}
+.garden-land{margin-top:15px;border-radius:18px;padding:14px;background:linear-gradient(180deg,#a8d2ee 0 17%,#8bc36b 17% 32%,#76503a 32% 100%);border:5px solid #d6e9c7;box-shadow:inset 0 0 0 2px #6a9c50}.garden-land-title{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#fff;text-shadow:0 1px 3px #365b35;font-weight:700;margin-bottom:10px}.garden-land-title small{font-weight:400}.garden-plots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.garden-plot{min-height:92px;border-radius:12px;background:repeating-linear-gradient(0deg,#80553d 0 9px,#916447 9px 13px);border:1px solid #d3ad7e;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 4px;text-align:center;box-shadow:inset 0 3px 7px #432a1c66;animation:plotPop .45s ease both}.garden-plot .crop{font-size:34px;line-height:1.2;filter:drop-shadow(0 3px 2px #38281766)}.garden-plot b{font-size:12px;color:#fff;text-shadow:0 1px 3px #3b261a}.garden-plot small{font-size:10px;color:#f7e8cf}.garden-plot.empty{background:repeating-linear-gradient(0deg,#8b6045 0 9px,#a87854 9px 13px);opacity:.72}.garden-plot.empty .crop{font-size:25px}
+.garden-note{margin:10px 0 0;text-align:center;color:#47734a;font-size:14px}.garden-note.success{font-weight:700;color:#267137}
+@keyframes gardenSway{0%,100%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-5px)}}@keyframes plotPop{from{opacity:0;transform:scale(.65) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@media(max-width:560px){.midad-garden{padding:13px}.garden-plots{grid-template-columns:repeat(3,minmax(0,1fr))}.garden-controls{align-items:stretch}.garden-controls .btn{width:100%}.garden-heading h3{font-size:21px}}
+</style></head>
 <body>
 <noscript><p style="padding:20px;text-align:center">مِداد يحتاج تفعيل JavaScript في المتصفح ليعمل.</p></noscript>
 <div class="wrap">
@@ -394,7 +403,20 @@ body:has(#pmStrictOverlay.active){overflow:hidden}
 <section class="card wide c1" aria-labelledby="sh"><div class="sheet plain">
 <h2 id="sh" data-admin-key="study_heading">المذاكرة</h2>
 <div class="sg"><div class="pomo"><div class="tabs" id="pmtabs"><button class="tab" data-m="f" aria-pressed="true">تركيز ٢٥</button><button class="tab" data-m="b" aria-pressed="false">راحة ٥</button></div><b id="pmt">٢٥:٠٠</b><div class="ctl"><button class="btn" id="pms" type="button">ابدأ</button><button class="tab" id="pmr" type="button">إعادة</button></div><p class="sub" id="pmi"></p><div class="pm-sound-box"><h3>🎧 أجواء جلسة المذاكرة</h3><p class="sub">اختار الصوت اللي يساعدك تركز — الصوت يبدأ مع المؤقت</p><select id="pmSoundType" aria-label="نوع الصوت"><option value="off">بدون صوت</option><option value="rain">مطر هادئ</option><option value="fire">حطب نار</option><option value="ocean">أمواج البحر</option><option value="wind">هواء الغابة</option><option value="birds">غابة وطيور</option><option value="quran">القرآن الكريم</option></select><div id="pmQuranControls" hidden><select id="pmReciter" aria-label="القارئ"><option value="">جاري تحميل القراء...</option></select><select id="pmSurah" aria-label="السورة"><option value="1">الفاتحة</option></select></div><div class="pm-volume-row"><label for="pmVolume">مستوى الصوت</label><input id="pmVolume" type="range" min="0" max="100" value="35"><button type="button" class="tab" id="pmSoundPreview">تجربة الصوت</button></div><small id="pmSoundStatus" class="sub" aria-live="polite">اختار صوتًا ثم ابدأ جلسة التركيز</small></div><div class="pm-add-time"><span>زود وقت المؤقت</span><button class="tab" type="button" data-pm-add="5">+٥ دقائق</button><button class="tab" type="button" data-pm-add="10">+١٠ دقائق</button></div><label class="strict-option"><input id="pmStrictToggle" type="checkbox"> <span>🔒 وضع التركيز الصارم</span></label><small class="strict-hint">يقفل أقسام الموقع أثناء الجلسة حتى ينتهي المؤقت</small></div>
-<div id="sj"></div></div>
+<div class="midad-garden" id="midadGarden">
+ <div class="garden-heading"><div><h3>🌿 مزرعتي الصغيرة</h3><p class="sub">ذاكر شوية… وازرع خضار وشجر في أرضك!</p></div><div class="garden-count"><b id="gardenCount">٠</b><small>نبتة وشجرة</small></div></div>
+ <div class="garden-controls">
+  <label class="garden-goal"><span>هتذاكر إيه؟</span><input id="gardenGoal" maxlength="100" placeholder="مثلاً: حل واجب الرياضيات"></label>
+  <label><span>وقت الزراعة</span><select id="gardenMinutes"><option value="5">٥ دقائق تجربة</option><option value="15">١٥ دقيقة</option><option value="25" selected>٢٥ دقيقة</option><option value="45">٤٥ دقيقة</option><option value="60">ساعة</option></select></label>
+  <button class="btn" id="gardenPlant" type="button">🌱 ازرع وابدأ</button>
+ </div>
+ <div class="garden-active" id="gardenActive"><div class="garden-empty">🌤️ أرضك مستنياك… ازرع أول بذرة!</div></div>
+ <div class="garden-land">
+  <div class="garden-land-title"><span>🏡 أرض مِداد</span><small>كل جلسة مكتملة بتضيف محصول جديد</small></div>
+  <div class="garden-plots" id="gardenPlots"></div>
+ </div>
+ <p class="garden-note" id="gardenNote" aria-live="polite">اختار هدفك وابدأ أول جلسة زراعة</p>
+</div><div id="sj"></div></div>
 </div></section>
 <section class="card wide c2" aria-labelledby="hh"><div class="sheet plain">
 <h2 id="hh" data-admin-key="history_heading">سجل أيامي</h2>
@@ -1317,6 +1339,40 @@ document.addEventListener('click',e=>{
 $('#pmr').addEventListener('click',()=>{if(pm.locked)return;pm.run=0;pmStopSound();pm.left=PMD[pm.mode];pmSetStatus('تمت إعادة المؤقت');pmUi()});
 $('#pmtabs').addEventListener('click',e=>{if(pm.locked)return;const b=e.target.closest('.tab');if(!b)return;pm.mode=b.dataset.m;pm.run=0;pmStopSound();pmSetStatus('اختار صوتًا ثم ابدأ المؤقت');pm.left=PMD[pm.mode];pmUi()});
 document.addEventListener('visibilitychange',()=>{if(pm.locked&&document.hidden){try{if(navigator.vibrate)navigator.vibrate([120,60,120])}catch{}}});
+/* Midad study garden — available to every visitor */
+(()=>{
+ const KEY='midad-garden-v1',crops=[{emoji:'🌳',name:'شجرة مثمرة'},{emoji:'🥕',name:'جزر'},{emoji:'🍅',name:'طماطم'},{emoji:'🌽',name:'ذرة'},{emoji:'🍓',name:'فراولة'},{emoji:'🌻',name:'زهرة شمس'}];
+ const $g=id=>document.getElementById(id),read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{plants:[],active:null}}catch{return{plants:[],active:null}}},write=d=>localStorage.setItem(KEY,JSON.stringify(d));
+ let data=read(),ticker=null;
+ const digits=n=>String(n).replace(/\d/g,x=>'٠١٢٣٤٥٦٧٨٩'[Number(x)]);
+ function stage(p){if(p>=1)return{emoji:'🌿',label:'جاهزة للحصاد'};if(p>=.72)return{emoji:'🪴',label:'بقت نبتة صغيرة'};if(p>=.35)return{emoji:'🌱',label:'بدأت تطلع'};return{emoji:'🌰',label:'بذرة تحت التربة'}}
+ function draw(){
+  data=read();$g('gardenCount').textContent=digits(data.plants.length);
+  const plots=$g('gardenPlots');plots.replaceChildren();
+  const recent=data.plants.slice(-11).reverse();
+  recent.forEach((plant,i)=>{const el=document.createElement('div');el.className='garden-plot';el.style.animationDelay=(i*45)+'ms';const crop=document.createElement('span');crop.className='crop';crop.textContent=plant.emoji;const name=document.createElement('b');name.textContent=plant.name;const goal=document.createElement('small');goal.textContent=plant.goal;el.append(crop,name,goal);plots.append(el)});
+  for(let i=recent.length;i<8;i++){const el=document.createElement('div');el.className='garden-plot empty';el.innerHTML='<span class="crop">🌱</span><b>مكان فاضي</b><small>مستني زرعتك</small>';plots.append(el)}
+  tick();
+ }
+ function tick(){
+  data=read();const root=$g('gardenActive');if(!data.active){root.innerHTML='<div class="garden-empty">🌤️ أرضك مستنياك… ازرع أول بذرة!</div>';return}
+  const a=data.active,now=Date.now(),total=a.minutes*60000,p=Math.min(1,Math.max(0,(now-a.startedAt)/total)),left=Math.max(0,a.endsAt-now),st=stage(p);
+  root.innerHTML='<div class="garden-growing"><div class="garden-plant" id="gardenPlantEmoji">'+st.emoji+'</div><div class="garden-grow-info"><b></b><small></small><div class="garden-bar"><i></i></div><strong class="garden-clock"></strong></div></div>';
+  root.querySelector('b').textContent=a.goal;root.querySelector('small').textContent=st.label+' · '+digits(Math.floor(p*100))+'٪';
+  root.querySelector('.garden-bar i').style.width=(p*100)+'%';
+  root.querySelector('.garden-clock').textContent=left?digits(String(Math.floor(left/60000)).padStart(2,'0')+':'+String(Math.floor(left%60000/1000)).padStart(2,'0')):'اكتمل وقت الزراعة!';
+  if(left<=0){const crop=crops[Math.floor(Math.random()*crops.length)];data.plants.push({emoji:crop.emoji,name:crop.name,goal:a.goal,at:Date.now()});data.active=null;write(data);$g('gardenNote').textContent='عاش! خلصت هدفك واتزرع '+crop.name+' جديدة في مزرعتك 🎉';$g('gardenNote').classList.add('success');draw();return}
+ }
+ function start(){
+  data=read();if(data.active){$g('gardenNote').textContent='فيه نبتة بتكبر دلوقتي — كمّل جلستك الأول';return}
+  const goal=$g('gardenGoal').value.trim(),minutes=Number($g('gardenMinutes').value);
+  if(goal.length<2){$g('gardenNote').textContent='اكتب هدف المذاكرة الأول عشان نعرف هنزرع إيه';$g('gardenGoal').focus();return}
+  const now=Date.now();data.active={goal,minutes,startedAt:now,endsAt:now+minutes*60000};write(data);$g('gardenGoal').value='';$g('gardenNote').textContent='بدأت الزراعة! ركّز وسيب النبتة تكبر 🌱';$g('gardenNote').classList.remove('success');draw();
+ }
+ $g('gardenPlant').addEventListener('click',start);
+ draw();ticker=setInterval(()=>{const before=read().active?.endsAt;tick();if(!read().active&&before)draw()},1000);
+ window.addEventListener('storage',e=>{if(e.key===KEY)draw()});
+})();
 /* weekly summary */
 function wkRender(){
   const c=$('#wk');if(!c)return;c.replaceChildren();
@@ -1419,7 +1475,7 @@ dates();render();
 const URL="https://dheazidcgmvjauchesey.supabase.co",KEY="sb_publishable_eI6CH_F8ThW5qFpkVMEGbA_GMDis66s",ENDPOINT=URL+"/functions/v1/midad-sync";
 const statusEl=document.getElementById("midadSyncStatus");
 const say=t=>{if(statusEl)statusEl.textContent=t};
-const validKey=k=>["tasks","exams","qi","qs","hist","loc","padj","wird","theme"].includes(k)||/^(pr|az|hb|tsb|pomo):\d{4}-\d{1,2}-\d{1,2}$/.test(k);
+const validKey=k=>["tasks","exams","qi","qs","hist","loc","padj","wird","theme"].includes(k)||k==="midad-garden-v1"||/^(pr|az|hb|tsb|pomo):\d{4}-\d{1,2}-\d{1,2}$/.test(k);
 const snapshot=()=>{const out={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(validKey(k)){try{out[k]=JSON.parse(localStorage.getItem(k))}catch{}}}return out};
 let ready=false,busy=false,timer=null,version=Number(localStorage.getItem("midad-sync-last-version")||0);
 const enabled=()=>localStorage.getItem("midad-cloud-sync-enabled")==="1";
